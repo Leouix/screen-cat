@@ -11,8 +11,16 @@ const FRAMES = [
   require('../../assets/cat_4.png'),
 ];
 
+const FRAMES_RIGHT = [
+  require('../../assets/cat_right_1.png'),
+  require('../../assets/cat_right_2.png'),
+  require('../../assets/cat_right_3.png'),
+  require('../../assets/cat_right_4.png'),
+];
+
 class Cat {
   static FRAMES = FRAMES;
+  static FRAMES_RIGHT = FRAMES_RIGHT;
   static WIDTH = CAT_WIDTH;
   static HEIGHT = CAT_HEIGHT;
   static SCREEN_WIDTH = SCREEN_WIDTH;

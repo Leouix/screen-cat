@@ -10,8 +10,12 @@ export default function App() {
   // Состояние для текущего кадра (от 0 до 3)
   const [currentFrame, setCurrentFrame] = useState(0);
   
+  // Направление движения: 'right' или 'left'
+  const [direction, setDirection] = useState('right');
+  
   // Анимированное значение для движения по оси X
   const moveX = useRef(new Animated.Value(0)).current;
+  const prevX = useRef(0);
 
   // Эффект для работы с БД
   useEffect(() => {
@@ -61,6 +65,20 @@ export default function App() {
         }),
       ])
     ).start();
+
+    // Слушаем изменение позиции для определения направления
+    const listenerId = moveX.addListener(({ value }) => {
+      if (value > prevX.current) {
+        setDirection('right');
+      } else if (value < prevX.current) {
+        setDirection('left');
+      }
+      prevX.current = value;
+    });
+
+    return () => {
+      moveX.removeListener(listenerId);
+    };
   }, [moveX]);
 
   return (
@@ -75,9 +93,9 @@ export default function App() {
         ]}
       >
         <Image
-          source={Cat.FRAMES[currentFrame]} // Используем текущий кадр
+          source={direction === 'right' ? Cat.FRAMES_RIGHT[currentFrame] : Cat.FRAMES[currentFrame]}
           style={styles.catImage}
-          fadeDuration={0} // Важно: отключает плавное появление, чтобы кадры не мерцали
+          fadeDuration={0}
         />
       </Animated.View>
     </View>
