@@ -5,7 +5,7 @@ import * as SQLite from 'expo-sqlite';
 import Cat from './src/models/cat';
 
 export default function App() {
-  const [dbStatus, setDbStatus] = useState('Инициализация БД...');
+  // const [dbStatus, setDbStatus] = useState('Инициализация БД...');
   
   // Состояние для текущего кадра (от 0 до 3)
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -18,27 +18,27 @@ export default function App() {
   const prevX = useRef(0);
 
   // Эффект для работы с БД
-  useEffect(() => {
-    const setupDatabase = async () => {
-      try {
-        const db = SQLite.openDatabaseSync('mydb.db');
-        db.execSync(`
-          PRAGMA journal_mode = WAL;
-          CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL, name TEXT);
-        `);
-        db.runSync('INSERT INTO users (name) VALUES (?)', 'Leo');
-        const allRows = db.getAllSync('SELECT * FROM users');
+  // useEffect(() => {
+  //   const setupDatabase = async () => {
+  //     try {
+  //       const db = SQLite.openDatabaseSync('mydb.db');
+  //       db.execSync(`
+  //         PRAGMA journal_mode = WAL;
+  //         CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL, name TEXT);
+  //       `);
+  //       db.runSync('INSERT INTO users (name) VALUES (?)', 'Leo');
+  //       const allRows = db.getAllSync('SELECT * FROM users');
 
-        console.log('Данные из SQLite:', allRows);
-        setDbStatus(`БД готова. Записей: ${allRows.length}`);
-      } catch (error) {
-        console.error('Ошибка SQLite:', error);
-        setDbStatus('Ошибка при работе с БД');
-      }
-    };
+  //       console.log('Данные из SQLite:', allRows);
+  //       setDbStatus(`БД готова. Записей: ${allRows.length}`);
+  //     } catch (error) {
+  //       console.error('Ошибка SQLite:', error);
+  //       setDbStatus('Ошибка при работе с БД');
+  //     }
+  //   };
 
-    setupDatabase();
-  }, []);
+  //   setupDatabase();
+  // }, []);
 
   // Эффект для смены кадров (анимация ходьбы)
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.statusText}>{dbStatus}</Text>
+      <Text style={styles.statusText}>Hello, kitty!</Text>
 
       {/* Оборачиваем View в Animated.View для применения трансформаций */}
       <Animated.View 
