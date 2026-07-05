@@ -1,104 +1,101 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, Image, Text, Animated } from 'react-native';
-import * as SQLite from 'expo-sqlite';
+import { StyleSheet, Image, Animated, Pressable } from 'react-native';
 
 import Cat from './src/models/cat';
 
+const START_X = 50;
+const START_Y = 200;
+const MARGIN = 20;
+const SPEED = 150;
+
 export default function App() {
-  // const [dbStatus, setDbStatus] = useState('Инициализация БД...');
-  
-  // Состояние для текущего кадра (от 0 до 3)
   const [currentFrame, setCurrentFrame] = useState(0);
-  
-  // Направление движения: 'right' или 'left'
   const [direction, setDirection] = useState('right');
-  
-  // Анимированное значение для движения по оси X
+
   const moveX = useRef(new Animated.Value(0)).current;
-  const prevX = useRef(0);
+  const moveY = useRef(new Animated.Value(0)).current;
 
-  // Эффект для работы с БД
-  // useEffect(() => {
-  //   const setupDatabase = async () => {
-  //     try {
-  //       const db = SQLite.openDatabaseSync('mydb.db');
-  //       db.execSync(`
-  //         PRAGMA journal_mode = WAL;
-  //         CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL, name TEXT);
-  //       `);
-  //       db.runSync('INSERT INTO users (name) VALUES (?)', 'Leo');
-  //       const allRows = db.getAllSync('SELECT * FROM users');
+  const posX = useRef(0);
+  const posY = useRef(0);
 
-  //       console.log('Данные из SQLite:', allRows);
-  //       setDbStatus(`БД готова. Записей: ${allRows.length}`);
-  //     } catch (error) {
-  //       console.error('Ошибка SQLite:', error);
-  //       setDbStatus('Ошибка при работе с БД');
-  //     }
-  //   };
+  useEffect(() => {
+    const idX = moveX.addListener(({ value }) => { posX.current = value; });
+    const idY = moveY.addListener(({ value }) => { posY.current = value; });
+    return () => {
+      moveX.removeListener(idX);
+      moveY.removeListener(idY);
+    };
+  }, []);
 
-  //   setupDatabase();
-  // }, []);
-
-  // Эффект для смены кадров (анимация ходьбы)
   useEffect(() => {
     const frameInterval = setInterval(() => {
       setCurrentFrame((prevFrame) => (prevFrame + 1) % Cat.FRAMES.length);
-    }, 150); // Скорость смены кадров (150 мс)
-
+    }, 150);
     return () => clearInterval(frameInterval);
   }, []);
 
-  // Эффект для перемещения кота
-  useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(moveX, {
-          toValue: 150, // Двигаем на 150 пикселей вправо
-          duration: 3000, // За 3 секунды
-          useNativeDriver: true, // Включаем нативное ускорение для производительности
-        }),
-        Animated.timing(moveX, {
-          toValue: 0, // Возвращаем обратно
-          duration: 3000,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
+  const handleTap = (evt) => {
+    const { pageX, pageY } = evt.nativeEvent;
 
-    // Слушаем изменение позиции для определения направления
-    const listenerId = moveX.addListener(({ value }) => {
-      if (value > prevX.current) {
-        setDirection('right');
-      } else if (value < prevX.current) {
-        setDirection('left');
-      }
-      prevX.current = value;
-    });
+    const rawTargetX = pageX - START_X - Cat.WIDTH / 2;
+    const rawTargetY = pageY - START_Y - Cat.HEIGHT / 2;
 
-    return () => {
-      moveX.removeListener(listenerId);
-    };
-  }, [moveX]);
+    const maxX = Cat.SCREEN_WIDTH - START_X - Cat.WIDTH - MARGIN;
+    const maxY = Cat.SCREEN_HEIGHT - START_Y - Cat.HEIGHT - MARGIN;
+
+    const targetX = Math.max(0, Math.min(rawTargetX, maxX));
+    const targetY = Math.max(0, Math.min(rawTargetY, maxY));
+
+    const dx = targetX - posX.current;
+    const dy = targetY - posY.current;
+
+    if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      setDirection(dx >= 0 ? 'right' : 'left');
+    } else {
+      setDirection(dy >= 0 ? 'down' : 'up');
+    }
+
+    const maxDist = Math.max(Math.abs(dx), Math.abs(dy), 1);
+    const duration = (maxDist / SPEED) * 1000;
+
+    Animated.parallel([
+      Animated.timing(moveX, { toValue: targetX, duration, useNativeDriver: true }),
+      Animated.timing(moveY, { toValue: targetY, duration, useNativeDriver: true }),
+    ]).start();
+  };
+
+  const getSource = () => {
+    switch (direction) {
+      case 'right':
+        return Cat.FRAMES_RIGHT[currentFrame];
+      case 'left':
+        return Cat.FRAMES[currentFrame];
+      case 'up':
+        return Cat.FRAMES_UP[currentFrame % Cat.FRAMES_UP.length];
+      case 'down':
+        return Cat.FRAMES_DOWN[currentFrame % Cat.FRAMES_DOWN.length];
+      default:
+        return Cat.FRAMES[currentFrame];
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.statusText}>Hello, kitty!</Text>
-
-      {/* Оборачиваем View в Animated.View для применения трансформаций */}
-      <Animated.View 
+    <Pressable onPress={handleTap} style={styles.container}>
+      <Animated.View
         style={[
-          styles.catWrap, 
-          { transform: [{ translateX: moveX }] } // Привязываем позицию к moveX
+          styles.catWrap,
+          { transform: [{ translateX: moveX }, { translateY: moveY }] },
         ]}
       >
         <Image
-          source={direction === 'right' ? Cat.FRAMES_RIGHT[currentFrame] : Cat.FRAMES[currentFrame]}
+          source={getSource()}
           style={styles.catImage}
           fadeDuration={0}
         />
       </Animated.View>
-    </View>
+    </Pressable>
   );
 }
 
@@ -106,17 +103,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  statusText: {
-    marginTop: 50,
-    color: '#666',
   },
   catWrap: {
     position: 'absolute',
-    top: 200,
-    left: 50,
+    top: START_Y,
+    left: START_X,
   },
   catImage: {
     width: Cat.WIDTH,
