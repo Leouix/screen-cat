@@ -7,6 +7,7 @@ const START_X = 50;
 const START_Y = 200;
 const MARGIN = 20;
 const SPEED = 150;
+const UP_DOWN_SCALE = 0.6;
 
 export default function App() {
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -66,6 +67,8 @@ export default function App() {
     ]).start();
   };
 
+  const isUpDown = direction === 'up' || direction === 'down';
+
   const getSource = () => {
     switch (direction) {
       case 'right':
@@ -91,7 +94,7 @@ export default function App() {
       >
         <Image
           source={getSource()}
-          style={styles.catImage}
+          style={isUpDown ? styles.vCat : styles.hCat}
           fadeDuration={0}
         />
       </Animated.View>
@@ -109,9 +112,14 @@ const styles = StyleSheet.create({
     top: START_Y,
     left: START_X,
   },
-  catImage: {
+  hCat: {
     width: Cat.WIDTH,
     height: Cat.HEIGHT,
+    resizeMode: 'contain',
+  },
+  vCat: {
+    width: Cat.WIDTH * UP_DOWN_SCALE,
+    height: Cat.HEIGHT * UP_DOWN_SCALE,
     resizeMode: 'contain',
   },
 });
