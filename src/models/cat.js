@@ -28,11 +28,18 @@ const FRAMES_DOWN = [
   require('../../assets/cat_down_2.png'),
 ];
 
+const CAT_SIT_FRONT_1 = require('../../assets/cat_sit_front_1.png');
+const CAT_SIT_2 = require('../../assets/cat_sit_2.png');
+const CAT_SIT_BACK_3 = require('../../assets/cat_sit_back_3.png');
+
 class Cat {
   static FRAMES = FRAMES;
   static FRAMES_RIGHT = FRAMES_RIGHT;
   static FRAMES_UP = FRAMES_UP;
   static FRAMES_DOWN = FRAMES_DOWN;
+  static CAT_SIT_FRONT_1 = CAT_SIT_FRONT_1;
+  static CAT_SIT_2 = CAT_SIT_2;
+  static CAT_SIT_BACK_3 = CAT_SIT_BACK_3;
   static WIDTH = CAT_WIDTH;
   static HEIGHT = CAT_HEIGHT;
   static SCREEN_WIDTH = SCREEN_WIDTH;
