@@ -12,6 +12,7 @@ const UP_DOWN_SCALE = 0.6;
 export default function App() {
   const [currentFrame, setCurrentFrame] = useState(0);
   const [direction, setDirection] = useState('right');
+  const [isMoving, setIsMoving] = useState(false);
 
   const moveX = useRef(new Animated.Value(0)).current;
   const moveY = useRef(new Animated.Value(0)).current;
@@ -29,11 +30,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (!isMoving) return;
     const frameInterval = setInterval(() => {
       setCurrentFrame((prevFrame) => (prevFrame + 1) % Cat.FRAMES.length);
     }, 150);
     return () => clearInterval(frameInterval);
-  }, []);
+  }, [isMoving]);
 
   const handleTap = (evt) => {
     const { pageX, pageY } = evt.nativeEvent;
@@ -52,6 +54,9 @@ export default function App() {
 
     if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
 
+    setIsMoving(true);
+    setCurrentFrame(0);
+
     if (Math.abs(dx) >= Math.abs(dy)) {
       setDirection(dx >= 0 ? 'right' : 'left');
     } else {
@@ -64,12 +69,23 @@ export default function App() {
     Animated.parallel([
       Animated.timing(moveX, { toValue: targetX, duration, useNativeDriver: true }),
       Animated.timing(moveY, { toValue: targetY, duration, useNativeDriver: true }),
-    ]).start();
+    ]).start(({ finished }) => {
+      if (finished) setIsMoving(false);
+    });
   };
 
   const isUpDown = direction === 'up' || direction === 'down';
 
   const getSource = () => {
+    if (!isMoving) {
+      switch (direction) {
+        case 'right': return Cat.CAT_SIT_2;
+        case 'up':    return Cat.CAT_SIT_BACK_3;
+        case 'left':
+        case 'down':
+        default:      return Cat.CAT_SIT_FRONT_1;
+      }
+    }
     switch (direction) {
       case 'right':
         return Cat.FRAMES_RIGHT[currentFrame];
