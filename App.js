@@ -1,29 +1,29 @@
 import React, { useState, useRef } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { TamaguiProvider, Theme, YStack, XStack, Text, Button } from 'tamagui'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import { TamaguiProvider, Theme, YStack, Text, Button } from 'tamagui'
 import { StatusBar } from 'expo-status-bar'
+import dayjs from 'dayjs'
 
 import config from './tamagui.config'
 import StarryBackground from './src/components/StarryBackground'
+import BirthDatePicker from './src/components/BirthDatePicker'
 
 export default function App() {
-  const [date, setDate] = useState(new Date(2000, 0, 1))
+  const [date, setDate] = useState(dayjs('2000-01-01'))
   const [showPicker, setShowPicker] = useState(true)
 
-  const initialDate = useRef(new Date(2000, 0, 1))
+  const initialDate = useRef(dayjs('2000-01-01'))
   const changedFieldsRef = useRef({ day: false, month: false, year: false })
 
-  const formattedDate = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`
+  const formattedDate = date.format('DD.MM.YYYY')
 
-  const onChange = (event, selectedDate) => {
+  const onChange = (selectedDate) => {
     if (!selectedDate) return
     const fields = changedFieldsRef.current
-    if (selectedDate.getDate() !== initialDate.current.getDate()) fields.day = true
-    if (selectedDate.getMonth() !== initialDate.current.getMonth()) fields.month = true
-    if (selectedDate.getFullYear() !== initialDate.current.getFullYear()) fields.year = true
+    if (selectedDate.date() !== initialDate.current.date()) fields.day = true
+    if (selectedDate.month() !== initialDate.current.month()) fields.month = true
+    if (selectedDate.year() !== initialDate.current.year()) fields.year = true
     setDate(selectedDate)
-
   }
 
   const handleNext = () => {
@@ -66,14 +66,11 @@ export default function App() {
 
           <YStack alignItems="center" gap={12}>
             {showPicker && (
-              <DateTimePicker
-                value={date}
-                mode="date"
-                display="spinner"
+              <BirthDatePicker
+                date={date}
                 onChange={onChange}
-                maximumDate={new Date()}
-                minimumDate={new Date(1900, 0, 1)}
-                theme="dark"
+                minDate={dayjs('1900-01-01')}
+                maxDate={dayjs()}
               />
             )}
 
@@ -81,7 +78,7 @@ export default function App() {
               <Button
                 size="$6"
                 onPress={() => {
-                  initialDate.current = new Date(date)
+                  initialDate.current = dayjs(date)
                   changedFieldsRef.current = { day: false, month: false, year: false }
                   setShowPicker(true)
                 }}

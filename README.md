@@ -87,3 +87,10 @@ sprite-app/
 UI-кит: [Advisor — Astrology App | Mobile UI Kit](https://www.figma.com/design/493l8QKB5vndt5VRYEfEoT/) в Figma.
 
 Тёмная тема с палитрой Deep Space: фон `#0B0C10`, золотые и фиолетовые акценты. Подробности в [docs/design-tokens.md](./docs/design-tokens.md).
+
+
+запуск эмулятора:
+
+```
+npx expo run:android
+```
