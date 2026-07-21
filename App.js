@@ -1,141 +1,99 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Image, Animated, Pressable } from 'react-native';
+import React, { useState } from 'react'
+import { useColorScheme } from 'react-native'
+import { TamaguiProvider, Theme, YStack, XStack, Text, Button } from 'tamagui'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { StatusBar } from 'expo-status-bar'
 
-import Cat from './src/models/cat';
-
-const START_X = 50;
-const START_Y = 200;
-const MARGIN = 20;
-const SPEED = 150;
-const UP_DOWN_SCALE = 0.6;
+import config from './tamagui.config'
 
 export default function App() {
-  const [currentFrame, setCurrentFrame] = useState(0);
-  const [direction, setDirection] = useState('right');
-  const [isMoving, setIsMoving] = useState(false);
+  const [date, setDate] = useState(new Date(2000, 0, 1))
+  const [showPicker, setShowPicker] = useState(true)
 
-  const moveX = useRef(new Animated.Value(0)).current;
-  const moveY = useRef(new Animated.Value(0)).current;
+  const formattedDate = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`
 
-  const posX = useRef(0);
-  const posY = useRef(0);
-
-  useEffect(() => {
-    const idX = moveX.addListener(({ value }) => { posX.current = value; });
-    const idY = moveY.addListener(({ value }) => { posY.current = value; });
-    return () => {
-      moveX.removeListener(idX);
-      moveY.removeListener(idY);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isMoving) return;
-    const frameInterval = setInterval(() => {
-      setCurrentFrame((prevFrame) => (prevFrame + 1) % Cat.FRAMES.length);
-    }, 150);
-    return () => clearInterval(frameInterval);
-  }, [isMoving]);
-
-  const handleTap = (evt) => {
-    const { pageX, pageY } = evt.nativeEvent;
-
-    const rawTargetX = pageX - START_X - Cat.WIDTH / 2;
-    const rawTargetY = pageY - START_Y - Cat.HEIGHT / 2;
-
-    const maxX = Cat.SCREEN_WIDTH - START_X - Cat.WIDTH - MARGIN;
-    const maxY = Cat.SCREEN_HEIGHT - START_Y - Cat.HEIGHT - MARGIN;
-
-    const targetX = Math.max(0, Math.min(rawTargetX, maxX));
-    const targetY = Math.max(0, Math.min(rawTargetY, maxY));
-
-    const dx = targetX - posX.current;
-    const dy = targetY - posY.current;
-
-    if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
-
-    setIsMoving(true);
-    setCurrentFrame(0);
-
-    if (Math.abs(dx) >= Math.abs(dy)) {
-      setDirection(dx >= 0 ? 'right' : 'left');
-    } else {
-      setDirection(dy >= 0 ? 'down' : 'up');
+  const onChange = (event, selectedDate) => {
+    setShowPicker(false)
+    if (selectedDate) {
+      setDate(selectedDate)
     }
+  }
 
-    const maxDist = Math.max(Math.abs(dx), Math.abs(dy), 1);
-    const duration = (maxDist / SPEED) * 1000;
-
-    Animated.parallel([
-      Animated.timing(moveX, { toValue: targetX, duration, useNativeDriver: true }),
-      Animated.timing(moveY, { toValue: targetY, duration, useNativeDriver: true }),
-    ]).start(({ finished }) => {
-      if (finished) setIsMoving(false);
-    });
-  };
-
-  const isUpDown = direction === 'up' || direction === 'down';
-
-  const getSource = () => {
-    if (!isMoving) {
-      switch (direction) {
-        case 'right': return Cat.CAT_SIT_2;
-        case 'up':    return Cat.CAT_SIT_BACK_3;
-        case 'left':
-        case 'down':
-        default:      return Cat.CAT_SIT_FRONT_1;
-      }
-    }
-    switch (direction) {
-      case 'right':
-        return Cat.FRAMES_RIGHT[currentFrame];
-      case 'left':
-        return Cat.FRAMES[currentFrame];
-      case 'up':
-        return Cat.FRAMES_UP[currentFrame % Cat.FRAMES_UP.length];
-      case 'down':
-        return Cat.FRAMES_DOWN[currentFrame % Cat.FRAMES_DOWN.length];
-      default:
-        return Cat.FRAMES[currentFrame];
-    }
-  };
+  const handleNext = () => {
+    console.log('Дата рождения:', formattedDate)
+  }
 
   return (
-    <Pressable onPress={handleTap} style={styles.container}>
-      <Animated.View
-        style={[
-          styles.catWrap,
-          { transform: [{ translateX: moveX }, { translateY: moveY }] },
-        ]}
-      >
-        <Image
-          source={getSource()}
-          style={isUpDown ? styles.vCat : styles.hCat}
-          fadeDuration={0}
-        />
-      </Animated.View>
-    </Pressable>
-  );
-}
+    <TamaguiProvider config={config} defaultTheme="dark">
+      <Theme name="dark">
+        <YStack
+          flex={1}
+          backgroundColor="$background"
+          alignItems="center"
+          justifyContent="center"
+          padding={24}
+          gap={24}
+        >
+          <YStack alignItems="center" gap={8}>
+            <Text
+              fontSize={28}
+              fontWeight="700"
+              color="$color"
+              textAlign="center"
+            >
+              Введите дату рождения
+            </Text>
+            <Text
+              fontSize={16}
+              color="$color11"
+              textAlign="center"
+              opacity={0.7}
+            >
+              Это необходимо для расчёта натальной карты
+            </Text>
+          </YStack>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  catWrap: {
-    position: 'absolute',
-    top: START_Y,
-    left: START_X,
-  },  
-  hCat: {
-    width: Cat.WIDTH,
-    height: Cat.HEIGHT,
-    resizeMode: 'contain',
-  },
-  vCat: {
-    width: Cat.WIDTH * UP_DOWN_SCALE,
-    height: Cat.HEIGHT * UP_DOWN_SCALE,
-    resizeMode: 'contain',
-  },
-});
+          <YStack alignItems="center" gap={12}>
+            {showPicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="spinner"
+                onChange={onChange}
+                maximumDate={new Date()}
+                minimumDate={new Date(1900, 0, 1)}
+                theme="dark"
+              />
+            )}
+
+            {!showPicker && (
+              <Button
+                size="$6"
+                onPress={() => setShowPicker(true)}
+                variant="outlined"
+                borderColor="$borderColor"
+              >
+                <Text fontSize={18} color="$color12">
+                  {formattedDate}
+                </Text>
+              </Button>
+            )}
+          </YStack>
+
+          <Button
+            size="$5"
+            backgroundColor="$blue10"
+            color="white"
+            onPress={handleNext}
+            width={200}
+            fontWeight="600"
+          >
+            Далее
+          </Button>
+
+          <StatusBar style="light" />
+        </YStack>
+      </Theme>
+    </TamaguiProvider>
+  )
+}
