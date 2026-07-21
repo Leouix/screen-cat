@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react'
-import { useColorScheme } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { TamaguiProvider, Theme, YStack, XStack, Text, Button } from 'tamagui'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { StatusBar } from 'expo-status-bar'
 
 import config from './tamagui.config'
+import StarryBackground from './src/components/StarryBackground'
 
 export default function App() {
   const [date, setDate] = useState(new Date(2000, 0, 1))
@@ -34,13 +35,21 @@ export default function App() {
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
       <Theme name="dark">
+        <View
+          pointerEvents="none"
+          style={[StyleSheet.absoluteFillObject, { zIndex: 0, backgroundColor: '#0B0C10' }]}
+        >
+          <StarryBackground />
+        </View>
+
         <YStack
           flex={1}
-          backgroundColor="$background"
+          backgroundColor="transparent"
           justifyContent="flex-end"
           padding={24}
           paddingBottom={60}
           gap={24}
+          zIndex={1}
         >
           <StatusBar style="light" />
 
