@@ -29,11 +29,13 @@ export default function App() {
         <YStack
           flex={1}
           backgroundColor="$background"
-          alignItems="center"
-          justifyContent="center"
+          justifyContent="flex-end"
           padding={24}
+          paddingBottom={60}
           gap={24}
         >
+          <StatusBar style="light" />
+
           <YStack alignItems="center" gap={8}>
             <Text
               fontSize={28}
@@ -82,16 +84,16 @@ export default function App() {
 
           <Button
             size="$5"
-            backgroundColor="$blue10"
+            backgroundColor="transparent"
+            borderWidth={1}
+            borderColor="gold"
+            borderRadius={9999}
             color="white"
             onPress={handleNext}
-            width={200}
-            fontWeight="600"
+            pressStyle={{ opacity: 0.7 }}
           >
             Далее
           </Button>
-
-          <StatusBar style="light" />
         </YStack>
       </Theme>
     </TamaguiProvider>
