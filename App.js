@@ -51,15 +51,7 @@ export default function App() {
               color="$color"
               textAlign="center"
             >
-              Введите дату рождения
-            </Text>
-            <Text
-              fontSize={16}
-              color="$color11"
-              textAlign="center"
-              opacity={0.7}
-            >
-              Это необходимо для расчёта натальной карты
+              Когда вы родились?
             </Text>
           </YStack>
 
