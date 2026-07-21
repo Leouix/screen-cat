@@ -1,3 +1,46 @@
-# Expo HAS CHANGED
+# Инструкции для AI-агентов
 
-Read the exact versioned docs at https://docs.expo.dev/versions/v54.0.0/ before writing any code.
+## Контекст проекта
+
+**Sprite App** — астрологическое мобильное приложение (натальные карты, гороскопы). строится на Expo 54 + React Native + Tamagui. UI на **русском языке**.
+
+## Документация
+
+Перед написанием кода **обязательно** прочитать актуальную документацию:
+
+- **Expo v54**: https://docs.expo.dev/versions/v54.0.0/
+- **Tamagui**: https://tamagui.dev
+- **React Native**: https://reactnative.dev
+
+## Конвенции кода
+
+- Основной язык — **JavaScript**. TypeScript используется только для конфигов (`tamagui.config.ts`, `tsconfig.json`).
+- UI-компоненты — из **Tamagui** (`YStack`, `XStack`, `Text`, `Button`, `Card` и т.д.).
+- Тема — **тёмная** (`defaultTheme="dark"` в `TamaguiProvider`).
+- Точка входа — `index.js` → `App.js`.
+- Нет навигации (пока один экран). Не добавлять `expo-router` или `@react-navigation` без явного запроса.
+
+## Ограничения
+
+- **Не устанавливать** `react-native-skia` и другие пакеты без явного указания в задаче.
+- **Не изменять** `PLAN.md` — это утверждённый план реализации.
+- Следовать порядку этапов из `PLAN.md`: тема → компоненты → дашборд → натальная карта → API.
+- Не подключать Tamagui Babel-плагин в `babel.config.js` без указания (плагин есть в зависимостях, но не настроен).
+
+## Порядок работы
+
+Реализовывать изменения **поэтапно**, согласно `PLAN.md`:
+
+1. Настройка темы и дизайн-токенов в Tamagui
+2. Атомарные компоненты (карточки, аккордеон)
+3. Dashboard — гороскоп, шкалы, события дня
+4. Натальная карта — круг через `react-native-skia`
+5. Интеграция с API
+
+Каждый этап — отдельная задача. Не объединять несколько этапов в одну итерацию.
+
+## Полезные ссылки
+
+- План реализации: [PLAN.md](./PLAN.md)
+- Архитектура: [docs/architecture.md](./docs/architecture.md)
+- Дизайн-токены: [docs/design-tokens.md](./docs/design-tokens.md)
