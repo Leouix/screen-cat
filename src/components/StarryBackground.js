@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect } from 'react'
 import { Dimensions } from 'react-native'
 import { Canvas, Circle, Fill } from '@shopify/react-native-skia'
-import { useSharedValue, useDerivedValue, withRepeat, withTiming } from 'react-native-reanimated'
+import { useSharedValue, useDerivedValue, withRepeat, withTiming, Easing } from 'react-native-reanimated'
 
 const STAR_COUNT = 60
 
@@ -23,13 +23,28 @@ function generateStars(width, height) {
   }))
 }
 
-function Star({ cx, cy, r, color, phase, speed, time }) {
+function Star({ x, y, r, color, phase, speed, time, width }) {
+  // 1. Плавное мерцание (Opacity)
   const opacity = useDerivedValue(() => {
     const wave = Math.sin(time.value * speed + phase)
-    return 0.3 + (wave + 1) * 0.35
+    // Раньше: 0.3 + (wave + 1) * 0.35 (разбег от 0.3 до 1.0)
+    // Теперь: 0.6 + (wave + 1) * 0.2 (разбег от 0.6 до 1.0) - меньше контраста
+    return 0.6 + (wave + 1) * 0.2
   })
 
-  return <Circle cx={cx} cy={cy} r={r} color={color} opacity={opacity} />
+  // 2. Движение справа налево (X)
+  const cx = useDerivedValue(() => {
+    // Коэффициент 2 регулирует общую скорость движения.
+    // Умножаем на star.speed, чтобы получился эффект параллакса (разные звезды летят с разной скоростью)
+    const shiftX = time.value * speed * 2
+    const newX = x - shiftX
+    
+    // Хак для правильного зацикливания отрицательных чисел в JS,
+    // чтобы при уходе за 0 звезда появлялась с другой стороны (width)
+    return ((newX % width) + width) % width
+  })
+
+  return <Circle cx={cx} cy={y} r={r} color={color} opacity={opacity} />
 }
 
 export default function StarryBackground() {
@@ -39,8 +54,12 @@ export default function StarryBackground() {
   const time = useSharedValue(0)
 
   useEffect(() => {
+    // 3. Равномерный таймер (Linear Easing)
     time.value = withRepeat(
-      withTiming(1000, { duration: 20000 }),
+      withTiming(1000, { 
+        duration: 100000000, // 100 секунд на полный цикл
+        easing: Easing.linear // Равномерное движение без ускорений/замедлений
+      }),
       -1,
       false
     )
@@ -52,13 +71,14 @@ export default function StarryBackground() {
       {stars.map((star, i) => (
         <Star
           key={i}
-          cx={star.x}
-          cy={star.y}
+          x={star.x}       // Передаем базовый X, а не сразу в cx
+          y={star.y}       // Передаем базовый Y в y, а не cy
           r={star.r}
           color={star.color}
           phase={star.phase}
           speed={star.speed}
           time={time}
+          width={width}    // Передаем ширину, чтобы Star знала, где правый край экрана
         />
       ))}
     </Canvas>
