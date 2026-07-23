@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { TamaguiProvider, YStack, Text, Button, styled } from 'tamagui'
-import DatePicker from 'react-native-date-picker'
+import { DatePicker } from '@quidone/react-native-wheel-picker'
 import config from './tamagui.config'
 import StarryBackground from './src/components/StarryBackground'
 
@@ -57,7 +57,7 @@ const SecondaryButton = styled(Button, {
 })
 
 export default function App() {
-  const [date, setDate] = useState(new Date(1995, 0, 1))
+  const [date, setDate] = useState('1995-01-01')
 
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
@@ -70,12 +70,14 @@ export default function App() {
           <Label>Дата рождения</Label>
           <DatePicker
             date={date}
-            onDateChange={setDate}
-            mode="date"
+            onDateChanged={({ date }) => setDate(date)}
+            itemHeight={48}
+            visibleItemCount={5}
+            minDate="1930-01-01"
+            maxDate="2010-12-31"
             locale="ru"
-            theme="dark"
-            minimumDate={new Date(1930, 0, 1)}
-            maximumDate={new Date(2010, 11, 31)}
+            itemTextStyle={{ color: '#f8df61', fontSize: 18 }}
+            overlayItemStyle={{ backgroundColor: 'rgba(248, 223, 97, 0.15)', borderRadius: 8 }}
           />
 
           <PrimaryButton onPress={() => {}}>NEXT</PrimaryButton>

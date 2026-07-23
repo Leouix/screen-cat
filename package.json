@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@quidone/react-native-wheel-picker": "^1.7.1",
     "@shopify/react-native-skia": "2.6.2",
     "@tamagui/babel-plugin": "^2.5.0",
     "@tamagui/config": "^2.5.0",
@@ -21,7 +22,6 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.0",
-    "react-native-date-picker": "^5.0.13",
     "react-native-reanimated": "4.5.0",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-ui-datepicker": "^3.3.0",
