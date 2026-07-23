@@ -15,7 +15,7 @@ const BackgroundView = styled(YStack, {
 
 const Label = styled(Text, {
   color: '#6B6B8D',
-  fontSize: 13,
+  fontSize: 18,
   fontWeight: '500',
   letterSpacing: 1.5,
   textTransform: 'uppercase',
@@ -67,7 +67,7 @@ export default function App() {
         </BackgroundView>
 
         <MainContainer>
-          <Label>Дата рождения</Label>
+          <Label>When is your birthday</Label>
           <DatePicker
             date={date}
             onDateChanged={({ date }) => setDate(date)}
