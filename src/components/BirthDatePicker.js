@@ -6,9 +6,9 @@ const VISIBLE_ITEMS = 5
 const CONTAINER_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS
 
 const MONTHS = [
-  'Январь', 'Февраль', 'Март', 'Апрель',
-  'Май', 'Июнь', 'Июль', 'Август',
-  'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',
+  'January', 'February', 'March', 'April',
+  'May', 'June', 'July', 'August',
+  'September', 'October', 'November', 'December',
 ]
 
 const GOLD = '#D4AF37'
