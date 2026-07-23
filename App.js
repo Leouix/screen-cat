@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { TamaguiProvider, YStack, Text, Button, styled } from 'tamagui'
 import config from './tamagui.config'
 import StarryBackground from './src/components/StarryBackground'
+import BirthDatePicker from './src/components/BirthDatePicker'
 
 // Кастомные стилизованные компоненты
 const BackgroundView = styled(YStack, {
@@ -46,6 +48,8 @@ const SecondaryButton = styled(Button, {
 })
 
 export default function App() {
+  const [date, setDate] = useState(new Date(1995, 0, 1))
+
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
       <YStack flex={1}>
@@ -54,9 +58,7 @@ export default function App() {
         </BackgroundView>
 
         <MainContainer>
-          <Text color="white" fontSize={36} mb={30}>
-            Hello!
-          </Text>
+          <BirthDatePicker date={date} onChange={setDate} />
 
           <PrimaryButton onPress={() => {}}>NEXT</PrimaryButton>
           <SecondaryButton onPress={() => {}}>Skip</SecondaryButton>
