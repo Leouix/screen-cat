@@ -17,6 +17,10 @@ export default function App() {
     console.log({ birthDate, name })
   }
 
+  const goBack = () => {
+    if (screen === 'name') setScreen('birthDate')
+  }
+
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
       <YStack flex={1}>
@@ -24,7 +28,7 @@ export default function App() {
           <BirthDateScreen onNext={handleBirthDateNext} />
         )}
         {screen === 'name' && (
-          <NameScreen birthDate={birthDate} onNext={handleNameNext} />
+          <NameScreen birthDate={birthDate} onNext={handleNameNext} onBack={goBack} />
         )}
       </YStack>
     </TamaguiProvider>

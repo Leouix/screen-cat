@@ -39,7 +39,7 @@ export const PrimaryButton = styled(Button, {
 })
 
 export const SecondaryButton = styled(Button, {
-  width: '100%',
+  
   backgroundColor: 'transparent',
   paddingVertical: 5,
   borderRadius: 50,

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { YStack, Input } from 'tamagui'
+import { YStack, XStack, Input, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import {
   BackgroundView,
@@ -24,7 +24,7 @@ const StyledInput = styled(Input, {
 
 import { styled } from 'tamagui'
 
-export default function NameScreen({ birthDate, onNext }) {
+export default function NameScreen({ birthDate, onNext, onBack }) {
   const [name, setName] = useState('')
 
   return (
@@ -44,9 +44,25 @@ export default function NameScreen({ birthDate, onNext }) {
         <PrimaryButton onPress={() => onNext(name)}>
           NEXT
         </PrimaryButton>
-        <SecondaryButton onPress={() => onNext('')}>
-          Skip
-        </SecondaryButton>
+
+        <XStack width="100%" justifyContent="space-between" alignItems="center" gap={16}>
+          {onBack && (
+            <Button
+              backgroundColor="transparent"
+              color="#6B6B8D"
+              fontSize={14}
+              pressStyle={{ opacity: 0.6 }}
+              onPress={onBack}
+            >
+              ← Back
+            </Button>
+          )}
+
+          <SecondaryButton onPress={() => onNext('')}>
+            Skip →
+          </SecondaryButton>
+        </XStack>
+
       </MainContainer>
     </YStack>
   )
