@@ -21,6 +21,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.0",
+    "react-native-date-picker": "^5.0.13",
     "react-native-reanimated": "4.5.0",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-ui-datepicker": "^3.3.0",

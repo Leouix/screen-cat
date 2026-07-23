@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { TamaguiProvider, YStack, Text, Button, styled } from 'tamagui'
+import DatePicker from 'react-native-date-picker'
 import config from './tamagui.config'
 import StarryBackground from './src/components/StarryBackground'
-import BirthDatePicker from './src/components/BirthDatePicker'
 
 // Кастомные стилизованные компоненты
 const BackgroundView = styled(YStack, {
@@ -11,6 +11,15 @@ const BackgroundView = styled(YStack, {
   width: '100%',
   height: '100%',
   backgroundColor: '#060606',
+})
+
+const Label = styled(Text, {
+  color: '#6B6B8D',
+  fontSize: 13,
+  fontWeight: '500',
+  letterSpacing: 1.5,
+  textTransform: 'uppercase',
+  marginBottom: 20,
 })
 
 const MainContainer = styled(YStack, {
@@ -58,7 +67,16 @@ export default function App() {
         </BackgroundView>
 
         <MainContainer>
-          <BirthDatePicker date={date} onChange={setDate} />
+          <Label>Дата рождения</Label>
+          <DatePicker
+            date={date}
+            onDateChange={setDate}
+            mode="date"
+            locale="ru"
+            theme="dark"
+            minimumDate={new Date(1930, 0, 1)}
+            maximumDate={new Date(2010, 11, 31)}
+          />
 
           <PrimaryButton onPress={() => {}}>NEXT</PrimaryButton>
           <SecondaryButton onPress={() => {}}>Skip</SecondaryButton>
