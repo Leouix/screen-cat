@@ -70,8 +70,6 @@ export const StyledInput = styled(Input, {
   borderColor: '#ffffff20',
   borderRadius: 12,
   color: '#ffffff',
-  fontSize: 16,
-  paddingHorizontal: 16,
-  paddingVertical: 14,
-  placeholderTextColor: '#6B6B8D',
+  fontSize: 16,  
+  placeholderTextColor: '#b2b2bc',
 })

@@ -110,7 +110,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
           </Label>
         ) : null}
 
-        <Label>What is your name</Label>
+        <Label style={{fontWeight: 700, }}>What is your name</Label>
         <StyledInput
           value={name}
           onChangeText={setName}
@@ -138,7 +138,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
             size={sizePlanet}
             innerShadow={{
               side: 'bottom',
-              spread: 0.3,
+              spread: 0.5,
               opacity: 0.4,
               color: '#000000',
             }}
