@@ -29,7 +29,7 @@ export default function SunDecoration({ size = 350, style }) {
         <Circle c={center} r={innerRadius * 0.2}>
           <RadialGradient
             c={center}
-            r={innerRadius * 0.2}
+            r={innerRadius * 0.1}
             colors={['rgba(255, 220, 80, 1)', 'rgba(255, 180, 0, 0.8)', 'transparent']}
             positions={[0, 0.6, 1]}
           />
@@ -38,7 +38,7 @@ export default function SunDecoration({ size = 350, style }) {
         <Circle c={center} r={innerRadius * 0.7}>
           <RadialGradient
             c={center}
-            r={innerRadius * 0.4}
+            r={innerRadius * 0.5}
             colors={['white', 'yellow', 'transparent']}
             positions={[0, 0.5, 1]}
           />
