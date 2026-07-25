@@ -66,6 +66,13 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
       .finally(() => setLoading(false))
   }, [birthDate])
 
+  const PLANET_SIZES = {
+    'Сатурн': 600,
+    'Уран': 500,
+  }
+  const sizePlanet = PLANET_SIZES[planetTitle] ?? 550
+
+  console.log('sizePlanet', planetTitle, sizePlanet)
   return (
     <YStack flex={1}>
       <BackgroundView>
@@ -125,7 +132,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
 
           <PlanetImage
             source={planetAsset}
-            size={550}
+            size={sizePlanet}
             innerShadow={{
               side: 'bottom',
               spread: 0.3,
