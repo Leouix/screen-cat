@@ -23,7 +23,8 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
   const [loading, setLoading] = useState(true)
 
   const fallbackPlanet = getRulingPlanet(birthDate)
-  const planetTitle = planetData?.interpretations?.sign?.title ?? fallbackPlanet
+  const planetTitle = fallbackPlanet
+  const planetInterpretation = planetData?.interpretations?.sign?.title ?? ''
   const planetContent = planetData?.interpretations?.sign?.content ?? ''
 
   useEffect(() => {
@@ -67,8 +68,14 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
                 {planetTitle}
               </Label>
 
+                <Label  style={{
+                  alignSelf: 'start',
+                }}>
+                {planetInterpretation}
+              </Label>
+
         {planetContent ? (
-          <Label style={{  marginBottom: 150 }}>
+          <Label style={{  marginBottom: 100 }}>
             {planetContent}
           </Label>
         ) : null}
