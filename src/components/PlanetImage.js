@@ -42,6 +42,7 @@ function getGradientStops(spread) {
 export default function PlanetImage({
   source,
   size = 550,
+  dimOverlay = 0,
   innerShadow = {},
   style,
 }) {
@@ -88,6 +89,15 @@ export default function PlanetImage({
           height={size}
           fit="contain"
         />
+        {dimOverlay > 0 && (
+          <Rect
+            x={0}
+            y={0}
+            width={size}
+            height={size}
+            color={Skia.Color(`rgba(0, 0, 0, ${dimOverlay})`)}
+          />
+        )}
         <Group>
           <Rect x={0} y={0} width={size} height={size}>
             <LinearGradient

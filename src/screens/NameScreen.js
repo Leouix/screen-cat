@@ -78,8 +78,9 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
       <BackgroundView>
         <StarryBackground />
 
-        <SunDecoration 
-          style={{  marginTop: 85, position: 'absolute', left: -20}} 
+        <SunDecoration
+          dimOverlay={0.2}
+          style={{  marginTop: 85, position: 'absolute', left: -20}}
         />
       </BackgroundView>
 
@@ -136,6 +137,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
           <PlanetImage
             source={planetAsset}
             size={sizePlanet}
+            dimOverlay={0.4}
             innerShadow={{
               side: 'bottom',
               spread: 0.5,

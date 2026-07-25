@@ -5,10 +5,12 @@ import {
   Group,
   RadialGradient,
   BlurMask,
+  Rect,
+  Skia,
   vec,
 } from '@shopify/react-native-skia';
 
-export default function SunDecoration({ size = 350, style }) {
+export default function SunDecoration({ size = 350, dimOverlay = 0, style }) {
   const center = vec(size / 2, size / 2);
   const outerRadius = size * 0.4;
   const innerRadius = size * 0.8;
@@ -45,6 +47,16 @@ export default function SunDecoration({ size = 350, style }) {
           <BlurMask blur={5} style="solid" />
         </Circle>
       </Group>
+
+      {dimOverlay > 0 && (
+        <Rect
+          x={0}
+          y={0}
+          width={size}
+          height={size}
+          color={Skia.Color(`rgba(0, 0, 0, ${dimOverlay})`)}
+        />
+      )}
     </Canvas>
   );
 }
