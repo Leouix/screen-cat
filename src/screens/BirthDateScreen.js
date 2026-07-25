@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { YStack } from 'tamagui'
 import { DatePicker } from '@quidone/react-native-wheel-picker'
 import StarryBackground from '../components/StarryBackground'
+import SunDecoration from '../components/SunDecoration';
+
 import {
   BackgroundView,
   Label,
@@ -17,6 +19,11 @@ export default function BirthDateScreen({ onNext }) {
     <YStack flex={1}>
       <BackgroundView>
         <StarryBackground />
+
+        <SunDecoration 
+          style={{ alignSelf: 'center', marginTop: 20, position: 'absolute', }} 
+        />
+
       </BackgroundView>
 
       <MainContainer>
