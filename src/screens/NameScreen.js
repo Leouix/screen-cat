@@ -33,6 +33,14 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
       <MainContainer style={{
             zIndex: 1
           }}>
+
+            <Label  style={{
+              alignSelf: 'start',
+              marginBottom: 250}}>
+                Mercury
+            </Label>
+
+
         <Label>What is your name</Label>
         <StyledInput
           value={name}
