@@ -27,20 +27,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
         />
       </BackgroundView>
 
-      <Image
-        source={mercuryAsset}
-        width={450}
-        height={450}
-        resizeMode="contain"
-        position="absolute"
-        alignSelf="center"
-        top={60}
-        shadowColor="#000"
-        shadowOffset={{ width: 0, height: 8 }}
-        shadowOpacity={0.4}
-        shadowRadius={20}
-        elevation={10}
-      />
+     
 
       <MainContainer>
         <Label>What is your name</Label>
