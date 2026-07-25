@@ -50,3 +50,14 @@ export const SecondaryButton = styled(Button, {
   textDecorationLine: 'underline',
   pressStyle: { opacity: 0.6 },
 })
+
+export const BackButton = styled(Button, {
+   backgroundColor: 'transparent',
+  paddingVertical: 5,
+  borderRadius: 50,
+  marginTop: 15,
+  color: '#c3bea6',
+  fontSize: 12,
+  textDecorationLine: 'underline',
+  pressStyle: { opacity: 0.6 },
+})

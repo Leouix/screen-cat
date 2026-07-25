@@ -7,6 +7,7 @@ import {
   MainContainer,
   PrimaryButton,
   SecondaryButton,
+  BackButton,
 } from '../components/shared/StyledComponents'
 
 const StyledInput = styled(Input, {
@@ -47,15 +48,9 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
 
         <XStack width="100%" justifyContent="space-between" alignItems="center" gap={16}>
           {onBack && (
-            <Button
-              backgroundColor="transparent"
-              color="#6B6B8D"
-              fontSize={14}
-              pressStyle={{ opacity: 0.6 }}
-              onPress={onBack}
-            >
+            <BackButton  onPress={onBack} >
               ← Back
-            </Button>
+            </BackButton>
           )}
 
           <SecondaryButton onPress={() => onNext('')}>
