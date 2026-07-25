@@ -38,7 +38,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
               alignSelf: 'start',
               marginBottom: 250}}>
                 Mercury
-            </Label>
+              </Label>
 
 
         <Label>What is your name</Label>
