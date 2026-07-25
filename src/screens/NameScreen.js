@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { YStack, XStack, Input, Button } from 'tamagui'
+import { YStack, XStack, Input, Button, Image } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
+import SunDecoration from '../components/SunDecoration';
 import {
   BackgroundView,
   Label,
@@ -8,22 +9,10 @@ import {
   PrimaryButton,
   SecondaryButton,
   BackButton,
+  StyledInput,
 } from '../components/shared/StyledComponents'
 
-const StyledInput = styled(Input, {
-  backgroundColor: 'rgba(248, 223, 97, 0.08)',
-  borderWidth: 1,
-  borderColor: '#f8df61b3',
-  borderRadius: 16,
-  color: '#fffffffa',
-  fontSize: 18,
-  height: 56,
-  width: '100%',
-  paddingHorizontal: 20,
-  placeholderTextColor: '#6B6B8D',
-})
-
-import { styled } from 'tamagui'
+const mercuryAsset = require('../../assets/mercury.png')
 
 export default function NameScreen({ birthDate, onNext, onBack }) {
   const [name, setName] = useState('')
@@ -32,7 +21,26 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
     <YStack flex={1}>
       <BackgroundView>
         <StarryBackground />
+
+        <SunDecoration 
+          style={{  marginTop: 85, position: 'absolute', left: -20}} 
+        />
       </BackgroundView>
+
+      <Image
+        source={mercuryAsset}
+        width={450}
+        height={450}
+        resizeMode="contain"
+        position="absolute"
+        alignSelf="center"
+        top={60}
+        shadowColor="#000"
+        shadowOffset={{ width: 0, height: 8 }}
+        shadowOpacity={0.4}
+        shadowRadius={20}
+        elevation={10}
+      />
 
       <MainContainer>
         <Label>What is your name</Label>

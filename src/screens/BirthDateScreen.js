@@ -12,8 +12,8 @@ import {
   SecondaryButton,
 } from '../components/shared/StyledComponents'
 
-export default function BirthDateScreen({ onNext }) {
-  const [date, setDate] = useState('1995-01-01')
+export default function BirthDateScreen({ birthDate, onNext }) {
+  const [date, setDate] = useState(birthDate || '1995-01-01')
 
   return (
     <YStack flex={1}>

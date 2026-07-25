@@ -1,4 +1,4 @@
-import { YStack, Text, Button, styled } from 'tamagui'
+import { YStack, Text, Button, Input, styled } from 'tamagui'
 
 export const BackgroundView = styled(YStack, {
   pointerEvents: 'none',
@@ -58,6 +58,20 @@ export const BackButton = styled(Button, {
   marginTop: 15,
   color: '#c3bea6',
   fontSize: 12,
+  fontWeight: 'bold',
   textDecorationLine: 'underline',
   pressStyle: { opacity: 0.6 },
+})
+
+export const StyledInput = styled(Input, {
+  width: '100%',
+  backgroundColor: '#ffffff08',
+  borderWidth: 1,
+  borderColor: '#ffffff20',
+  borderRadius: 12,
+  color: '#ffffff',
+  fontSize: 16,
+  paddingHorizontal: 16,
+  paddingVertical: 14,
+  placeholderTextColor: '#6B6B8D',
 })

@@ -3,6 +3,9 @@ import { TamaguiProvider, YStack } from 'tamagui'
 import config from './tamagui.config'
 import BirthDateScreen from './src/screens/BirthDateScreen'
 import NameScreen from './src/screens/NameScreen'
+import { Image } from 'tamagui'
+
+const mercuryAsset = require('./assets/mercury.png')
 
 export default function App() {
   const [screen, setScreen] = useState('birthDate')
@@ -23,14 +26,29 @@ export default function App() {
 
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
-      <YStack flex={1}>
+       <Image
+              source={mercuryAsset}
+              width={450}
+              height={450}
+              resizeMode="contain"
+              position="absolute"
+              alignSelf="center"
+              top={60}
+              shadowColor="#000"
+              shadowOffset={{ width: 0, height: 8 }}
+              shadowOpacity={0.4}
+              shadowRadius={20}
+              elevation={10}
+            />
+
+      {/* <YStack flex={1}>
         {screen === 'birthDate' && (
-          <BirthDateScreen onNext={handleBirthDateNext} />
+          <BirthDateScreen birthDate={birthDate} onNext={handleBirthDateNext} />
         )}
         {screen === 'name' && (
           <NameScreen birthDate={birthDate} onNext={handleNameNext} onBack={goBack} />
         )}
-      </YStack>
+      </YStack> */}
     </TamaguiProvider>
   )
 }
