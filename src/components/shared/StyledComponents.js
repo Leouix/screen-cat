@@ -9,12 +9,12 @@ export const BackgroundView = styled(YStack, {
 })
 
 export const Label = styled(Text, {
-  color: '#6B6B8D',
+  color: '#ffffff',
   fontSize: 18,
-  fontWeight: '500',
   letterSpacing: 1.5,
   textTransform: 'uppercase',
   marginBottom: 20,
+  fontFamily: 'Montserrat_400Regular',
 })
 
 export const MainContainer = styled(YStack, {

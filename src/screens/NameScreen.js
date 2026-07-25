@@ -97,12 +97,13 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
 
                 <Label  style={{
                   alignSelf: 'start',
+                  fontSize: 16
                 }}>
                 {planetInterpretation}
               </Label>
 
         {planetContent ? (
-          <Label style={{  marginBottom: 100 }}>
+          <Label style={{  marginBottom: 100, fontSize: 12 }}>
             {planetContent}
           </Label>
         ) : null}

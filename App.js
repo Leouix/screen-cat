@@ -1,10 +1,23 @@
 import { useState } from 'react'
 import { TamaguiProvider, YStack } from 'tamagui'
+import {
+  useFonts,
+  Montserrat_400Regular,
+  Montserrat_500Medium,
+  Montserrat_600SemiBold,
+  Montserrat_700Bold,
+} from '@expo-google-fonts/montserrat'
 import config from './tamagui.config'
 import BirthDateScreen from './src/screens/BirthDateScreen'
 import NameScreen from './src/screens/NameScreen'
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
+  })
   const [screen, setScreen] = useState('birthDate')
   const [birthDate, setBirthDate] = useState('')
 
@@ -20,6 +33,8 @@ export default function App() {
   const goBack = () => {
     if (screen === 'name') setScreen('birthDate')
   }
+
+  if (!fontsLoaded) return null
 
   return (
     <TamaguiProvider config={config} defaultTheme="dark">

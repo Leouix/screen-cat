@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/montserrat": "^0.4.2",
     "@quidone/react-native-wheel-picker": "^1.7.1",
     "@shopify/react-native-skia": "2.6.2",
     "@tamagui/babel-plugin": "^2.5.0",
