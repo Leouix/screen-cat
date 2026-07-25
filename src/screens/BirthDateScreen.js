@@ -21,7 +21,7 @@ export default function BirthDateScreen({ onNext }) {
         <StarryBackground />
 
         <SunDecoration 
-          style={{ alignSelf: 'center', marginTop: 20, position: 'absolute', }} 
+          style={{  marginTop: 100, position: 'absolute', left: -50}} 
         />
 
       </BackgroundView>
