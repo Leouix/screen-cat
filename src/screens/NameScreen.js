@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { YStack, XStack, Input, Button, Image } from 'tamagui'
+import { YStack, XStack, Input, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import SunDecoration from '../components/SunDecoration';
+import Animated from 'react-native-reanimated'
 import {
   BackgroundView,
   Label,
@@ -27,9 +28,11 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
         />
       </BackgroundView>
 
-     
+   
 
-      <MainContainer>
+      <MainContainer style={{
+            zIndex: 1
+          }}>
         <Label>What is your name</Label>
         <StyledInput
           value={name}
@@ -53,7 +56,28 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
           </SecondaryButton>
         </XStack>
 
+          <Animated.Image
+          source={mercuryAsset}
+          style={{
+            width: 550,
+            height: 550,
+            resizeMode: 'contain',
+            position: 'absolute',
+            alignSelf: 'center',
+            bottom: -50,
+            right: -150,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.4,
+            shadowRadius: 20,
+            elevation: 10,
+            zIndex: -1
+          }}
+        />
+
       </MainContainer>
+
+      
     </YStack>
   )
 }
