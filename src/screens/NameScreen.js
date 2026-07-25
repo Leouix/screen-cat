@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { YStack, XStack, Input, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import SunDecoration from '../components/SunDecoration';
@@ -15,7 +15,26 @@ import {
 import { getPlanetByBirthDate } from '../services/api'
 import { getRulingPlanet } from '../utils/planets'
 
-const mercuryAsset = require('../../assets/mercury.png')
+const PLANET_ASSETS = {
+  'Меркурий': require('../../assets/planets/mercury.png'),
+  'Венера': require('../../assets/planets/venus.png'),
+  'Марс': require('../../assets/planets/mars.png'),
+  'Юпитер': require('../../assets/planets/jupiter.png'),
+  'Сатурн': require('../../assets/planets/saturn.png'),
+  'Уран': require('../../assets/planets/uranus.png'),
+  'Нептун': require('../../assets/planets/neptune.png'),
+  'Плутон': require('../../assets/planets/pluton.png'),
+  'Луна': require('../../assets/planets/moon.png'),
+}
+
+const PLANET_KEYS = Object.keys(PLANET_ASSETS)
+
+function getPlanetAsset(planetName) {
+  if (planetName === 'Солнце' || !PLANET_ASSETS[planetName]) {
+    return PLANET_ASSETS[PLANET_KEYS[Math.floor(Math.random() * PLANET_KEYS.length)]]
+  }
+  return PLANET_ASSETS[planetName]
+}
 
 export default function NameScreen({ birthDate, onNext, onBack }) {
   const [name, setName] = useState('')
@@ -26,6 +45,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
   const planetTitle = fallbackPlanet
   const planetInterpretation = planetData?.interpretations?.sign?.title ?? ''
   const planetContent = planetData?.interpretations?.sign?.content ?? ''
+  const planetAsset = useMemo(() => getPlanetAsset(planetTitle), [planetTitle])
 
   useEffect(() => {
     if (!birthDate) {
@@ -104,7 +124,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
         </XStack>
 
           <Animated.Image
-          source={mercuryAsset}
+          source={planetAsset}
           style={{
             width: 550,
             height: 550,
