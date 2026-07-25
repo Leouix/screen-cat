@@ -57,7 +57,7 @@ export default function StarryBackground() {
     // 3. Равномерный таймер (Linear Easing)
     time.value = withRepeat(
       withTiming(1000, { 
-        duration: 100000000, // 100 секунд на полный цикл
+        duration: 1000000, // 100 секунд на полный цикл
         easing: Easing.linear // Равномерное движение без ускорений/замедлений
       }),
       -1,
