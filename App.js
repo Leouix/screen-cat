@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { TamaguiProvider, YStack } from 'tamagui'
+import { TamaguiProvider } from 'tamagui'
 import {
   useFonts,
   Montserrat_400Regular,
@@ -8,8 +7,7 @@ import {
   Montserrat_700Bold,
 } from '@expo-google-fonts/montserrat'
 import config from './tamagui.config'
-import BirthDateScreen from './src/screens/BirthDateScreen'
-import NameScreen from './src/screens/NameScreen'
+import Earth3d from './src/components/Earth3d'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,35 +16,12 @@ export default function App() {
     Montserrat_600SemiBold,
     Montserrat_700Bold,
   })
-  const [screen, setScreen] = useState('birthDate')
-  const [birthDate, setBirthDate] = useState('')
-
-  const handleBirthDateNext = (date) => {
-    setBirthDate(date)
-    setScreen('name')
-  }
-
-  const handleNameNext = (name) => {
-    console.log({ birthDate, name })
-  }
-
-  const goBack = () => {
-    if (screen === 'name') setScreen('birthDate')
-  }
 
   if (!fontsLoaded) return null
 
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
-
-      <YStack flex={1}>
-        {screen === 'birthDate' && (
-          <BirthDateScreen birthDate={birthDate} onNext={handleBirthDateNext} />
-        )}
-        {screen === 'name' && (
-          <NameScreen birthDate={birthDate} onNext={handleNameNext} onBack={goBack} />
-        )}
-      </YStack>
+      <Earth3d targetLat={40.7283} targetLng={73.9942} />
     </TamaguiProvider>
   )
 }
