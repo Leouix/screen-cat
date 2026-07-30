@@ -128,7 +128,7 @@ export default function NameScreen({ birthDate, name, onNameChange, onNext, onBa
             </BackButton>
           )}
 
-          <SecondaryButton onPress={() => onNext('')}>
+          <SecondaryButton onPress={() => onNext(name)}>
             Skip →
           </SecondaryButton>
         </XStack>
