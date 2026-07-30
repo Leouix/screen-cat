@@ -27,6 +27,10 @@ const earthShader = Skia.RuntimeEffect.Make(`
 
   vec4 main(vec2 pos) {
     vec2 uv = pos / iResolution * 2.0 - 1.0;
+    
+    // ИСПРАВЛЕНИЕ: Переворачиваем ось Y для 3D-камеры
+    uv.y = -uv.y; 
+    
     uv.x *= iResolution.x / iResolution.y;
 
     vec3 ro = vec3(0.0, 0.0, 3.0);
@@ -35,39 +39,39 @@ const earthShader = Skia.RuntimeEffect.Make(`
     float b = dot(ro, rd);
     float c = dot(ro, ro) - 1.0;
     float h = b * b - c;
-    if (h < 0.0) return vec4(0.0, 0.0, 0.0, 1.0);
+    
+    if (h < 0.0) return vec4(0.0);
 
     h = sqrt(h);
     float t = -b - h;
     vec3 hit = ro + rd * t;
 
-    float cosY = cos(rotation.y);
-    float sinY = sin(rotation.y);
     float cosX = cos(rotation.x);
     float sinX = sin(rotation.x);
-
     vec3 p;
-    p.x = hit.x * cosY - hit.z * sinY;
-    p.y = hit.y;
-    p.z = hit.x * sinY + hit.z * cosY;
+    p.x = hit.x;
+    p.y = hit.y * cosX - hit.z * sinX;
+    p.z = hit.y * sinX + hit.z * cosX;
 
+    float cosY = cos(rotation.y);
+    float sinY = sin(rotation.y);
     vec3 p2;
-    p2.x = p.x;
-    p2.y = p.y * cosX - p.z * sinX;
-    p2.z = p.y * sinX + p.z * cosX;
+    p2.x = p.x * cosY - p.z * sinY;
+    p2.y = p.y;
+    p2.z = p.x * sinY + p.z * cosY;
 
     vec2 texCoord = vec2(
-      atan(p2.z, p2.x) / 6.283185 + 0.5,
-      asin(p2.y) / 3.141593 + 0.5
+      atan(p2.x, p2.z) / 6.283185 + 0.5,
+      0.5 - asin(p2.y) / 3.141593
     );
 
     vec4 color = image.eval(texCoord * iResolution);
 
     if (showMarker > 0.5) {
       vec3 target3D = vec3(
-        cos(markerPos.x) * cos(markerPos.y),
+        cos(markerPos.x) * sin(markerPos.y),
         sin(markerPos.x),
-        cos(markerPos.x) * sin(markerPos.y)
+        cos(markerPos.x) * cos(markerPos.y)
       );
 
       float dist = distance(p2, target3D);
@@ -90,8 +94,12 @@ export default function Earth3d({ targetLat, targetLng, style, showMarker = fals
   const { width, height } = Dimensions.get('window')
   const earthImage = useImage({ uri: EARTH_IMG_URL })
 
-  const rotX = useSharedValue(0)
-  const rotY = useSharedValue(Math.PI / 2)
+  // Инициализируем планету сразу в нужных координатах, чтобы не было прыжка при рендере
+  const initialLatRad = targetLat != null ? -(targetLat * Math.PI) / 180 : 0
+  const initialLngRad = targetLng != null ? -(targetLng * Math.PI) / 180 : 0
+
+  const rotX = useSharedValue(initialLatRad)
+  const rotY = useSharedValue(initialLngRad)
 
   const latSV = useSharedValue(targetLat ?? 0)
   const lngSV = useSharedValue(targetLng ?? 0)
@@ -106,23 +114,15 @@ export default function Earth3d({ targetLat, targetLng, style, showMarker = fals
   useEffect(() => {
     if (targetLat == null || targetLng == null) return
 
-    const latRad = (targetLat * Math.PI) / 180
-    const lngRad = (targetLng * Math.PI) / 180
-    const sinLat = Math.sin(latRad)
-    const cosLat = Math.cos(latRad)
-    const sinLng = Math.sin(lngRad)
-    const cosLng = Math.cos(lngRad)
+    // Вращаем глобус в обратную сторону от координат города, чтобы город оказался в центре камеры (0, 0, 1)
+    const targetRotX = -(targetLat * Math.PI) / 180
+    let targetRotY = -(targetLng * Math.PI) / 180
 
-    const targetRotX = Math.atan2(-sinLat, cosLat * sinLng)
-
-    let cosY
-    if (Math.abs(Math.cos(targetRotX)) > 0.001) {
-      cosY = (cosLat * sinLng) / Math.cos(targetRotX)
-    } else {
-      cosY = -sinLat / Math.sin(targetRotX)
-    }
-
-    const targetRotY = Math.atan2(-cosLat * cosLng, cosY)
+    // Логика "Кратчайшего пути": предотвращает перекручивание глобуса 
+    // при переходе через линию смены дат (-180 / +180)
+    const diffY = targetRotY - rotY.value
+    const normalizedDiffY = Math.atan2(Math.sin(diffY), Math.cos(diffY))
+    targetRotY = rotY.value + normalizedDiffY
 
     rotX.value = withTiming(targetRotX, {
       duration: 1500,
