@@ -22,6 +22,8 @@ const earthShader = Skia.RuntimeEffect.Make(`
   uniform shader image;
   uniform vec2 iResolution;
   uniform vec2 rotation;
+  uniform vec2 markerPos;
+  uniform float showMarker;
 
   vec4 main(vec2 pos) {
     vec2 uv = pos / iResolution * 2.0 - 1.0;
@@ -59,22 +61,68 @@ const earthShader = Skia.RuntimeEffect.Make(`
       asin(p2.y) / 3.141593 + 0.5
     );
 
-    return image.eval(texCoord * iResolution);
+    vec4 color = image.eval(texCoord * iResolution);
+
+    if (showMarker > 0.5) {
+      vec3 target3D = vec3(
+        cos(markerPos.x) * cos(markerPos.y),
+        sin(markerPos.x),
+        cos(markerPos.x) * sin(markerPos.y)
+      );
+
+      float dist = distance(p2, target3D);
+      float ringR = 0.035;
+      float ringW = 0.01;
+
+      if (dist < ringR && dist > ringR - ringW) {
+        color = vec4(1.0, 0.27, 0.34, 1.0);
+      }
+      if (dist < 0.006) {
+        color = vec4(1.0, 0.27, 0.34, 1.0);
+      }
+    }
+
+    return color;
   }
 `)
 
-export default function Earth3d({ targetLat, targetLng, style }) {
+export default function Earth3d({ targetLat, targetLng, style, showMarker = false }) {
   const { width, height } = Dimensions.get('window')
   const earthImage = useImage({ uri: EARTH_IMG_URL })
 
   const rotX = useSharedValue(0)
   const rotY = useSharedValue(Math.PI / 2)
 
+  const latSV = useSharedValue(targetLat ?? 0)
+  const lngSV = useSharedValue(targetLng ?? 0)
+  const showSV = useSharedValue(showMarker ? 1 : 0)
+
+  useEffect(() => {
+    latSV.value = targetLat
+    lngSV.value = targetLng
+    showSV.value = showMarker ? 1 : 0
+  }, [targetLat, targetLng, showMarker])
+
   useEffect(() => {
     if (targetLat == null || targetLng == null) return
 
-    const targetRotY = Math.PI / 2 - (targetLng * Math.PI) / 180
-    const targetRotX = (targetLat * Math.PI) / 180
+    const latRad = (targetLat * Math.PI) / 180
+    const lngRad = (targetLng * Math.PI) / 180
+    const sinLat = Math.sin(latRad)
+    const cosLat = Math.cos(latRad)
+    const sinLng = Math.sin(lngRad)
+    const cosLng = Math.cos(lngRad)
+
+    const targetRotX = Math.atan2(-sinLat, cosLat * sinLng)
+
+    let cosY
+    if (Math.abs(Math.cos(targetRotX)) > 0.001) {
+      cosY = (cosLat * sinLng) / Math.cos(targetRotX)
+    } else {
+      cosY = -sinLat / Math.sin(targetRotX)
+    }
+
+    const targetRotY = Math.atan2(-cosLat * cosLng, cosY)
 
     rotX.value = withTiming(targetRotX, {
       duration: 1500,
@@ -89,6 +137,11 @@ export default function Earth3d({ targetLat, targetLng, style }) {
   const uniforms = useDerivedValue(() => ({
     iResolution: [width, height],
     rotation: [rotX.value, rotY.value],
+    markerPos: [
+      (latSV.value * Math.PI) / 180,
+      (lngSV.value * Math.PI) / 180,
+    ],
+    showMarker: showSV.value,
   }))
 
   return (

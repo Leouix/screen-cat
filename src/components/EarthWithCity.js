@@ -10,11 +10,12 @@ export default function EarthWithCity() {
 
   return (
     <YStack flex={1} position="relative">
-      <Earth3d
-        targetLat={coord.latitude}
-        targetLng={coord.longitude}
-        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
-      />
+        <Earth3d
+          targetLat={coord.latitude}
+          targetLng={coord.longitude}
+          showMarker={!!selectedCity}
+          style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+        />
 
       <YStack
         position="absolute"
@@ -24,9 +25,7 @@ export default function EarthWithCity() {
         alignItems="center"
         gap={8}
       >
-        <CitySearch onSelect={setSelectedCity} selectedCity={selectedCity} />
-
-        {selectedCity && (
+         {selectedCity && (
           <YStack alignItems="center">
             <Text color="#ffffff" fontSize={14} fontWeight="500">
               {selectedCity.name}, {selectedCity.country}
@@ -36,6 +35,9 @@ export default function EarthWithCity() {
             </Text>
           </YStack>
         )}
+        <CitySearch onSelect={setSelectedCity} selectedCity={selectedCity} />
+
+       
       </YStack>
     </YStack>
   )
