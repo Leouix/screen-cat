@@ -36,8 +36,7 @@ function getPlanetAsset(planetName) {
   return PLANET_ASSETS[planetName]
 }
 
-export default function NameScreen({ birthDate, onNext, onBack }) {
-  const [name, setName] = useState('')
+export default function NameScreen({ birthDate, name, onNameChange, onNext, onBack }) {
   const [planetData, setPlanetData] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -114,7 +113,7 @@ export default function NameScreen({ birthDate, onNext, onBack }) {
         <Label style={{fontWeight: 700, }}>What is your name</Label>
         <StyledInput
           value={name}
-          onChangeText={setName}
+          onChangeText={onNameChange}
           placeholder="Enter your name"
         />
 

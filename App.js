@@ -23,6 +23,7 @@ export default function App() {
   const [screen, setScreen] = useState('birthDate')
   const [birthDate, setBirthDate] = useState('')
   const [name, setName] = useState('')
+  const [selectedCity, setSelectedCity] = useState(null)
 
   if (!fontsLoaded) return null
 
@@ -49,12 +50,20 @@ export default function App() {
           <BirthDateScreen birthDate={birthDate} onNext={handleBirthDateNext} />
         )}
         {screen === 'name' && (
-          <NameScreen birthDate={birthDate} onNext={handleNameNext} onBack={goBack} />
+          <NameScreen
+            birthDate={birthDate}
+            name={name}
+            onNameChange={setName}
+            onNext={handleNameNext}
+            onBack={goBack}
+          />
         )}
         {screen === 'city' && (
           <EarthWithCity
             birthDate={birthDate}
             name={name}
+            selectedCity={selectedCity}
+            onCitySelect={setSelectedCity}
             onBack={goBack}
           />
         )}

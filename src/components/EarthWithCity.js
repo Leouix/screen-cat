@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { YStack, Text, XStack } from 'tamagui'
 import Earth3d from './Earth3d'
 import CitySearch from './CitySearch'
@@ -12,9 +11,7 @@ import {
 } from '../components/shared/StyledComponents'
 
 
-export default function EarthWithCity({ birthDate, name, onBack }) {
-  const [selectedCity, setSelectedCity] = useState(null)
-
+export default function EarthWithCity({ birthDate, name, selectedCity, onCitySelect, onBack }) {
   const coord = selectedCity || { latitude: 42.8746, longitude: 74.5698 }
 
   return (
@@ -50,7 +47,7 @@ export default function EarthWithCity({ birthDate, name, onBack }) {
             </Text>
           </YStack>
         )}
-        <CitySearch onSelect={setSelectedCity} selectedCity={selectedCity} />
+        <CitySearch onSelect={onCitySelect} selectedCity={selectedCity} />
 
         <XStack width="100%" justifyContent="space-between" alignItems="center" gap={16}>
           {onBack && (
