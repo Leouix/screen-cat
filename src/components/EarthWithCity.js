@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { YStack, Text } from 'tamagui'
 import Earth3d from './Earth3d'
 import CitySearch from './CitySearch'
+import StarryBackground from '../components/StarryBackground'
+
+import {
+  BackgroundView,
+} from '../components/shared/StyledComponents'
+
 
 export default function EarthWithCity() {
   const [selectedCity, setSelectedCity] = useState(null)
@@ -10,6 +16,12 @@ export default function EarthWithCity() {
 
   return (
     <YStack flex={1} position="relative">
+
+
+        <BackgroundView>
+          <StarryBackground />
+        </BackgroundView>
+
         <Earth3d
           targetLat={coord.latitude}
           targetLng={coord.longitude}

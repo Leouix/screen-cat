@@ -147,7 +147,6 @@ export default function Earth3d({ targetLat, targetLng, style, showMarker = fals
   return (
     <View style={[{ width, height }, style]}>
       <Canvas style={{ flex: 1 }}>
-        <Fill color="#0B0C10" />
         {earthImage && (
           <Fill>
             <Shader source={earthShader} uniforms={uniforms}>
