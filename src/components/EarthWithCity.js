@@ -1,15 +1,18 @@
 import { useState } from 'react'
-import { YStack, Text } from 'tamagui'
+import { YStack, Text, XStack } from 'tamagui'
 import Earth3d from './Earth3d'
 import CitySearch from './CitySearch'
 import StarryBackground from '../components/StarryBackground'
 
 import {
   BackgroundView,
+  BackButton,
+  PrimaryButton,
+  SecondaryButton,
 } from '../components/shared/StyledComponents'
 
 
-export default function EarthWithCity() {
+export default function EarthWithCity({ birthDate, name, onBack }) {
   const [selectedCity, setSelectedCity] = useState(null)
 
   const coord = selectedCity || { latitude: 42.8746, longitude: 74.5698 }
@@ -49,7 +52,17 @@ export default function EarthWithCity() {
         )}
         <CitySearch onSelect={setSelectedCity} selectedCity={selectedCity} />
 
-       
+        <XStack width="100%" justifyContent="space-between" alignItems="center" gap={16}>
+          {onBack && (
+            <BackButton onPress={onBack}>
+              ← Back
+            </BackButton>
+          )}
+          <SecondaryButton onPress={() => {}}>
+            Done →
+          </SecondaryButton>
+        </XStack>
+
       </YStack>
     </YStack>
   )
