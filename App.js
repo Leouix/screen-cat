@@ -7,7 +7,7 @@ import {
   Montserrat_700Bold,
 } from '@expo-google-fonts/montserrat'
 import config from './tamagui.config'
-import Earth3d from './src/components/Earth3d'
+import EarthWithCity from './src/components/EarthWithCity'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -21,7 +21,7 @@ export default function App() {
 
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
-      <Earth3d targetLat={40.7283} targetLng={73.9942} />
+      <EarthWithCity />
     </TamaguiProvider>
   )
 }
