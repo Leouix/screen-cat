@@ -1,7 +1,8 @@
 import { YStack, Text, XStack } from 'tamagui'
 import Earth3d from './Earth3d'
-import CitySearch from './CitySearch'
+import CitySearch from '../screens/CitySearch'
 import StarryBackground from '../components/StarryBackground'
+import SunDecoration from '../components/SunDecoration';
 
 import {
   BackgroundView,
@@ -20,6 +21,13 @@ export default function EarthWithCity({ birthDate, name, selectedCity, onCitySel
 
         <BackgroundView>
           <StarryBackground />
+
+          <SunDecoration 
+            dimOverlay={0.3}
+            size = {300}
+              style={{  marginTop: 55, position: 'absolute', left: -40}} 
+            />
+
         </BackgroundView>
 
         <Earth3d

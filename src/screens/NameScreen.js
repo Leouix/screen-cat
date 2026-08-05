@@ -78,7 +78,7 @@ export default function NameScreen({ birthDate, name, onNameChange, onNext, onBa
         <StarryBackground />
 
         <SunDecoration
-          dimOverlay={0.2}
+          dimOverlay={0.3}
           style={{  marginTop: 85, position: 'absolute', left: -20}}
         />
       </BackgroundView>
