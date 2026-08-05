@@ -12,7 +12,7 @@ import {
 } from '../components/shared/StyledComponents'
 
 
-export default function EarthWithCity({ birthDate, name, selectedCity, onCitySelect, onBack }) {
+export default function EarthWithCity({ birthDate, birthTime, name, selectedCity, onCitySelect, onBack }) {
   const coord = selectedCity || { latitude: 42.8746, longitude: 74.5698 }
 
   return (

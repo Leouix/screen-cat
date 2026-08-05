@@ -73,3 +73,9 @@ export const StyledInput = styled(Input, {
   fontSize: 16,  
   placeholderTextColor: '#b2b2bc',
 })
+
+export const Divider = styled(YStack, {
+  width: '30%',
+  height: 1,
+  backgroundColor: '#ffffff20',
+})

@@ -22,13 +22,15 @@ export default function App() {
 
   const [screen, setScreen] = useState('birthDate')
   const [birthDate, setBirthDate] = useState('')
+  const [birthTime, setBirthTime] = useState('')
   const [name, setName] = useState('')
   const [selectedCity, setSelectedCity] = useState(null)
 
   if (!fontsLoaded) return null
 
-  const handleBirthDateNext = (date) => {
+  const handleBirthDateNext = (date, time) => {
     setBirthDate(date)
+    setBirthTime(time)
     setScreen('name')
   }
 
@@ -47,11 +49,12 @@ export default function App() {
 
       <YStack flex={1}>
         {screen === 'birthDate' && (
-          <BirthDateScreen birthDate={birthDate} onNext={handleBirthDateNext} />
+          <BirthDateScreen birthDate={birthDate} birthTime={birthTime} onNext={handleBirthDateNext} />
         )}
         {screen === 'name' && (
           <NameScreen
             birthDate={birthDate}
+            birthTime={birthTime}
             name={name}
             onNameChange={setName}
             onNext={handleNameNext}
@@ -61,6 +64,7 @@ export default function App() {
         {screen === 'city' && (
           <EarthWithCity
             birthDate={birthDate}
+            birthTime={birthTime}
             name={name}
             selectedCity={selectedCity}
             onCitySelect={setSelectedCity}

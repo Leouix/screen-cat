@@ -36,7 +36,7 @@ function getPlanetAsset(planetName) {
   return PLANET_ASSETS[planetName]
 }
 
-export default function NameScreen({ birthDate, name, onNameChange, onNext, onBack }) {
+export default function NameScreen({ birthDate, birthTime, name, onNameChange, onNext, onBack }) {
   const [planetData, setPlanetData] = useState(null)
   const [loading, setLoading] = useState(true)
 
