@@ -32,11 +32,25 @@ export default function App() {
     setBirthDate(date)
     setBirthTime(time)
     setScreen('name')
+    console.log('[Screen 1 → 2] BirthDate data:', { birthDate: date, birthTime: time })
   }
 
   const handleNameNext = (name) => {
     setName(name)
     setScreen('city')
+    console.log('[Screen 2 → 3] Data so far:', { birthDate, birthTime, name })
+  }
+
+  const handleCitySelect = (city) => {
+    setSelectedCity(city)
+    console.log('[Screen 3] City selected:', {
+      birthDate,
+      birthTime,
+      name,
+      selectedCity: city
+        ? { name: city.name, country: city.country, latitude: city.latitude, longitude: city.longitude }
+        : null,
+    })
   }
 
   const goBack = () => {
@@ -67,7 +81,7 @@ export default function App() {
             birthTime={birthTime}
             name={name}
             selectedCity={selectedCity}
-            onCitySelect={setSelectedCity}
+            onCitySelect={handleCitySelect}
             onBack={goBack}
           />
         )}
