@@ -43,7 +43,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
         left={20}
         right={20}
         alignItems="center"
-        gap={8}
+        
       >
          {selectedCity && (
           <YStack alignItems="center">
@@ -61,7 +61,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
           NEXT
         </PrimaryButton>
 
-        <XStack width="100%" justifyContent="space-between" alignItems="center" gap={16}>
+        <XStack width="100%" justifyContent="space-between" >
           {onBack && (
             <BackButton onPress={onBack}>
               ← Back
