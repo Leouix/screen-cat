@@ -9,6 +9,7 @@ import {
   BackButton,
   PrimaryButton,
   SecondaryButton,
+  Label,
 } from '../components/shared/StyledComponents'
 
 
@@ -43,18 +44,22 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
         left={20}
         right={20}
         alignItems="center"
-        
       >
+        
+
          {selectedCity && (
           <YStack alignItems="center">
             <Text color="#ffffff" fontSize={14} fontWeight="500">
               {selectedCity.name}, {selectedCity.country}
             </Text>
-            <Text color="#b2b2bc" fontSize={11}>
+            <Text color="#b2b2bc" fontSize={11} marginBottom="20">
               {selectedCity.latitude}°, {selectedCity.longitude}°
             </Text>
           </YStack>
         )}
+
+        <Label style={{fontWeight: 700, }}>In which city were you born?</Label>
+
         <CitySearch onSelect={onCitySelect} selectedCity={selectedCity} />
 
         <PrimaryButton onPress={() => onNext(selectedCity)}>
