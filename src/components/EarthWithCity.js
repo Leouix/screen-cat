@@ -12,7 +12,7 @@ import {
 } from '../components/shared/StyledComponents'
 
 
-export default function EarthWithCity({ birthDate, birthTime, name, selectedCity, onCitySelect, onBack }) {
+export default function EarthWithCity({ birthDate, birthTime, name, selectedCity, onCitySelect, onBack, onNext }) {
   const coord = selectedCity || { latitude: 42.8746, longitude: 74.5698 }
 
   return (
@@ -57,14 +57,18 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
         )}
         <CitySearch onSelect={onCitySelect} selectedCity={selectedCity} />
 
+        <PrimaryButton onPress={() => onNext(selectedCity)}>
+          NEXT
+        </PrimaryButton>
+
         <XStack width="100%" justifyContent="space-between" alignItems="center" gap={16}>
           {onBack && (
             <BackButton onPress={onBack}>
               ← Back
             </BackButton>
           )}
-          <SecondaryButton onPress={() => {}}>
-            Done →
+          <SecondaryButton onPress={() => onNext(null)}>
+            Skip →
           </SecondaryButton>
         </XStack>
 

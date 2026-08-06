@@ -53,6 +53,17 @@ export default function App() {
     })
   }
 
+  const handleCityNext = (city) => {
+    console.log('[Screen 3 → next] City step done:', {
+      birthDate,
+      birthTime,
+      name,
+      selectedCity: city
+        ? { name: city.name, country: city.country, latitude: city.latitude, longitude: city.longitude }
+        : null,
+    })
+  }
+
   const goBack = () => {
     if (screen === 'name') setScreen('birthDate')
     if (screen === 'city') setScreen('name')
@@ -83,6 +94,7 @@ export default function App() {
             selectedCity={selectedCity}
             onCitySelect={handleCitySelect}
             onBack={goBack}
+            onNext={handleCityNext}
           />
         )}
       </YStack>
