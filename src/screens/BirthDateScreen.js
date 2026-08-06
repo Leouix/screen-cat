@@ -28,12 +28,13 @@ const MINUTES = Array.from({ length: 60 }, (_, i) => ({
 export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
   const [date, setDate] = useState(birthDate || '1995-01-01')
   const [time, setTime] = useState(() => {
-    const [hours = 12, minutes = 0] = (birthTime || '12:00').split(':').map(Number)
+    if (!birthTime) return null
+    const [hours = 12, minutes = 0] = birthTime.split(':').map(Number)
     return { hours, minutes }
   })
 
   const timeString = useMemo(
-    () => `${String(time.hours).padStart(2, '0')}:${String(time.minutes).padStart(2, '0')}`,
+    () => (time ? `${String(time.hours).padStart(2, '0')}:${String(time.minutes).padStart(2, '0')}` : null),
     [time],
   )
 
@@ -60,24 +61,41 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
         <Label>when were you born?</Label>
 
          <XStack alignItems="center" gap={3} marginBottom={10}>
-         
-          <WheelPicker
-            data={HOURS}
-            value={time.hours}
-            onValueChanged={({ item }) => setTime((prev) => ({ ...prev, hours: item.value }))}
-            width={32}
-            {...wheelProps}
-          />
-          <Text color="#f8df61" fontSize={18} fontWeight="bold">:</Text>
-          <WheelPicker
-           
-            data={MINUTES}
-            value={time.minutes}
-            onValueChanged={({ item }) => setTime((prev) => ({ ...prev, minutes: item.value }))}
-            width={32}
-            {...wheelProps}
-          />
+          {time ? (
+            <>
+              <WheelPicker
+                data={HOURS}
+                value={time.hours}
+                onValueChanged={({ item }) => setTime((prev) => ({ ...prev, hours: item.value }))}
+                width={32}
+                {...wheelProps}
+              />
+              <Text color="#f8df61" fontSize={18} fontWeight="bold">:</Text>
+              <WheelPicker
+                data={MINUTES}
+                value={time.minutes}
+                onValueChanged={({ item }) => setTime((prev) => ({ ...prev, minutes: item.value }))}
+                width={32}
+                {...wheelProps}
+              />
+            </>
+          ) : (
+            <XStack
+              onPress={() => setTime({ hours: 12, minutes: 0 })}
+              alignItems="center"
+              justifyContent="center"
+              gap={15}              
+              paddingHorizontal={28}
+              paddingVertical={6}
+            >
+              <Text color="#f8df61" fontSize={18} fontWeight="bold">--</Text>
+              <Text color="#f8df61" fontSize={18} fontWeight="bold">:</Text>
+              <Text color="#f8df61" fontSize={18} fontWeight="bold">--</Text>
+            </XStack>
+          )}
         </XStack>
+
+       
 
         <Divider marginVertical={5} />
 
