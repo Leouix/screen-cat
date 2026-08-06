@@ -10,7 +10,7 @@ import {
 import config from './tamagui.config'
 import BirthDateScreen from './src/screens/BirthDateScreen'
 import NameScreen from './src/screens/NameScreen'
-import EarthWithCity from './src/components/EarthWithCity'
+import EarthWithCity from './src/screens/EarthWithCity'
 
 export default function App() {
   const [fontsLoaded] = useFonts({

@@ -57,7 +57,7 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
       </BackgroundView>
 
       <MainContainer>
-        <Label>Time and date of your birth:</Label>
+        <Label>when were you born?</Label>
 
          <XStack alignItems="center" gap={3} marginBottom={10}>
          

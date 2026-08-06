@@ -1,6 +1,6 @@
 import { YStack, Text, XStack } from 'tamagui'
-import Earth3d from './Earth3d'
-import CitySearch from '../screens/CitySearch'
+import Earth3d from '../components/Earth3d'
+import CitySearch from '../components/CitySearch'
 import StarryBackground from '../components/StarryBackground'
 import SunDecoration from '../components/SunDecoration';
 
