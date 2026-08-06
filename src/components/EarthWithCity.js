@@ -39,7 +39,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
 
       <YStack
         position="absolute"
-        bottom={60}
+        bottom={30}
         left={20}
         right={20}
         alignItems="center"
