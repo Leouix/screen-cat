@@ -8,15 +8,13 @@ import {
   useImage,
   Skia,
 } from '@shopify/react-native-skia'
-import {
+import Animated, {
+  useAnimatedStyle,
   useSharedValue,
   withTiming,
   useDerivedValue,
   Easing,
 } from 'react-native-reanimated'
-
-const EARTH_IMG_URL =
-  'https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg'
 
 const earthShader = Skia.RuntimeEffect.Make(`
   uniform shader image;
@@ -92,7 +90,19 @@ const earthShader = Skia.RuntimeEffect.Make(`
 
 export default function Earth3d({ targetLat, targetLng, style, showMarker = false }) {
   const { width, height } = Dimensions.get('window')
-  const earthImage = useImage({ uri: EARTH_IMG_URL })
+  const earthImage = useImage(require('../../assets/earth.jpg'))
+  const opacity = useSharedValue(0)
+
+  useEffect(() => {
+    if (earthImage) {
+      opacity.value = withTiming(1, {
+        duration: 700,
+        easing: Easing.out(Easing.cubic),
+      })
+    }
+  }, [earthImage, opacity])
+
+  const fadeInStyle = useAnimatedStyle(() => ({ opacity: opacity.value }))
 
   // Инициализируем планету сразу в нужных координатах, чтобы не было прыжка при рендере
   const initialLatRad = targetLat != null ? -(targetLat * Math.PI) / 180 : 0
@@ -146,22 +156,24 @@ export default function Earth3d({ targetLat, targetLng, style, showMarker = fals
 
   return (
     <View style={[{ width, height }, style]}>
-      <Canvas style={{ flex: 1 }}>
-        {earthImage && (
-          <Fill>
-            <Shader source={earthShader} uniforms={uniforms}>
-              <ImageShader
-                image={earthImage}
-                x={0}
-                y={0}
-                width={width}
-                height={height}
-                fit="fill"
-              />
-            </Shader>
-          </Fill>
-        )}
-      </Canvas>
+      <Animated.View style={[{ flex: 1 }, fadeInStyle]}>
+        <Canvas style={{ flex: 1 }}>
+          {earthImage && (
+            <Fill>
+              <Shader source={earthShader} uniforms={uniforms}>
+                <ImageShader
+                  image={earthImage}
+                  x={0}
+                  y={0}
+                  width={width}
+                  height={height}
+                  fit="fill"
+                />
+              </Shader>
+            </Fill>
+          )}
+        </Canvas>
+      </Animated.View>
     </View>
   )
 }
