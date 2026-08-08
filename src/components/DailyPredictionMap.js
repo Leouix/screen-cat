@@ -64,7 +64,7 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
       return
     }
     const target = rotation.value + Math.PI * 2
-    rotation.value = withRepeat(withTiming(target, { duration: 60000, easing: Easing.linear }), -1)
+    rotation.value = withRepeat(withTiming(target, { duration: 420000, easing: Easing.linear }), -1)
     return () => cancelAnimation(rotation)
   }, [selectedId, rotation])
 
