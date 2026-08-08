@@ -99,7 +99,7 @@ function AspectLine({ path, rotation, zoom, panX, panY, cx, cy, natalR, natalZ, 
         style="stroke"
         strokeWidth={selected ? 3 : 1.4}
       />
-      {selected ? <BlurMask blur={6} style="normal" /> : <BlurMask blur={2} style="normal" />}
+      {selected ? <BlurMask blur={2} style="normal" /> : <BlurMask blur={2} style="normal" />}
     </Group>
   )
 }
@@ -212,7 +212,6 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
 
   const focusOn = (id) => {
 
-    console.log('focusOn')
     const path = paths.find((p) => p.id === id)
     if (!path) return
 
@@ -226,8 +225,8 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
     const span = Math.hypot(transit.x - natal.x, transit.y - natal.y)
 
     const MAX_ZOOM = 1.35
-    const MIN_ZOOM = 0.95
-    const FOCUS_SPAN = size * 0.8
+    const MIN_ZOOM = 0.8
+    const FOCUS_SPAN = size * 0.95
     const targetZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, FOCUS_SPAN / Math.max(span, 1)))
 
     panX.value = withTiming(-(mid.x - cx) * targetZoom, { duration: 600 })
@@ -268,10 +267,16 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
 
     const lineHit = size * 0.02 * zoom.value
     for (const p of paths) {
+
+
       const natal = planetPoint({ deg: p.visuals.natal_planet_position, r: NATAL_R, z: NATAL_Z, ...proj })
+
+
       const transit = planetPoint({ deg: p.visuals.transit_planet_position, r: TRANSIT_R, z: TRANSIT_Z, ...proj })
+
+
       if (distToSegment(tap, natal, transit) < lineHit) {
-        focusOn(p.id)
+       focusOn(p.id)
         return
       }
     }
