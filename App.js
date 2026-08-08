@@ -100,7 +100,13 @@ export default function App() {
             onNext={handleCityNext}
           />
         )}
-        {screen === 'prediction' && <PredictionScreen />}
+        {screen === 'prediction' && (
+          <PredictionScreen
+            birthDate={birthDate}
+            birthTime={birthTime}
+            selectedCity={selectedCity}
+          />
+        )}
       </YStack>
 
      

@@ -44,3 +44,6 @@
 - План реализации: [PLAN.md](./PLAN.md)
 - Архитектура: [docs/architecture.md](./docs/architecture.md)
 - Дизайн-токены: [docs/design-tokens.md](./docs/design-tokens.md)
+
+
+Весь интерфейс приложения нужен на английском языке. Русский язык я буду постепенно убирать из приложения

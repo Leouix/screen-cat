@@ -1,13 +1,14 @@
 export const PLANET_NAMES = {
-  sun: 'Солнце',
-  moon: 'Луна',
-  mercury: 'Меркурий',
-  venus: 'Венера',
-  mars: 'Марс',
-  jupiter: 'Юпитер',
-  saturn: 'Сатурн',
-  uranus: 'Уран',
-  neptune: 'Нептун',
+  sun: 'Sun',
+  moon: 'Moon',
+  mercury: 'Mercury',
+  venus: 'Venus',
+  mars: 'Mars',
+  jupiter: 'Jupiter',
+  saturn: 'Saturn',
+  uranus: 'Uranus',
+  neptune: 'Neptune',
+  pluto: 'Pluto',
 }
 
 export function getRulingPlanet(birthDateString) {
