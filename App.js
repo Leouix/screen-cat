@@ -11,6 +11,7 @@ import config from './tamagui.config'
 import BirthDateScreen from './src/screens/BirthDateScreen'
 import NameScreen from './src/screens/NameScreen'
 import EarthWithCity from './src/screens/EarthWithCity'
+import PredictionScreen from './src/screens/PredictionScreen'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -62,11 +63,13 @@ export default function App() {
         ? { name: city.name, country: city.country, latitude: city.latitude, longitude: city.longitude }
         : null,
     })
+    setScreen('prediction')
   }
 
   const goBack = () => {
     if (screen === 'name') setScreen('birthDate')
     if (screen === 'city') setScreen('name')
+    if (screen === 'prediction') setScreen('city')
   }
 
   return (
@@ -97,6 +100,7 @@ export default function App() {
             onNext={handleCityNext}
           />
         )}
+        {screen === 'prediction' && <PredictionScreen />}
       </YStack>
 
      
