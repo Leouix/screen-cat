@@ -8,6 +8,8 @@ export function buildPredictionPaths(aspects) {
     aspectType: a.type,
     orb: a.orb,
     separation: a.separation,
+    title: a.title,
+    content: a.content,
     natal_planet: PLANET_NAMES[a.natal_planet] || a.natal_planet,
     transit_planet: PLANET_NAMES[a.transit_planet] || a.transit_planet,
     visuals: {

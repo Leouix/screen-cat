@@ -83,10 +83,10 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity })
           <>
             <DailyPredictionMap paths={paths} size={size} selectedId={selectedPath?.id} onSelect={setSelectedPath} />
 
-            <YStack height={120} width="100%" alignItems="center" justifyContent="flex-start" paddingTop={8}>
+            <YStack height={170} width="100%" alignItems="center" justifyContent="flex-start" paddingTop={8}>
               {selectedPath && aspect ? (
                 <XStack
-                  alignItems="center"
+                  alignItems="flex-start"
                   gap={10}
                   backgroundColor="#ffffff0a"
                   borderWidth={1}
@@ -95,10 +95,15 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity })
                   paddingHorizontal={18}
                   paddingVertical={14}
                 >
-                  <YStack width={14} height={14} borderRadius={7} backgroundColor={aspect.color} />
-                  <Text color="#ffffff" fontSize={14} fontFamily="Montserrat_500Medium">
-                    {selectedPath.transit_planet} {aspect.label} natal {selectedPath.natal_planet}
-                  </Text>
+                  <YStack width={14} height={14} borderRadius={7} backgroundColor={aspect.color} marginTop={2} />
+                  <YStack flex={1} gap={5}>
+                    <Text color="#ffffff" fontSize={14} fontFamily="Montserrat_600SemiBold">
+                      {selectedPath.title}
+                    </Text>
+                    <Text color="#b2b2bc" fontSize={12} fontFamily="Montserrat_400Regular" lineHeight={17}>
+                      {selectedPath.content}
+                    </Text>
+                  </YStack>
                 </XStack>
               ) : (
                 <Text color="#b2b2bc" fontSize={13} fontFamily="Montserrat_400Regular" textAlign="center">
