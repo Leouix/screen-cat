@@ -211,23 +211,27 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
   const coreR = useDerivedValue(() => CORE_R * zoom.value)
 
   const focusOn = (id) => {
+
+    console.log('focusOn')
     const path = paths.find((p) => p.id === id)
     if (!path) return
 
     cancelAnimation(rotation)
 
-    const base = planetPoint({
-      deg: path.visuals.natal_planet_position,
-      rotation: rotation.value,
-      r: NATAL_R,
-      z: NATAL_Z,
-      cx,
-      cy,
-    })
-    const targetZoom = 1.35
+    const proj = { rotation: rotation.value, cx, cy }
+    const natal = planetPoint({ deg: path.visuals.natal_planet_position, r: NATAL_R, z: NATAL_Z, ...proj })
+    const transit = planetPoint({ deg: path.visuals.transit_planet_position, r: TRANSIT_R, z: TRANSIT_Z, ...proj })
 
-    panX.value = withTiming(-(base.x - cx) * targetZoom, { duration: 600 })
-    panY.value = withTiming(-(base.y - cy) * targetZoom, { duration: 600 })
+    const mid = { x: (natal.x + transit.x) / 2, y: (natal.y + transit.y) / 2 }
+    const span = Math.hypot(transit.x - natal.x, transit.y - natal.y)
+
+    const MAX_ZOOM = 1.35
+    const MIN_ZOOM = 0.95
+    const FOCUS_SPAN = size * 0.8
+    const targetZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, FOCUS_SPAN / Math.max(span, 1)))
+
+    panX.value = withTiming(-(mid.x - cx) * targetZoom, { duration: 600 })
+    panY.value = withTiming(-(mid.y - cy) * targetZoom, { duration: 600 })
     zoom.value = withTiming(targetZoom, { duration: 600 })
 
     onSelectRef.current?.(path)
