@@ -48,7 +48,7 @@ export default function PredictionScreen() {
   const { width, height } = useWindowDimensions()
   const [selectedPath, setSelectedPath] = useState(null)
 
-  const size = Math.min(width - 40, height * 0.52)
+  const size = Math.min(width, height)
   const aspect = selectedPath
     ? getAspect(selectedPath.visuals.natal_planet_position, selectedPath.visuals.transit_planet_position)
     : null
@@ -59,7 +59,7 @@ export default function PredictionScreen() {
         <StarryBackground />
       </BackgroundView>
 
-      <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" paddingHorizontal={20}>
+      <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" paddingHorizontal={50}>
         <Text color="#ffffff" fontFamily="Montserrat_600SemiBold" fontSize={22} letterSpacing={1} marginTop={30}>
           Карта предсказаний
         </Text>

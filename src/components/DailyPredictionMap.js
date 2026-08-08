@@ -11,33 +11,153 @@ import {
 } from 'react-native-reanimated'
 
 import {
-  circlePoint,
-  buildSceneMatrix,
-  mapScenePoint,
-  screenToLocal,
-  orbitArcPath,
+  projectScenePoint,
+  planetPoint,
+  buildRingPaths,
   dist2,
   distToSegment,
-  ORBIT_INNER,
-  ORBIT_OUTER,
+  CHART_R_F,
+  NATAL_R_F,
+  NATAL_Z_F,
+  TRANSIT_R_F,
+  TRANSIT_Z_F,
+  GLOBE_R_F,
+  PARALLEL_Z_FRACTIONS,
 } from '../utils/trig'
 
-const ORBIT_COLOR = 'rgba(255, 255, 255, 0.35)'
-const ORBIT_STROKE = 1
+const ORBIT_COLOR = '#ffffff'
+const SPHERE_COLOR = '#ffffff'
 const NATAL_COLOR = '#8f93a3'
 const CORE_COLOR = '#f8df61'
 
-const ORIGIN = { x: 0, y: 0 }
+function RingLayer({ rotation, zoom, panX, panY, cx, cy, r, z, color, backOpacity, frontOpacity }) {
+  const ring = useDerivedValue(() =>
+    buildRingPaths({
+      r,
+      z,
+      rotation: rotation.value,
+      cx,
+      cy,
+      zoom: zoom.value,
+      panX: panX.value,
+      panY: panY.value,
+    })
+  )
+  const frontPath = useDerivedValue(() => ring.value.front)
+  const backPath = useDerivedValue(() => ring.value.back)
+
+  return (
+    <>
+      <Path path={backPath} color={color} style="stroke" strokeWidth={1} opacity={backOpacity} />
+      <Path path={frontPath} color={color} style="stroke" strokeWidth={1} opacity={frontOpacity} />
+    </>
+  )
+}
+
+function AspectLine({ path, rotation, zoom, panX, panY, cx, cy, natalR, natalZ, transitR, transitZ, selected, dimmed }) {
+  const line = useDerivedValue(() => {
+    const a = planetPoint({
+      deg: path.visuals.natal_planet_position,
+      rotation: rotation.value,
+      r: natalR,
+      z: natalZ,
+      cx,
+      cy,
+      zoom: zoom.value,
+      panX: panX.value,
+      panY: panY.value,
+    })
+    const b = planetPoint({
+      deg: path.visuals.transit_planet_position,
+      rotation: rotation.value,
+      r: transitR,
+      z: transitZ,
+      cx,
+      cy,
+      zoom: zoom.value,
+      panX: panX.value,
+      panY: panY.value,
+    })
+    const depth = (a.z2 + b.z2) / 2
+    return {
+      p1: { x: a.x, y: a.y },
+      p2: { x: b.x, y: b.y },
+      alpha: dimmed ? 0.3 : selected ? 1 : depth >= 0 ? 0.85 : 0.45,
+    }
+  })
+  const p1 = useDerivedValue(() => line.value.p1)
+  const p2 = useDerivedValue(() => line.value.p2)
+  const opacity = useDerivedValue(() => line.value.alpha)
+
+  return (
+    <Group>
+      <Line
+        p1={p1}
+        p2={p2}
+        color={path.color}
+        opacity={opacity}
+        style="stroke"
+        strokeWidth={selected ? 3 : 1.4}
+      />
+      {selected ? <BlurMask blur={6} style="normal" /> : <BlurMask blur={2} style="normal" />}
+    </Group>
+  )
+}
+
+function PlanetDot({
+  deg,
+  r,
+  z,
+  rotation,
+  zoom,
+  panX,
+  panY,
+  cx,
+  cy,
+  color,
+  baseR,
+  selected,
+  dimmed,
+  blur,
+}) {
+  const pos = useDerivedValue(() =>
+    planetPoint({
+      deg,
+      rotation: rotation.value,
+      r,
+      z,
+      cx,
+      cy,
+      zoom: zoom.value,
+      panX: panX.value,
+      panY: panY.value,
+    })
+  )
+  const c = useDerivedValue(() => ({ x: pos.value.x, y: pos.value.y }))
+  const dotR = useDerivedValue(() => baseR * pos.value.k * zoom.value * (selected ? 1.35 : 1))
+  const opacity = useDerivedValue(() => (dimmed ? 0.55 : 1))
+
+  return (
+    <Group>
+      <Circle c={c} r={dotR} color={color} opacity={opacity} />
+      <BlurMask blur={blur} style="normal" />
+    </Group>
+  )
+}
 
 export default function DailyPredictionMap({ paths, size, selectedId = null, onSelect }) {
   const cx = size / 2
   const cy = size / 2
 
-  const R_IN = size * ORBIT_INNER
-  const R_OUT = size * ORBIT_OUTER
+  const CHART_R = size * CHART_R_F
+  const NATAL_R = CHART_R * NATAL_R_F
+  const NATAL_Z = CHART_R * NATAL_Z_F
+  const TRANSIT_R = CHART_R * TRANSIT_R_F
+  const TRANSIT_Z = CHART_R * TRANSIT_Z_F
+  const GLOBE_R = CHART_R * GLOBE_R_F
   const CORE_R = size * 0.03
-  const NATAL_R = size * 0.018
-  const TRANSIT_R = size * 0.024
+  const NATAL_DOT = size * 0.016
+  const TRANSIT_DOT = size * 0.022
 
   const rotation = useSharedValue(0)
   const zoom = useSharedValue(1)
@@ -47,63 +167,69 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
 
-  const sceneMatrix = useDerivedValue(() =>
-    buildSceneMatrix({
-      rotation: rotation.value,
-      zoom: zoom.value,
-      panX: panX.value,
-      panY: panY.value,
-      cx,
-      cy,
-    })
-  )
-
   useEffect(() => {
     if (selectedId) {
       cancelAnimation(rotation)
       return
     }
     const target = rotation.value + Math.PI * 2
-    rotation.value = withRepeat(withTiming(target, { duration: 420000, easing: Easing.linear }), -1)
+    rotation.value = withRepeat(withTiming(target, { duration: 50000, easing: Easing.linear }), -1)
     return () => cancelAnimation(rotation)
   }, [selectedId, rotation])
 
-  const orbitArcs = useMemo(
-    () => ({
-      backInner: orbitArcPath(R_IN, 180, 180),
-      backOuter: orbitArcPath(R_OUT, 180, 180),
-      frontInner: orbitArcPath(R_IN, 0, 180),
-      frontOuter: orbitArcPath(R_OUT, 0, 180),
-    }),
-    [R_IN, R_OUT]
+  const spherePaths = useMemo(
+    () =>
+      PARALLEL_Z_FRACTIONS.map((zf) => {
+        const z = zf * CHART_R
+        const r = Math.sqrt(GLOBE_R * GLOBE_R - z * z)
+        const paths3d = buildRingPaths({ r, z, rotation: 0, segments: 200, cx, cy })
+        return { ...paths3d, key: zf }
+      }),
+    [CHART_R, GLOBE_R, cx, cy]
   )
 
-  const pathPoints = useMemo(
-    () =>
-      paths.map((p) => ({
-        id: p.id,
-        color: p.color,
-        natal: circlePoint(p.visuals.natal_planet_position, R_IN),
-        transit: circlePoint(p.visuals.transit_planet_position, R_OUT),
-      })),
-    [paths, R_IN, R_OUT]
-  )
+  const backdropTransform = useDerivedValue(() => [
+    { translateX: panX.value + cx * (1 - zoom.value) },
+    { translateY: panY.value + cy * (1 - zoom.value) },
+    { scale: zoom.value },
+  ])
+
+  const corePos = useDerivedValue(() => {
+    const p = projectScenePoint({
+      x: 0,
+      y: 0,
+      z: 0,
+      rotation: rotation.value,
+      cx,
+      cy,
+      zoom: zoom.value,
+      panX: panX.value,
+      panY: panY.value,
+    })
+    return { x: p.x, y: p.y }
+  })
+  const coreR = useDerivedValue(() => CORE_R * zoom.value)
 
   const focusOn = (id) => {
-    const point = pathPoints.find((pp) => pp.id === id)
-    if (!point) return
+    const path = paths.find((p) => p.id === id)
+    if (!path) return
 
     cancelAnimation(rotation)
 
-    const m = buildSceneMatrix({ rotation: rotation.value, zoom: 1, cx, cy })
+    const base = planetPoint({
+      deg: path.visuals.natal_planet_position,
+      rotation: rotation.value,
+      r: NATAL_R,
+      z: NATAL_Z,
+      cx,
+      cy,
+    })
     const targetZoom = 1.35
-    const s = mapScenePoint(m, point.natal.x, point.natal.y)
 
-    panX.value = withTiming(cx - s.x * targetZoom, { duration: 600 })
-    panY.value = withTiming(cy - s.y * targetZoom, { duration: 600 })
+    panX.value = withTiming(-(base.x - cx) * targetZoom, { duration: 600 })
+    panY.value = withTiming(-(base.y - cy) * targetZoom, { duration: 600 })
     zoom.value = withTiming(targetZoom, { duration: 600 })
 
-    const path = paths.find((p) => p.id === id) || null
     onSelectRef.current?.(path)
   }
 
@@ -116,28 +242,32 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
 
   const handleTap = (event) => {
     const { locationX, locationY } = event.nativeEvent
-    const m = buildSceneMatrix({
+    const proj = {
       rotation: rotation.value,
       zoom: zoom.value,
       panX: panX.value,
       panY: panY.value,
       cx,
       cy,
-    })
-    const local = screenToLocal(m, locationX, locationY)
+    }
+    const tap = { x: locationX, y: locationY }
 
-    const planetHit = size * 0.05
-    for (const pp of pathPoints) {
-      if (dist2(local, pp.natal) < planetHit * planetHit || dist2(local, pp.transit) < planetHit * planetHit) {
-        focusOn(pp.id)
+    const planetHit = size * 0.05 * zoom.value
+    for (const p of paths) {
+      const natal = planetPoint({ deg: p.visuals.natal_planet_position, r: NATAL_R, z: NATAL_Z, ...proj })
+      const transit = planetPoint({ deg: p.visuals.transit_planet_position, r: TRANSIT_R, z: TRANSIT_Z, ...proj })
+      if (dist2(tap, natal) < planetHit * planetHit || dist2(tap, transit) < planetHit * planetHit) {
+        focusOn(p.id)
         return
       }
     }
 
-    const lineHit = size * 0.02
-    for (const pp of pathPoints) {
-      if (distToSegment(local, pp.natal, pp.transit) < lineHit) {
-        focusOn(pp.id)
+    const lineHit = size * 0.02 * zoom.value
+    for (const p of paths) {
+      const natal = planetPoint({ deg: p.visuals.natal_planet_position, r: NATAL_R, z: NATAL_Z, ...proj })
+      const transit = planetPoint({ deg: p.visuals.transit_planet_position, r: TRANSIT_R, z: TRANSIT_Z, ...proj })
+      if (distToSegment(tap, natal, transit) < lineHit) {
+        focusOn(p.id)
         return
       }
     }
@@ -148,56 +278,105 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
   return (
     <View style={{ width: size, height: size }}>
       <Canvas style={{ width: size, height: size }}>
-        <Group matrix={sceneMatrix}>
-          <Group>
-            <Path path={orbitArcs.backInner} color={ORBIT_COLOR} style="stroke" strokeWidth={ORBIT_STROKE} />
-            <Path path={orbitArcs.backOuter} color={ORBIT_COLOR} style="stroke" strokeWidth={ORBIT_STROKE} />
-          </Group>
-
-          {pathPoints.map((pp) => {
-            const isSelected = pp.id === selectedId
-            return (
-              <Group key={pp.id} opacity={isSelected ? 1 : 0.8}>
-                <Line
-                  p1={pp.natal}
-                  p2={pp.transit}
-                  color={pp.color}
-                  style="stroke"
-                  strokeWidth={isSelected ? 3 : 1.4}
-                />
-                {isSelected ? <BlurMask blur={6} style="normal" /> : <BlurMask blur={2} style="normal" />}
-              </Group>
-            )
-          })}
-
-          {pathPoints.map((pp) => (
-            <Circle key={`natal-${pp.id}`} c={pp.natal} r={NATAL_R} color={NATAL_COLOR} />
+        <Group transform={backdropTransform}>
+          {spherePaths.map((s) => (
+            <Group key={s.key}>
+              <Path path={s.back} color={SPHERE_COLOR} style="stroke" strokeWidth={1} opacity={0.08} />
+              <Path path={s.front} color={SPHERE_COLOR} style="stroke" strokeWidth={1} opacity={0.16} />
+            </Group>
           ))}
-
-          <Group>
-            <Circle c={ORIGIN} r={CORE_R} color={CORE_COLOR} />
-            <BlurMask blur={8} style="normal" />
-          </Group>
-
-          {pathPoints.map((pp) => {
-            const isSelected = pp.id === selectedId
-            return (
-              <Group key={`transit-${pp.id}`}>
-                <Circle
-                  c={pp.transit}
-                  r={TRANSIT_R * (isSelected ? 1.35 : 1)}
-                  color={pp.color}
-                />
-                <BlurMask blur={isSelected ? 8 : 4} style="normal" />
-              </Group>
-            )
-          })}
-
-          <Group>
-            <Path path={orbitArcs.frontInner} color={ORBIT_COLOR} style="stroke" strokeWidth={ORBIT_STROKE} />
-            <Path path={orbitArcs.frontOuter} color={ORBIT_COLOR} style="stroke" strokeWidth={ORBIT_STROKE} />
-          </Group>
         </Group>
+
+        <RingLayer
+          rotation={rotation}
+          zoom={zoom}
+          panX={panX}
+          panY={panY}
+          cx={cx}
+          cy={cy}
+          r={NATAL_R}
+          z={NATAL_Z}
+          color={ORBIT_COLOR}
+          backOpacity={0.16}
+          frontOpacity={0.4}
+        />
+        <RingLayer
+          rotation={rotation}
+          zoom={zoom}
+          panX={panX}
+          panY={panY}
+          cx={cx}
+          cy={cy}
+          r={TRANSIT_R}
+          z={TRANSIT_Z}
+          color={ORBIT_COLOR}
+          backOpacity={0.22}
+          frontOpacity={0.6}
+        />
+
+        <Group>
+          <Circle c={corePos} r={coreR} color={CORE_COLOR} />
+          <BlurMask blur={8} style="normal" />
+        </Group>
+
+        {paths.map((p) => (
+          <AspectLine
+            key={p.id}
+            path={p}
+            rotation={rotation}
+            zoom={zoom}
+            panX={panX}
+            panY={panY}
+            cx={cx}
+            cy={cy}
+            natalR={NATAL_R}
+            natalZ={NATAL_Z}
+            transitR={TRANSIT_R}
+            transitZ={TRANSIT_Z}
+            selected={p.id === selectedId}
+            dimmed={selectedId !== null && p.id !== selectedId}
+          />
+        ))}
+
+        {paths.map((p) => (
+          <PlanetDot
+            key={`natal-${p.id}`}
+            deg={p.visuals.natal_planet_position}
+            r={NATAL_R}
+            z={NATAL_Z}
+            rotation={rotation}
+            zoom={zoom}
+            panX={panX}
+            panY={panY}
+            cx={cx}
+            cy={cy}
+            color={NATAL_COLOR}
+            baseR={NATAL_DOT}
+            selected={p.id === selectedId}
+            dimmed={selectedId !== null && p.id !== selectedId}
+            blur={2}
+          />
+        ))}
+
+        {paths.map((p) => (
+          <PlanetDot
+            key={`transit-${p.id}`}
+            deg={p.visuals.transit_planet_position}
+            r={TRANSIT_R}
+            z={TRANSIT_Z}
+            rotation={rotation}
+            zoom={zoom}
+            panX={panX}
+            panY={panY}
+            cx={cx}
+            cy={cy}
+            color={p.color}
+            baseR={TRANSIT_DOT}
+            selected={p.id === selectedId}
+            dimmed={selectedId !== null && p.id !== selectedId}
+            blur={p.id === selectedId ? 8 : 4}
+          />
+        ))}
       </Canvas>
 
       <Pressable style={StyleSheet.absoluteFill} onPress={handleTap} />
