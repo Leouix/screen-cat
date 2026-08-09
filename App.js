@@ -105,6 +105,7 @@ export default function App() {
             birthDate={birthDate}
             birthTime={birthTime}
             selectedCity={selectedCity}
+            onBack={goBack}
           />
         )}
       </YStack>

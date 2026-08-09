@@ -3,12 +3,12 @@ import { useWindowDimensions } from 'react-native'
 import { YStack, XStack, Text, Spinner, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import DailyPredictionMap from '../components/DailyPredictionMap'
-import { BackgroundView } from '../components/shared/StyledComponents'
+import { BackgroundView, SecondaryButton } from '../components/shared/StyledComponents'
 import { ASPECT_TYPES } from '../utils/aspects'
 import { buildPredictionPaths } from '../utils/prediction'
 import { getPrediction } from '../services/api'
 
-export default function PredictionScreen({ birthDate, birthTime, selectedCity }) {
+export default function PredictionScreen({ birthDate, birthTime, selectedCity, onBack }) {
   const { width, height } = useWindowDimensions()
   const [selectedPath, setSelectedPath] = useState(null)
   const [prediction, setPrediction] = useState(null)
@@ -52,10 +52,13 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity })
         <StarryBackground />
       </BackgroundView>
 
-      <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" paddingHorizontal={50}>
-        <Text color="#ffffff" fontFamily="Montserrat_600SemiBold" fontSize={22} letterSpacing={1} marginTop={30}>
-          Prediction Map
-        </Text>
+      <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" paddingHorizontal={20}>
+
+       {(!selectedPath && !aspect) && (
+          <Text color="#b2b2bc" fontSize={14} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={130}>
+            Tap an aspect line to inspect it
+          </Text>
+        )}
 
         {loading ? (
           <YStack flex={1} alignItems="center" justifyContent="center" gap={14}>
@@ -83,8 +86,8 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity })
           <>
             <DailyPredictionMap paths={paths} size={size} selectedId={selectedPath?.id} onSelect={setSelectedPath} />
 
-            <YStack height={170} width="100%" alignItems="center" justifyContent="flex-start" paddingTop={8}>
-              {selectedPath && aspect ? (
+            <YStack width="100%"  paddingTop={8} position='absolute' bottom={10}>
+              {(selectedPath && aspect) &&  (
                 <XStack
                   alignItems="flex-start"
                   gap={10}
@@ -92,7 +95,7 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity })
                   borderWidth={1}
                   borderColor="#ffffff20"
                   borderRadius={16}
-                  paddingHorizontal={18}
+                  paddingHorizontal={10}
                   paddingVertical={14}
                 >
                   <YStack width={14} height={14} borderRadius={7} backgroundColor={aspect.color} marginTop={2} />
@@ -100,20 +103,19 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity })
                     <Text color="#ffffff" fontSize={14} fontFamily="Montserrat_600SemiBold">
                       {selectedPath.title}
                     </Text>
-                    <Text color="#b2b2bc" fontSize={12} fontFamily="Montserrat_400Regular" lineHeight={17}>
+                    <Text color="#b2b2bc" fontSize={16} fontFamily="Montserrat_500Regular" lineHeight={20}>
                       {selectedPath.content}
                     </Text>
                   </YStack>
                 </XStack>
-              ) : (
-                <Text color="#b2b2bc" fontSize={13} fontFamily="Montserrat_400Regular" textAlign="center">
-                  Tap a planet or aspect line to inspect it
-                </Text>
               )}
             </YStack>
           </>
         )}
       </YStack>
+         {onBack && (
+            <SecondaryButton onPress={onBack}>Back</SecondaryButton>
+          )}
     </YStack>
   )
 }
