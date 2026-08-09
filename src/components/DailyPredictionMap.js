@@ -199,9 +199,9 @@ function PlanetLabel({
   )
 }
 
-export default function DailyPredictionMap({ paths, size, selectedId = null, onSelect }) {
+export default function DailyPredictionMap({ paths, size, height = size, selectedId = null, onSelect }) {
   const cx = size / 2
-  const cy = size / 2
+  const cy = height * 0.45
 
   const CHART_R = size * CHART_R_F
   const NATAL_R = CHART_R * NATAL_R_F
@@ -373,8 +373,8 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
   }
 
   return (
-    <View style={{ width: size, height: size }}>
-      <Canvas style={{ width: size, height: size }}>
+    <View style={{ width: size, height }}>
+      <Canvas style={{ width: size, height }}>
         <Group transform={backdropTransform}>
           {spherePaths.map((s) => (
             <Group key={s.key}>
