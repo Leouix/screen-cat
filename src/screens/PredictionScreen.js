@@ -51,8 +51,12 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
 
       <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" paddingHorizontal={20}>
 
+        <Text color="#b2b2bc" fontSize={18} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={110}>
+            Your sky today
+          </Text>
+
        {!selectedPath && (
-          <Text color="#b2b2bc" fontSize={14} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={130}>
+          <Text color="#b2b2bc" fontSize={12} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={140}>
             Tap an aspect line to inspect it
           </Text>
         )}
