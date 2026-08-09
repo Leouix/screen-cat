@@ -4,7 +4,6 @@ import { YStack, XStack, Text, Spinner, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import DailyPredictionMap from '../components/DailyPredictionMap'
 import { BackgroundView, SecondaryButton } from '../components/shared/StyledComponents'
-import { ASPECT_TYPES } from '../utils/aspects'
 import { buildPredictionPaths } from '../utils/prediction'
 import { getPrediction } from '../services/api'
 
@@ -44,8 +43,6 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
     return buildPredictionPaths(prediction.aspects)
   }, [prediction])
 
-  const aspect = selectedPath ? ASPECT_TYPES[selectedPath.aspectType] : null
-
   return (
     <YStack flex={1}>
       <BackgroundView>
@@ -54,7 +51,7 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
 
       <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" paddingHorizontal={20}>
 
-       {(!selectedPath && !aspect) && (
+       {!selectedPath && (
           <Text color="#b2b2bc" fontSize={14} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={130}>
             Tap an aspect line to inspect it
           </Text>
@@ -87,7 +84,7 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
             <DailyPredictionMap paths={paths} size={size} selectedId={selectedPath?.id} onSelect={setSelectedPath} />
 
             <YStack width="100%"  paddingTop={8} position='absolute' bottom={10}>
-              {(selectedPath && aspect) &&  (
+              {selectedPath && (
                 <XStack
                   alignItems="flex-start"
                   gap={10}
@@ -98,7 +95,7 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
                   paddingHorizontal={10}
                   paddingVertical={14}
                 >
-                  <YStack width={14} height={14} borderRadius={7} backgroundColor={aspect.color} marginTop={2} />
+                  <YStack width={14} height={14} borderRadius={7} backgroundColor={selectedPath.color} marginTop={2} />
                   <YStack flex={1} gap={5}>
                     <Text color="#ffffff" fontSize={14} fontFamily="Montserrat_600SemiBold">
                       {selectedPath.title}

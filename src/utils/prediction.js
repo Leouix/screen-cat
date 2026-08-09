@@ -1,10 +1,9 @@
-import { ASPECT_TYPES } from './aspects'
 import { PLANET_NAMES } from './planets'
 
 export function buildPredictionPaths(aspects) {
   return aspects.map((a) => ({
     id: `${a.transit_planet}-${a.type}-${a.natal_planet}`,
-    color: ASPECT_TYPES[a.type]?.color || '#ffffff',
+    color: a.color || '#ffffff',
     aspectType: a.type,
     orb: a.orb,
     separation: a.separation,
