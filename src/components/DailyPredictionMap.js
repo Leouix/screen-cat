@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { StyleSheet, View, Pressable } from 'react-native'
-import { Canvas, Group, Circle, Line, Path, BlurMask } from '@shopify/react-native-skia'
+import { Canvas, Group, Circle, Line, Path, Text, BlurMask, useFont } from '@shopify/react-native-skia'
+import { Montserrat_500Medium } from '@expo-google-fonts/montserrat'
 import {
   useSharedValue,
   useDerivedValue,
@@ -145,6 +146,51 @@ function PlanetDot({
   )
 }
 
+function PlanetLabel({
+  name,
+  width,
+  fontSize,
+  deg,
+  r,
+  z,
+  rotation,
+  zoom,
+  panX,
+  panY,
+  cx,
+  cy,
+  color,
+  font,
+}) {
+  const pos = useDerivedValue(() =>
+    planetPoint({
+      deg,
+      rotation: rotation.value,
+      r,
+      z,
+      cx,
+      cy,
+      zoom: zoom.value,
+      panX: panX.value,
+      panY: panY.value,
+    })
+  )
+  const textPos = useDerivedValue(() => {
+    const dx = pos.value.x - cx
+    const dy = pos.value.y - cy
+    const len = Math.hypot(dx, dy) || 1
+    const off = (len + 14) / len
+    return {
+      x: cx + dx * off - width / 2,
+      y: cy + dy * off + fontSize * 0.4,
+    }
+  })
+  const x = useDerivedValue(() => textPos.value.x)
+  const y = useDerivedValue(() => textPos.value.y)
+
+  return <Text x={x} y={y} text={name} font={font} color={color} />
+}
+
 export default function DailyPredictionMap({ paths, size, selectedId = null, onSelect }) {
   const cx = size / 2
   const cy = size / 2
@@ -163,6 +209,39 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
   const zoom = useSharedValue(1)
   const panX = useSharedValue(0)
   const panY = useSharedValue(0)
+
+  const labelFont = useFont(Montserrat_500Medium, 10)
+
+  const { natalLabels, transitLabels } = useMemo(() => {
+    const natal = new Map()
+    const transit = new Map()
+    for (const p of paths) {
+      if (!natal.has(p.natal_planet)) {
+        natal.set(p.natal_planet, {
+          name: p.natal_planet,
+          deg: p.visuals.natal_planet_position,
+          color: NATAL_COLOR,
+        })
+      }
+      if (!transit.has(p.transit_planet)) {
+        transit.set(p.transit_planet, {
+          name: p.transit_planet,
+          deg: p.visuals.transit_planet_position,
+          color: p.color,
+        })
+      }
+    }
+    return { natalLabels: [...natal.values()], transitLabels: [...transit.values()] }
+  }, [paths])
+
+  const labelWidths = useMemo(() => {
+    const widths = {}
+    if (!labelFont) return widths
+    for (const l of [...natalLabels, ...transitLabels]) {
+      if (widths[l.name] === undefined) widths[l.name] = labelFont.measureText(l.name).width
+    }
+    return widths
+  }, [labelFont, natalLabels, transitLabels])
 
   const onSelectRef = useRef(onSelect)
   onSelectRef.current = onSelect
@@ -384,6 +463,46 @@ export default function DailyPredictionMap({ paths, size, selectedId = null, onS
             selected={p.id === selectedId}
             dimmed={selectedId !== null && p.id !== selectedId}
             blur={p.id === selectedId ? 8 : 4}
+          />
+        ))}
+
+        {natalLabels.map((l) => (
+          <PlanetLabel
+            key={`natal-label-${l.name}`}
+            name={l.name}
+            width={labelWidths[l.name] ?? 0}
+            fontSize={10}
+            deg={l.deg}
+            r={NATAL_R}
+            z={NATAL_Z}
+            rotation={rotation}
+            zoom={zoom}
+            panX={panX}
+            panY={panY}
+            cx={cx}
+            cy={cy}
+            color={l.color}
+            font={labelFont}
+          />
+        ))}
+
+        {transitLabels.map((l) => (
+          <PlanetLabel
+            key={`transit-label-${l.name}`}
+            name={l.name}
+            width={labelWidths[l.name] ?? 0}
+            fontSize={10}
+            deg={l.deg}
+            r={TRANSIT_R}
+            z={TRANSIT_Z}
+            rotation={rotation}
+            zoom={zoom}
+            panX={panX}
+            panY={panY}
+            cx={cx}
+            cy={cy}
+            color={l.color}
+            font={labelFont}
           />
         ))}
       </Canvas>
