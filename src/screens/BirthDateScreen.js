@@ -106,7 +106,7 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
           visibleItemCount={5}
           minDate="1930-01-01"
           maxDate="2010-12-31"
-          locale="ru"
+          locale="en-GB"
           itemTextStyle={{ color: '#f8df61', fontSize: 18 }}
           overlayItemStyle={{ backgroundColor: 'rgba(248, 223, 97, 0.15)', borderRadius: 8 }}
         />

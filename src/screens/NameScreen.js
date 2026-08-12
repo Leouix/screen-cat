@@ -13,24 +13,24 @@ import {
   StyledInput,
 } from '../components/shared/StyledComponents'
 import { getPlanetByBirthDate } from '../services/api'
-import { getRulingPlanet } from '../utils/planets'
+import { getRulingPlanet, PLANET_NAMES } from '../utils/planets'
 
 const PLANET_ASSETS = {
-  'Меркурий': require('../../assets/planets/mercury.png'),
-  'Венера': require('../../assets/planets/venus.png'),
-  'Марс': require('../../assets/planets/mars.png'),
-  'Юпитер': require('../../assets/planets/jupiter.png'),
-  'Сатурн': require('../../assets/planets/saturn.png'),
-  'Уран': require('../../assets/planets/uranus.png'),
-  'Нептун': require('../../assets/planets/neptune.png'),
-  'Плутон': require('../../assets/planets/pluton.png'),
-  'Луна': require('../../assets/planets/moon.png'),
+  [PLANET_NAMES.mercury]: require('../../assets/planets/mercury.png'),
+  [PLANET_NAMES.venus]: require('../../assets/planets/venus.png'),
+  [PLANET_NAMES.mars]: require('../../assets/planets/mars.png'),
+  [PLANET_NAMES.jupiter]: require('../../assets/planets/jupiter.png'),
+  [PLANET_NAMES.saturn]: require('../../assets/planets/saturn.png'),
+  [PLANET_NAMES.uranus]: require('../../assets/planets/uranus.png'),
+  [PLANET_NAMES.neptune]: require('../../assets/planets/neptune.png'),
+  [PLANET_NAMES.pluto]: require('../../assets/planets/pluton.png'),
+  [PLANET_NAMES.moon]: require('../../assets/planets/moon.png'),
 }
 
 const PLANET_KEYS = Object.keys(PLANET_ASSETS)
 
 function getPlanetAsset(planetName) {
-  if (planetName === 'Солнце' || !PLANET_ASSETS[planetName]) {
+  if (planetName === PLANET_NAMES.sun || !PLANET_ASSETS[planetName]) {
     return PLANET_ASSETS[PLANET_KEYS[Math.floor(Math.random() * PLANET_KEYS.length)]]
   }
   return PLANET_ASSETS[planetName]
@@ -56,8 +56,8 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
   }, [birthDate])
 
   const PLANET_SIZES = {
-    'Сатурн': 600,
-    'Уран': 500,
+    [PLANET_NAMES.saturn]: 600,
+    [PLANET_NAMES.uranus]: 500,
   }
   const sizePlanet = PLANET_SIZES[planetTitle] ?? 550
 
