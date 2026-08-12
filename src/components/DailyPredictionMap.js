@@ -212,7 +212,7 @@ function PlanetLabel({
 
   return (
     <>
-      <RoundedRect x={bgX} y={bgY} width={bgW} height={bgH} r={4} color="rgba(16,16,24,0.58)" opacity={opacity} />
+      <RoundedRect x={bgX} y={bgY} width={bgW} height={bgH} r={4} color="rgba(16,16,24,0.48)" opacity={opacity} />
       <Text x={x} y={y} text={name} font={font} color={color} opacity={opacity} />
       {subtitle && <Text x={x} y={subtitleY} text={subtitle} font={subtitleFont} color={color} opacity={subtitleOpacity} />}
     </>
