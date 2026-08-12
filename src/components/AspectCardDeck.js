@@ -4,9 +4,10 @@ import { YStack, XStack, Text } from 'tamagui'
 
 const CARD_H = 114
 const PEEK = 64
+const MIN_PEEK = 20
 
-function DeckCard({ aspect, slot, count, onPress, hidden }) {
-  const topOffset = (count - 1 - slot) * PEEK
+function DeckCard({ aspect, slot, count, onPress, hidden, peek }) {
+  const topOffset = (count - 1 - slot) * peek
   const ty = useSharedValue(topOffset)
   const opacity = useSharedValue(1)
   const firstRender = useRef(true)
@@ -77,7 +78,7 @@ function DeckCard({ aspect, slot, count, onPress, hidden }) {
   )
 }
 
-export default function AspectCardDeck({ aspects, hidden = false }) {
+export default function AspectCardDeck({ aspects, hidden = false, maxHeight = CARD_H + 3 * PEEK }) {
   const [order, setOrder] = useState(() => aspects.map((a) => a.id).reverse())
 
   useEffect(() => {
@@ -95,7 +96,8 @@ export default function AspectCardDeck({ aspects, hidden = false }) {
   }, [])
 
   const count = order.length
-  const deckH = CARD_H + (count - 1) * PEEK
+  const peek = count > 1 ? Math.max(MIN_PEEK, Math.min(PEEK, (maxHeight - CARD_H) / (count - 1))) : PEEK
+  const deckH = CARD_H + (count - 1) * peek
 
   return (
     <Animated.View
@@ -119,6 +121,7 @@ export default function AspectCardDeck({ aspects, hidden = false }) {
             count={count}
             onPress={() => moveToFront(id)}
             hidden={hidden}
+            peek={peek}
           />
         )
       })}
