@@ -3,6 +3,7 @@ import { useWindowDimensions } from 'react-native'
 import { YStack, XStack, Text, Spinner, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import DailyPredictionMap from '../components/DailyPredictionMap'
+import AspectCardDeck from '../components/AspectCardDeck'
 import { BackgroundView, SecondaryButton } from '../components/shared/StyledComponents'
 import { buildPredictionPaths } from '../utils/prediction'
 import { getPrediction } from '../services/api'
@@ -87,8 +88,10 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
           <>
             <DailyPredictionMap paths={paths} size={size} height={height} selectedId={selectedPath?.id} onSelect={setSelectedPath} />
 
-            <YStack width="100%"  paddingTop={8} position='absolute' bottom={10}>
-              {selectedPath && (
+            <AspectCardDeck aspects={paths} hidden={!!selectedPath} />
+
+            {selectedPath && (
+              <YStack width="100%"  paddingTop={8} position='absolute' bottom={10} zIndex={4}>
                 <XStack
                   alignItems="flex-start"
                   gap={10}
@@ -109,8 +112,8 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
                     </Text>
                   </YStack>
                 </XStack>
-              )}
-            </YStack>
+              </YStack>
+            )}
           </>
         )}
       </YStack>
