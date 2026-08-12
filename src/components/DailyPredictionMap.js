@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import { StyleSheet, View, Pressable } from 'react-native'
 import { Canvas, Group, Circle, Line, Path, Text, RoundedRect, BlurMask, useFont } from '@shopify/react-native-skia'
 import { Montserrat_500Medium } from '@expo-google-fonts/montserrat'
@@ -219,7 +219,7 @@ function PlanetLabel({
   )
 }
 
-export default function DailyPredictionMap({ paths, size, height = size, selectedId = null, onSelect }) {
+export default forwardRef(function DailyPredictionMap({ paths, size, height = size, selectedId = null, onSelect }, ref) {
   const cx = size / 2
   const cy = height * 0.45 - 30
 
@@ -348,6 +348,8 @@ export default function DailyPredictionMap({ paths, size, height = size, selecte
 
     onSelectRef.current?.(path)
   }
+
+  useImperativeHandle(ref, () => ({ focus: focusOn }))
 
   const resetFocus = () => {
     zoom.value = withTiming(1, { duration: 500 })
@@ -550,4 +552,4 @@ export default function DailyPredictionMap({ paths, size, height = size, selecte
       <Pressable style={StyleSheet.absoluteFill} onPress={handleTap} />
     </View>
   )
-}
+})

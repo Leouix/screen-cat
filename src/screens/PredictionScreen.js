@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useWindowDimensions } from 'react-native'
 import { YStack, XStack, Text, Spinner, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
@@ -16,6 +16,7 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
   const [error, setError] = useState(null)
 
   const size = Math.min(width, height)
+  const mapRef = useRef(null)
 
   const loadPrediction = useCallback(async () => {
     setLoading(true)
@@ -86,9 +87,9 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
           </YStack>
         ) : (
           <>
-            <DailyPredictionMap paths={paths} size={size} height={height} selectedId={selectedPath?.id} onSelect={setSelectedPath} />
+            <DailyPredictionMap paths={paths} size={size} height={height} selectedId={selectedPath?.id} onSelect={setSelectedPath} ref={mapRef} />
 
-            <AspectCardDeck aspects={paths} hidden={!!selectedPath} />
+            <AspectCardDeck aspects={paths} hidden={!!selectedPath} onSelect={(aspect) => mapRef.current?.focus(aspect.id)} />
 
             {selectedPath && (
               <YStack width="100%"  paddingTop={8} position='absolute' bottom={10} zIndex={4}>

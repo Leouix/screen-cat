@@ -6,7 +6,7 @@ const CARD_H = 114
 const PEEK = 64
 const MIN_PEEK = 20
 
-function DeckCard({ aspect, slot, count, onPress, hidden, peek }) {
+function DeckCard({ aspect, slot, count, onPress, onSelect, hidden, peek }) {
   const topOffset = (count - 1 - slot) * peek
   const ty = useSharedValue(topOffset)
   const opacity = useSharedValue(1)
@@ -78,7 +78,7 @@ function DeckCard({ aspect, slot, count, onPress, hidden, peek }) {
   )
 }
 
-export default function AspectCardDeck({ aspects, hidden = false, maxHeight = CARD_H + 3 * PEEK }) {
+export default function AspectCardDeck({ aspects, hidden = false, maxHeight = CARD_H + 3 * PEEK, onSelect }) {
   const [order, setOrder] = useState(() => aspects.map((a) => a.id).reverse())
 
   useEffect(() => {
@@ -119,7 +119,8 @@ export default function AspectCardDeck({ aspects, hidden = false, maxHeight = CA
             aspect={aspect}
             slot={slot}
             count={count}
-            onPress={() => moveToFront(id)}
+            onPress={() => (slot === 0 ? onSelect?.(aspect) : moveToFront(id))}
+            onSelect={onSelect}
             hidden={hidden}
             peek={peek}
           />
