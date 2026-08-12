@@ -7,6 +7,10 @@
 - весь отладочный код удалён (в репо нет `console.*`, `debugger`, `TODO/FIXME`);
 - удалён мёртвый код: `BirthDatePicker.js`, `data/cities.json` (дублировал `cities_en.json`; повторы в обоих: Нур-Султан, Братислава, Любляна).
 
+Производительность карты: линии аспектов сгруппированы под один `BlurMask` (N offscreen-проходов → 1).
+
+Babel: ручной `react-native-reanimated/plugin` удалён из `babel.config.js` — `babel-preset-expo` сам добавляет `react-native-worklets/plugin` (дубль исключён).
+
 ---
 
 ## Критичные
