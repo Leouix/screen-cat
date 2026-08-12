@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { StyleSheet, View, Pressable } from 'react-native'
-import { Canvas, Group, Circle, Line, Path, Text, BlurMask, useFont } from '@shopify/react-native-skia'
+import { Canvas, Group, Circle, Line, Path, Text, RoundedRect, BlurMask, useFont } from '@shopify/react-native-skia'
 import { Montserrat_500Medium } from '@expo-google-fonts/montserrat'
 import {
   useSharedValue,
@@ -191,6 +191,17 @@ function PlanetLabel({
   const x = useDerivedValue(() => textPos.value.x)
   const y = useDerivedValue(() => textPos.value.y)
   const subtitleY = useDerivedValue(() => textPos.value.y + fontSize * 1.2)
+  const subWidth = useMemo(
+    () => (subtitle && subtitleFont ? subtitleFont.measureText(subtitle).width : 0),
+    [subtitle, subtitleFont]
+  )
+  const padX = 4
+  const padY = 1
+  const subH = subtitle ? fontSize * 1.2 + fontSize * 0.4 : 0
+  const bgW = Math.max(width, subWidth) + padX * 2
+  const bgH = fontSize + subH + padY * 2
+  const bgX = useDerivedValue(() => textPos.value.x - padX)
+  const bgY = useDerivedValue(() => textPos.value.y - fontSize - padY)
   const opacity = useSharedValue(dimmed ? 0 : 1)
   const subtitleOpacity = useSharedValue(dimmed ? 0 : 0.85)
 
@@ -201,6 +212,7 @@ function PlanetLabel({
 
   return (
     <>
+      <RoundedRect x={bgX} y={bgY} width={bgW} height={bgH} r={4} color="rgba(16,16,24,0.58)" opacity={opacity} />
       <Text x={x} y={y} text={name} font={font} color={color} opacity={opacity} />
       {subtitle && <Text x={x} y={subtitleY} text={subtitle} font={subtitleFont} color={color} opacity={subtitleOpacity} />}
     </>
@@ -488,49 +500,51 @@ export default function DailyPredictionMap({ paths, size, height = size, selecte
           />
         ))}
 
-        {natalLabels.map((l) => (
-          <PlanetLabel
-            key={`natal-label-${l.name}`}
-            name={l.name}
-            width={labelWidths[l.name] ?? 0}
-            fontSize={10}
-            deg={l.deg}
-            r={NATAL_R}
-            z={NATAL_Z}
-            rotation={rotation}
-            zoom={zoom}
-            panX={panX}
-            panY={panY}
-            cx={cx}
-            cy={cy}
-            color={l.color}
-            font={labelFont}
-            subtitle="natal"
-            subtitleFont={subtitleFont}
-            dimmed={selectedPath !== null && l.name !== selectedPath.natal_planet}
-          />
-        ))}
+        <Group zIndex={10}>
+          {natalLabels.map((l) => (
+            <PlanetLabel
+              key={`natal-label-${l.name}`}
+              name={l.name}
+              width={labelWidths[l.name] ?? 0}
+              fontSize={10}
+              deg={l.deg}
+              r={NATAL_R}
+              z={NATAL_Z}
+              rotation={rotation}
+              zoom={zoom}
+              panX={panX}
+              panY={panY}
+              cx={cx}
+              cy={cy}
+              color={l.color}
+              font={labelFont}
+              subtitle="natal"
+              subtitleFont={subtitleFont}
+              dimmed={selectedPath !== null && l.name !== selectedPath.natal_planet}
+            />
+          ))}
 
-        {transitLabels.map((l) => (
-          <PlanetLabel
-            key={`transit-label-${l.name}`}
-            name={l.name}
-            width={labelWidths[l.name] ?? 0}
-            fontSize={10}
-            deg={l.deg}
-            r={TRANSIT_R}
-            z={TRANSIT_Z}
-            rotation={rotation}
-            zoom={zoom}
-            panX={panX}
-            panY={panY}
-            cx={cx}
-            cy={cy}
-            color={l.color}
-            font={labelFont}
-            dimmed={selectedPath !== null && l.name !== selectedPath.transit_planet}
-          />
-        ))}
+          {transitLabels.map((l) => (
+            <PlanetLabel
+              key={`transit-label-${l.name}`}
+              name={l.name}
+              width={labelWidths[l.name] ?? 0}
+              fontSize={10}
+              deg={l.deg}
+              r={TRANSIT_R}
+              z={TRANSIT_Z}
+              rotation={rotation}
+              zoom={zoom}
+              panX={panX}
+              panY={panY}
+              cx={cx}
+              cy={cy}
+              color={l.color}
+              font={labelFont}
+              dimmed={selectedPath !== null && l.name !== selectedPath.transit_planet}
+            />
+          ))}
+        </Group>
       </Canvas>
 
       <Pressable style={StyleSheet.absoluteFill} onPress={handleTap} />
