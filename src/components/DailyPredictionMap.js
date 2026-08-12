@@ -91,17 +91,14 @@ function AspectLine({ path, rotation, zoom, panX, panY, cx, cy, natalR, natalZ, 
   const opacity = useDerivedValue(() => line.value.alpha)
 
   return (
-    <Group>
-      <Line
-        p1={p1}
-        p2={p2}
-        color={path.color}
-        opacity={opacity}
-        style="stroke"
-        strokeWidth={selected ? 3 : 1.4}
-      />
-      {selected ? <BlurMask blur={2} style="normal" /> : <BlurMask blur={2} style="normal" />}
-    </Group>
+    <Line
+      p1={p1}
+      p2={p2}
+      color={path.color}
+      opacity={opacity}
+      style="stroke"
+      strokeWidth={selected ? 3 : 1.4}
+    />
   )
 }
 
@@ -443,24 +440,27 @@ export default forwardRef(function DailyPredictionMap({ paths, size, height = si
           <BlurMask blur={8} style="normal" />
         </Group>
 
-        {paths.map((p) => (
-          <AspectLine
-            key={p.id}
-            path={p}
-            rotation={rotation}
-            zoom={zoom}
-            panX={panX}
-            panY={panY}
-            cx={cx}
-            cy={cy}
-            natalR={NATAL_R}
-            natalZ={NATAL_Z}
-            transitR={TRANSIT_R}
-            transitZ={TRANSIT_Z}
-            selected={p.id === selectedId}
-            dimmed={selectedId !== null && p.id !== selectedId}
-          />
-        ))}
+        <Group>
+          {paths.map((p) => (
+            <AspectLine
+              key={p.id}
+              path={p}
+              rotation={rotation}
+              zoom={zoom}
+              panX={panX}
+              panY={panY}
+              cx={cx}
+              cy={cy}
+              natalR={NATAL_R}
+              natalZ={NATAL_Z}
+              transitR={TRANSIT_R}
+              transitZ={TRANSIT_Z}
+              selected={p.id === selectedId}
+              dimmed={selectedId !== null && p.id !== selectedId}
+            />
+          ))}
+          <BlurMask blur={1} style="normal" />
+        </Group>
 
         {paths.map((p) => (
           <PlanetDot
