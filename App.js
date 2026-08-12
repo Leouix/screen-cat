@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { BackHandler } from 'react-native'
 import { TamaguiProvider, YStack } from 'tamagui'
 import {
   useFonts,
@@ -12,6 +13,8 @@ import BirthDateScreen from './src/screens/BirthDateScreen'
 import NameScreen from './src/screens/NameScreen'
 import EarthWithCity from './src/screens/EarthWithCity'
 import PredictionScreen from './src/screens/PredictionScreen'
+
+const SCREEN_ORDER = ['birthDate', 'name', 'city', 'prediction']
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,50 +30,43 @@ export default function App() {
   const [name, setName] = useState('')
   const [selectedCity, setSelectedCity] = useState(null)
 
-  if (!fontsLoaded) return null
-
   const handleBirthDateNext = (date, time) => {
     setBirthDate(date)
     setBirthTime(time)
     setScreen('name')
-    console.log('[Screen 1 → 2] BirthDate data:', { birthDate: date, birthTime: time })
   }
 
   const handleNameNext = (name) => {
     setName(name)
     setScreen('city')
-    console.log('[Screen 2 → 3] Data so far:', { birthDate, birthTime, name })
   }
 
   const handleCitySelect = (city) => {
     setSelectedCity(city)
-    console.log('[Screen 3] City selected:', {
-      birthDate,
-      birthTime,
-      name,
-      selectedCity: city
-        ? { name: city.name, country: city.country, latitude: city.latitude, longitude: city.longitude }
-        : null,
-    })
   }
 
   const handleCityNext = (city) => {
-    console.log('[Screen 3 → next] City step done:', {
-      birthDate,
-      birthTime,
-      name,
-      selectedCity: city
-        ? { name: city.name, country: city.country, latitude: city.latitude, longitude: city.longitude }
-        : null,
-    })
+    setSelectedCity(city)
     setScreen('prediction')
   }
 
-  const goBack = () => {
-    if (screen === 'name') setScreen('birthDate')
-    if (screen === 'city') setScreen('name')
-    if (screen === 'prediction') setScreen('city')
-  }
+  const goBack = useCallback(() => {
+    setScreen((current) => {
+      const idx = SCREEN_ORDER.indexOf(current)
+      return idx > 0 ? SCREEN_ORDER[idx - 1] : current
+    })
+  }, [])
+
+  useEffect(() => {
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (screen === SCREEN_ORDER[0]) return false
+      goBack()
+      return true
+    })
+    return () => subscription.remove()
+  }, [screen, goBack])
+
+  if (!fontsLoaded) return null
 
   return (
     <TamaguiProvider config={config} defaultTheme="dark">

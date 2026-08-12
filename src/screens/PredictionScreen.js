@@ -22,12 +22,16 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
     setLoading(true)
     setError(null)
     try {
-      const data = await getPrediction({
+      const { ok, data, error } = await getPrediction({
         birthDate,
         birthTime,
         latitude: selectedCity?.latitude,
         longitude: selectedCity?.longitude,
       })
+      if (!ok) {
+        setError(error || 'Failed to load prediction')
+        return
+      }
       setPrediction(data)
     } catch (err) {
       setError(err.message || 'Failed to load prediction')

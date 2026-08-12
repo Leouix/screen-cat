@@ -47,22 +47,12 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
   const planetAsset = useMemo(() => getPlanetAsset(planetTitle), [planetTitle])
 
   useEffect(() => {
-    if (!birthDate) {
-      console.log('[NameScreen] No birthDate, skipping API call')
-      return
-    }
-    console.log('[NameScreen] Fetching planet for birthDate:', birthDate)
+    if (!birthDate) return
     setLoading(true)
-    getPlanetByBirthDate(birthDate)
-      .then((data) => {
-        console.log('[NameScreen] Got data:', JSON.stringify(data, null, 2))
-        setPlanetData(data)
-      })
-      .catch((err) => {
-        console.log('[NameScreen] API failed, using fallback. Error:', err.message)
-        setPlanetData(null)
-      })
-      .finally(() => setLoading(false))
+    getPlanetByBirthDate(birthDate).then(({ ok, data }) => {
+      setPlanetData(ok ? data : null)
+      setLoading(false)
+    })
   }, [birthDate])
 
   const PLANET_SIZES = {
@@ -71,7 +61,6 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
   }
   const sizePlanet = PLANET_SIZES[planetTitle] ?? 550
 
-  console.log('sizePlanet', planetTitle, sizePlanet)
   return (
     <YStack flex={1}>
       <BackgroundView>
