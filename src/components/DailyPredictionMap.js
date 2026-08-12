@@ -163,6 +163,7 @@ function PlanetLabel({
   font,
   subtitle,
   subtitleFont,
+  dimmed,
 }) {
   const pos = useDerivedValue(() =>
     planetPoint({
@@ -190,11 +191,18 @@ function PlanetLabel({
   const x = useDerivedValue(() => textPos.value.x)
   const y = useDerivedValue(() => textPos.value.y)
   const subtitleY = useDerivedValue(() => textPos.value.y + fontSize * 1.2)
+  const opacity = useSharedValue(dimmed ? 0 : 1)
+  const subtitleOpacity = useSharedValue(dimmed ? 0 : 0.85)
+
+  useEffect(() => {
+    opacity.value = withTiming(dimmed ? 0 : 1, { duration: 200 })
+    subtitleOpacity.value = withTiming(dimmed ? 0 : 0.85, { duration: 200 })
+  }, [dimmed, opacity, subtitleOpacity])
 
   return (
     <>
-      <Text x={x} y={y} text={name} font={font} color={color} />
-      {subtitle && <Text x={x} y={subtitleY} text={subtitle} font={subtitleFont} color={color} opacity={0.85} />}
+      <Text x={x} y={y} text={name} font={font} color={color} opacity={opacity} />
+      {subtitle && <Text x={x} y={subtitleY} text={subtitle} font={subtitleFont} color={color} opacity={subtitleOpacity} />}
     </>
   )
 }
@@ -220,6 +228,11 @@ export default function DailyPredictionMap({ paths, size, height = size, selecte
 
   const labelFont = useFont(Montserrat_500Medium, 11)
   const subtitleFont = useFont(Montserrat_500Medium, 9)
+
+  const selectedPath = useMemo(() => {
+    if (!selectedId) return null
+    return paths.find((p) => p.id === selectedId) || null
+  }, [selectedId, paths])
 
   const { natalLabels, transitLabels } = useMemo(() => {
     const natal = new Map()
@@ -494,6 +507,7 @@ export default function DailyPredictionMap({ paths, size, height = size, selecte
             font={labelFont}
             subtitle="natal"
             subtitleFont={subtitleFont}
+            dimmed={selectedPath !== null && l.name !== selectedPath.natal_planet}
           />
         ))}
 
@@ -514,6 +528,7 @@ export default function DailyPredictionMap({ paths, size, height = size, selecte
             cy={cy}
             color={l.color}
             font={labelFont}
+            dimmed={selectedPath !== null && l.name !== selectedPath.transit_planet}
           />
         ))}
       </Canvas>
