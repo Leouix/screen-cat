@@ -63,7 +63,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
         <CitySearch onSelect={onCitySelect} selectedCity={selectedCity} />
 
         <PrimaryButton onPress={() => onNext(selectedCity)}>
-          NEXT
+          PREDICTION MAP
         </PrimaryButton>
 
         <XStack width="100%" justifyContent="space-between" >

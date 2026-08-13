@@ -8,3 +8,5 @@ const DEV_FALLBACK = Platform.select({
 export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || DEV_FALLBACK
 
 export const API_TIMEOUT_MS = 10000
+
+export const GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || ''

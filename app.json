@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "sprite-app",
-    "slug": "sprite-app",
+    "name": "Astrology App",
+    "slug": "astrology-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,7 +29,8 @@
     "plugins": [
       "expo-sqlite",
       "expo-font",
-      "expo-status-bar"
+      "expo-status-bar",
+      "@react-native-google-signin/google-signin"
     ]
   }
 }
