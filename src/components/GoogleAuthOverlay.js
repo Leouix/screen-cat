@@ -12,12 +12,10 @@ export default function GoogleAuthOverlay({ visible, loading, error, onSignIn })
       right={0}
       bottom={0}
       zIndex={10}
-      backgroundColor="#060606cc"
       alignItems="center"
       justifyContent="center"
       paddingHorizontal={24}
     >
-      <StarryBackground />
 
       <YStack
         width="100%"
@@ -35,7 +33,7 @@ export default function GoogleAuthOverlay({ visible, loading, error, onSignIn })
         </Text>
 
         <Text color="#ffffff" fontSize={18} fontFamily="Montserrat_600SemiBold" textAlign="center">
-          Your personal sky, saved
+          Preserve your starry sky!
         </Text>
 
         <Text color="#b2b2bc" fontSize={13} fontFamily="Montserrat_400Regular" textAlign="center" lineHeight={19}>

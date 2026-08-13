@@ -200,9 +200,12 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
       </YStack>
          {onBack && (
             <YStack alignItems="center" zIndex={5}>
-              <SecondaryButton onPress={handleLogOut}>Log Out</SecondaryButton>
-              <SecondaryButton onPress={onBack}>Back</SecondaryButton>
-            </YStack>
+            <SecondaryButton onPress={handleLogOut}>Log Out</SecondaryButton>
+             </YStack>
+          )}
+         {onBack && (
+            <SecondaryButton onPress={onBack}>Back</SecondaryButton>
+           
           )}
 
       <GoogleAuthOverlay
