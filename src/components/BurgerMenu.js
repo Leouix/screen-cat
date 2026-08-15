@@ -6,8 +6,8 @@ export default function BurgerMenu({ onLogout }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <YStack position="absolute" top={0} left={0} right={0} zIndex={30}>
-      <XStack justifyContent="flex-end" paddingTop={50} paddingRight={20}>
+    <YStack position="absolute" top={0} left={0} right={0} bottom={open ? 0 : undefined} zIndex={30}>
+      <XStack justifyContent="flex-end" paddingTop={50} paddingRight={20} zIndex={40}>
         <XStack
           onPress={() => setOpen((prev) => !prev)}
           flexDirection="column"
@@ -30,16 +30,28 @@ export default function BurgerMenu({ onLogout }) {
 
       {open && (
         <YStack
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          zIndex={20}
+          onPress={() => setOpen(false)}
+        />
+      )}
+
+      {open && (
+        <YStack
           width="100%"
           alignItems="center"
-          gap={8}
-          paddingVertical={18}
+          paddingVertical={10}
           paddingHorizontal={20}
           backgroundColor="#0B0C10f2"
           borderBottomWidth={1}
           borderBottomColor="#f8df6140"
+          zIndex={40}
         >
-          <Text color="#ffffff" fontSize={13} fontFamily="Montserrat_500Medium">
+          <Text color="#ffffff7a" fontSize={13} fontFamily="Montserrat_500Medium">
             Menu
           </Text>
           <LogoutButton
