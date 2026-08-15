@@ -6,13 +6,13 @@ import StarryBackground from '../components/StarryBackground'
 import DailyPredictionMap from '../components/DailyPredictionMap'
 import AspectCardDeck from '../components/AspectCardDeck'
 import GoogleAuthOverlay from '../components/GoogleAuthOverlay'
-import { BackButtonCenter, BackgroundView, LogoutButton } from '../components/shared/StyledComponents'
+import { BackButtonCenter, BackgroundView } from '../components/shared/StyledComponents'
 import { buildPredictionPaths } from '../utils/prediction'
 import { getPrediction, postGoogleAuth } from '../services/api'
-import { saveAuth, clearAuth, loadAuth, savePrediction as persistPrediction, loadPrediction } from '../services/db'
-import { signInWithGoogle, googleSignOut } from '../services/auth'
+import { saveAuth, savePrediction as persistPrediction, loadPrediction } from '../services/db'
+import { signInWithGoogle } from '../services/auth'
 
-export default function PredictionScreen({ birthDate, birthTime, name, selectedCity, onBack }) {
+export default function PredictionScreen({ birthDate, birthTime, name, selectedCity, onBack, isLoggedIn, onAuthChange }) {
   const { width, height } = useWindowDimensions()
   const [selectedPath, setSelectedPath] = useState(null)
   const [prediction, setPrediction] = useState(null)
@@ -54,7 +54,6 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
 
     async function init() {
       const cached = await loadPrediction()
-      const auth = await loadAuth()
       if (cancelled) return
 
       const today = dayjs().format('YYYY-MM-DD')
@@ -63,13 +62,8 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       if (cached) setPrediction(cached)
       setLoading(!hasFreshCache)
 
-      if (auth && auth.token) {
-        setAuthState('signed_in')
-        if (!hasFreshCache) {
-          fetchPublicPrediction()
-        }
-      } else {
-        setAuthState('auth_required')
+      if (isLoggedIn && !hasFreshCache) {
+        fetchPublicPrediction()
       }
     }
 
@@ -77,14 +71,17 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
     return () => {
       cancelled = true
     }
-  }, [fetchPublicPrediction])
+  }, [fetchPublicPrediction, isLoggedIn])
 
-  const handleLogOut = useCallback(async () => {
-    await googleSignOut()
-    await clearAuth()
-    setAuthState('auth_required')
-    onBack?.()
-  }, [onBack])
+  useEffect(() => {
+    if (isLoggedIn === null) {
+      setAuthState('loading')
+    } else if (isLoggedIn) {
+      setAuthState('signed_in')
+    } else {
+      setAuthState('auth_required')
+    }
+  }, [isLoggedIn])
 
   const handleGoogleSignIn = useCallback(async () => {
     setSignInLoading(true)
@@ -112,6 +109,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
         setPrediction(data.prediction)
       }
       setAuthState('signed_in')
+      onAuthChange?.(true)
       setError(null)
     } catch (err) {
       setAuthError(err.message || 'Sign-in failed. Try again.')
@@ -207,12 +205,6 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
         )}
       </YStack>
       )}
-         {onBack && (
-            <YStack alignItems="center" zIndex={5}>
-            <LogoutButton onPress={handleLogOut}>Log Out</LogoutButton>
-             </YStack>
-          )}
-        
 
       <GoogleAuthOverlay
         visible={authState === 'auth_required'}

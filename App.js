@@ -13,6 +13,9 @@ import BirthDateScreen from './src/screens/BirthDateScreen'
 import NameScreen from './src/screens/NameScreen'
 import EarthWithCity from './src/screens/EarthWithCity'
 import PredictionScreen from './src/screens/PredictionScreen'
+import BurgerMenu from './src/components/BurgerMenu'
+import { loadAuth, clearAuth } from './src/services/db'
+import { googleSignOut } from './src/services/auth'
 
 const SCREEN_ORDER = ['birthDate', 'name', 'city', 'prediction']
 
@@ -29,6 +32,28 @@ export default function App() {
   const [birthTime, setBirthTime] = useState('')
   const [name, setName] = useState('')
   const [selectedCity, setSelectedCity] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    loadAuth().then((auth) => {
+      if (cancelled) return
+      setIsLoggedIn(!!auth?.token)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const handleLogout = useCallback(async () => {
+    await googleSignOut()
+    await clearAuth()
+    setIsLoggedIn(false)
+  }, [])
+
+  const handleAuthChange = useCallback((signedIn) => {
+    setIsLoggedIn(!!signedIn)
+  }, [])
 
   const handleBirthDateNext = (date, time) => {
     setBirthDate(date)
@@ -103,8 +128,12 @@ export default function App() {
             name={name}
             selectedCity={selectedCity}
             onBack={goBack}
+            isLoggedIn={isLoggedIn}
+            onAuthChange={handleAuthChange}
           />
         )}
+
+        {isLoggedIn && <BurgerMenu onLogout={handleLogout} />}
       </YStack>
 
      
