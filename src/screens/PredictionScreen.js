@@ -178,7 +178,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
             <AspectCardDeck aspects={paths} hidden={!!selectedPath} onSelect={(aspect) => mapRef.current?.focus(aspect.id)} />
 
             {selectedPath && (
-              <YStack width="100%"  paddingTop={8} position='absolute' bottom={10} zIndex={4}>
+              <YStack width="100%"  paddingTop={8} position='absolute' bottom={120} zIndex={4}>
                 <XStack
                   alignItems="flex-start"
                   gap={10}
