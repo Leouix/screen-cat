@@ -132,6 +132,13 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
         <StarryBackground />
       </BackgroundView>
 
+      {authState === 'loading' && (
+        <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" gap={14}>
+          <Spinner color="#ffffff" size="large" />
+        </YStack>
+      )}
+
+      {authState === 'signed_in' && (
       <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" paddingHorizontal={20}>
 
         <Text color="#b2b2bc" fontSize={18} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={110} zIndex={2}>
@@ -199,6 +206,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
           </>
         )}
       </YStack>
+      )}
          {onBack && (
             <YStack alignItems="center" zIndex={5}>
             <SecondaryButton onPress={handleLogOut}>Log Out</SecondaryButton>
