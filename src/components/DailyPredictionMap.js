@@ -218,7 +218,7 @@ function PlanetLabel({
 
 export default forwardRef(function DailyPredictionMap({ paths, size, height = size, selectedId = null, onSelect }, ref) {
   const cx = size / 2
-  const cy = height * 0.45 - 30
+  const cy = height * 0.45 - 60
 
   const CHART_R = size * CHART_R_F
   const NATAL_R = CHART_R * NATAL_R_F

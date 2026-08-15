@@ -105,7 +105,7 @@ export default function AspectCardDeck({ aspects, hidden = false, maxHeight = CA
         width: '100%',
         height: deckH,
         position: 'absolute',
-        bottom: 10,
+        bottom: 70,
         zIndex: 3,
       }}
       pointerEvents={hidden || count === 0 ? 'none' : 'box-none'}
