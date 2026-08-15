@@ -51,6 +51,19 @@ export const SecondaryButton = styled(Button, {
   pressStyle: { opacity: 0.6 },
 })
 
+export const LogoutButton = styled(Button, {
+  
+  backgroundColor: 'transparent',
+  paddingVertical: 5,
+  borderRadius: 50,
+  marginTop: 15,
+  color: '#c3bea6',
+  fontSize: 12,
+  fontWeight: 'bold',
+  textDecorationLine: 'underline',
+  pressStyle: { opacity: 0.6 },
+})
+
 export const BackButton = styled(Button, {
    backgroundColor: 'transparent',
   paddingVertical: 5,
@@ -61,6 +74,23 @@ export const BackButton = styled(Button, {
   fontWeight: 'bold',
   textDecorationLine: 'underline',
   pressStyle: { opacity: 0.6 },
+})
+
+export const BackButtonCenter = styled(Button, {
+   backgroundColor: 'transparent',
+  paddingVertical: 5,
+  borderRadius: 50,
+  marginTop: 15,
+  color: '#c3bea6',
+  fontSize: 12,
+  fontWeight: 'bold',
+  textDecorationLine: 'underline',
+  pressStyle: { opacity: 0.6 },
+  zIndex: 11,
+  position: 'absolute',
+  bottom: 20,
+  right: 0,
+  left: 0,
 })
 
 export const StyledInput = styled(Input, {

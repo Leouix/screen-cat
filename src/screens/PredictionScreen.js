@@ -6,7 +6,7 @@ import StarryBackground from '../components/StarryBackground'
 import DailyPredictionMap from '../components/DailyPredictionMap'
 import AspectCardDeck from '../components/AspectCardDeck'
 import GoogleAuthOverlay from '../components/GoogleAuthOverlay'
-import { BackgroundView, SecondaryButton } from '../components/shared/StyledComponents'
+import { BackButtonCenter, BackgroundView, LogoutButton } from '../components/shared/StyledComponents'
 import { buildPredictionPaths } from '../utils/prediction'
 import { getPrediction, postGoogleAuth } from '../services/api'
 import { saveAuth, clearAuth, loadAuth, savePrediction as persistPrediction, loadPrediction } from '../services/db'
@@ -209,13 +209,10 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       )}
          {onBack && (
             <YStack alignItems="center" zIndex={5}>
-            <SecondaryButton onPress={handleLogOut}>Log Out</SecondaryButton>
+            <LogoutButton onPress={handleLogOut}>Log Out</LogoutButton>
              </YStack>
           )}
-         {onBack && (
-            <SecondaryButton onPress={onBack}>Back</SecondaryButton>
-           
-          )}
+        
 
       <GoogleAuthOverlay
         visible={authState === 'auth_required'}
@@ -223,6 +220,11 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
         error={authError}
         onSignIn={handleGoogleSignIn}
       />
+
+       {onBack && (
+            <BackButtonCenter onPress={onBack}>Back</BackButtonCenter>
+           
+          )}
     </YStack>
   )
 }
