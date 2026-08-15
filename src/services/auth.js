@@ -20,7 +20,7 @@ export async function signInWithGoogle() {
     cancelled: false,
     idToken: userInfo.idToken,
     user: {
-      name: userInfo.user?.name || '',
+      googleName: userInfo.user?.name || '',
       email: userInfo.user?.email || '',
     },
   }

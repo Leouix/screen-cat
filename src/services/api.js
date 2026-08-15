@@ -50,8 +50,9 @@ export async function getPrediction({ birthDate, birthTime, latitude, longitude 
   return request(`${API_BASE_URL}/api/v1/prediction?${params.toString()}`)
 }
 
-export async function postGoogleAuth({ idToken, name, email, birthDate, birthTime, latitude, longitude, timezone }) {
+export async function postGoogleAuth({ idToken, googleName, name, email, birthDate, birthTime, latitude, longitude, timezone }) {
   const body = { id_token: idToken, birth_date: birthDate }
+  if (googleName) body.google_name = googleName
   if (name) body.name = name
   if (email) body.email = email
   if (birthTime) body.birth_time = birthTime

@@ -100,6 +100,7 @@ export default function App() {
           <PredictionScreen
             birthDate={birthDate}
             birthTime={birthTime}
+            name={name}
             selectedCity={selectedCity}
             onBack={goBack}
           />

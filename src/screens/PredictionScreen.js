@@ -12,7 +12,7 @@ import { getPrediction, postGoogleAuth } from '../services/api'
 import { saveAuth, clearAuth, loadAuth, savePrediction as persistPrediction, loadPrediction } from '../services/db'
 import { signInWithGoogle, googleSignOut } from '../services/auth'
 
-export default function PredictionScreen({ birthDate, birthTime, selectedCity, onBack }) {
+export default function PredictionScreen({ birthDate, birthTime, name, selectedCity, onBack }) {
   const { width, height } = useWindowDimensions()
   const [selectedPath, setSelectedPath] = useState(null)
   const [prediction, setPrediction] = useState(null)
@@ -95,7 +95,8 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
 
       const { ok, data, error } = await postGoogleAuth({
         idToken,
-        name: user.name,
+        googleName: user.googleName,
+        name,
         email: user.email,
         birthDate,
         birthTime,
@@ -105,7 +106,7 @@ export default function PredictionScreen({ birthDate, birthTime, selectedCity, o
       })
       if (!ok) throw new Error(error || 'Sign-in failed')
 
-      await saveAuth({ token: data.token, user: { ...user, user_id: data.user_id } })
+      await saveAuth({ token: data.token, user: { google_name: user.googleName, name, email: user.email, user_id: data.user_id } })
       if (data.prediction) {
         await persistPrediction(data.prediction)
         setPrediction(data.prediction)
