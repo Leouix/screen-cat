@@ -4,8 +4,8 @@ const DB_NAME = 'sprite-app.db'
 
 let dbPromise = null
 
-function buildDataKey({ birthDate, birthTime, latitude, longitude }) {
-  return [birthDate ?? '', birthTime ?? '', latitude ?? '', longitude ?? ''].join('|')
+function buildDataKey({ birthDate, birthTime, latitude, longitude, timezone }) {
+  return [birthDate ?? '', birthTime ?? '', latitude ?? '', longitude ?? '', timezone ?? ''].join('|')
 }
 
 function getDb() {

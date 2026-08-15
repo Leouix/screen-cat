@@ -40,12 +40,13 @@ export async function getPlanetByBirthDate(birthDate) {
   return request(`${API_BASE_URL}/api/v1/get-data-planet?birth_date=${birthDate}`)
 }
 
-export async function getPrediction({ birthDate, birthTime, latitude, longitude }) {
+export async function getPrediction({ birthDate, birthTime, latitude, longitude, timezone }) {
   const params = new URLSearchParams()
   params.append('birth_date', birthDate)
   if (birthTime) params.append('birth_time', birthTime)
   if (latitude != null) params.append('latitude', String(latitude))
   if (longitude != null) params.append('longitude', String(longitude))
+  if (timezone) params.append('timezone', timezone)
 
   return request(`${API_BASE_URL}/api/v1/prediction?${params.toString()}`)
 }

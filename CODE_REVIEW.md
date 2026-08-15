@@ -21,13 +21,13 @@
 
 ## Критические
 
-- **Утечка `password_hash` в API.** `GetProfile` и `UpdateProfile` сериализуют `storage.User` целиком, а у структуры есть `json:"password_hash"` (`models.go:27`). Т.е. `GET /api/v1/profile` и `PUT /api/v1/profile` отдают bcrypt-хэш пароля клиенту (`handler.go:320, 391`). При этом `docs/API.md:226` прямо обещает, что хэш «не возвращается в API». Нужна DTO профиля без `password_hash`.
+++ **Утечка `password_hash` в API.** `GetProfile` и `UpdateProfile` сериализуют `storage.User` целиком, а у структуры есть `json:"password_hash"` (`models.go:27`). Т.е. `GET /api/v1/profile` и `PUT /api/v1/profile` отдают bcrypt-хэш пароля клиенту (`handler.go:320, 391`). При этом `docs/API.md:226` прямо обещает, что хэш «не возвращается в API». Нужна DTO профиля без `password_hash`.
 
 - **Натальная карта всегда пустая.** `ProfileService.CreateProfileAndCalculateChart` (`profile.go:21`) нигде не вызывается — `profileService` инжектится, но не используется (`main.go:86-89`). Значит `user_chart_placements` не заполняется, и `GET /api/v1/profile/natal-chart` всегда вернёт `placements: []`. После `UpdateProfile` кэш расчёта тоже не пересчитывается.
 
-- **`Register` усекает координаты до целых.** `float64ToNumeric` (в `auth.go:101-102` и `profile.go:82-91`) берёт `big.Int` от float — дробная часть теряется: 55.7558 → 55. Google-флоу использует `float64ToNumericExact` (`google.go:177`). Расхождение: регистрация по email хранит некорректные lat/lng. Нужно использовать `float64ToNumericExact` везде.
+++ **`Register` усекает координаты до целых.** `float64ToNumeric` (в `auth.go:101-102` и `profile.go:82-91`) берёт `big.Int` от float — дробная часть теряется: 55.7558 → 55. Google-флоу использует `float64ToNumericExact` (`google.go:177`). Расхождение: регистрация по email хранит некорректные lat/lng. Нужно использовать `float64ToNumericExact` везде.
 
-- **Timezone не участвует в расчёте предсказания.** «Сегодня» определяется как `time.Now().UTC()` (`handler.go:196`), таймзона пользователя игнорируется и в `buildPredictionResponse`, и в `CalculateTransits` (`transit.go:27`). Для дневного гороскопа это критично: «день» у пользователя в +9 может отличаться от UTC.
+++ **Timezone не участвует в расчёте предсказания.** «Сегодня» определяется как `time.Now().UTC()` (`handler.go:196`), таймзона пользователя игнорируется и в `buildPredictionResponse`, и в `CalculateTransits` (`transit.go:27`). Для дневного гороскопа это критично: «день» у пользователя в +9 может отличаться от UTC.
 
 - **JWT живёт вечно.** `generateToken` не ставит `exp` (`auth.go:168-175`) — украденный токен валиден бессрочно. Задокументировано как осознанное решение, но стоит хотя бы долгий TTL + refresh.
 
@@ -50,6 +50,8 @@
 - **Нет rate-limiting** на `/login` и `/auth/google` (`auth.go`, `google.go`) — открыт брутфорс/перебор; `/prediction` — дорогой расчёт без кэша (легко досить).
 
 - **Анонимный пользователь не может увидеть прогноз.** При `auth_required` рендерится только `GoogleAuthOverlay` без варианта «Skip» (`PredictionScreen.js:263-268`). Публичный `GET /prediction` тогда фактически никто не использует — либо убрать блокировку, либо сделать эндпоинт приватным.
+
+- **Деблирование городов в city_en.json
 
 ---
 

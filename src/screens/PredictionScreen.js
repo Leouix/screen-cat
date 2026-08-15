@@ -31,6 +31,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
     birthTime,
     latitude: selectedCity?.latitude,
     longitude: selectedCity?.longitude,
+    timezone: selectedCity?.timezone,
   }), [birthDate, birthTime, selectedCity])
 
   const currentProfile = useMemo(() => ({
@@ -59,6 +60,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
         birthTime,
         latitude: selectedCity?.latitude,
         longitude: selectedCity?.longitude,
+        timezone: selectedCity?.timezone,
       })
       if (!ok) {
         setError(error || 'Failed to load prediction')
