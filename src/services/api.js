@@ -50,6 +50,17 @@ export async function getPrediction({ birthDate, birthTime, latitude, longitude 
   return request(`${API_BASE_URL}/api/v1/prediction?${params.toString()}`)
 }
 
+export async function updateProfile({ token, name, birthDate, birthTime, latitude, longitude, timezone }) {
+  const body = { birth_date: birthDate }
+  if (name) body.name = name
+  if (birthTime) body.birth_time = birthTime
+  if (latitude != null) body.latitude = latitude
+  if (longitude != null) body.longitude = longitude
+  if (timezone) body.timezone = timezone
+
+  return request(`${API_BASE_URL}/api/v1/profile`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(body) })
+}
+
 export async function postGoogleAuth({ idToken, googleName, name, email, birthDate, birthTime, latitude, longitude, timezone }) {
   const body = { id_token: idToken, birth_date: birthDate }
   if (googleName) body.google_name = googleName

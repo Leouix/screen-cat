@@ -4,6 +4,10 @@ const DB_NAME = 'sprite-app.db'
 
 let dbPromise = null
 
+function buildDataKey({ birthDate, birthTime, latitude, longitude }) {
+  return [birthDate ?? '', birthTime ?? '', latitude ?? '', longitude ?? ''].join('|')
+}
+
 function getDb() {
   if (!dbPromise) {
     dbPromise = openDatabaseAsync(DB_NAME).then(async (db) => {
@@ -17,9 +21,22 @@ function getDb() {
         CREATE TABLE IF NOT EXISTS prediction (
           id INTEGER PRIMARY KEY CHECK (id = 1),
           date TEXT NOT NULL,
+          data_key TEXT,
           data_json TEXT NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS profile (
+          id INTEGER PRIMARY KEY CHECK (id = 1),
+          birth_date TEXT,
+          birth_time TEXT,
+          name TEXT,
+          latitude REAL,
+          longitude REAL,
+          timezone TEXT
+        );
       `)
+      try {
+        await db.execAsync('ALTER TABLE prediction ADD COLUMN data_key TEXT')
+      } catch {}
       return db
     })
   }
@@ -47,19 +64,48 @@ export async function clearAuth() {
   await db.runAsync('DELETE FROM auth WHERE id = 1')
 }
 
-export async function savePrediction(prediction) {
+export async function saveProfile(profile) {
+  if (!profile) return
+  const db = await getDb()
+  await db.runAsync(
+    'INSERT INTO profile (id, birth_date, birth_time, name, latitude, longitude, timezone) VALUES (1, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET birth_date = excluded.birth_date, birth_time = excluded.birth_time, name = excluded.name, latitude = excluded.latitude, longitude = excluded.longitude, timezone = excluded.timezone',
+    profile.birthDate ?? null,
+    profile.birthTime ?? null,
+    profile.name ?? null,
+    profile.latitude ?? null,
+    profile.longitude ?? null,
+    profile.timezone ?? null,
+  )
+}
+
+export async function loadProfile() {
+  const db = await getDb()
+  const row = await db.getFirstAsync('SELECT birth_date, birth_time, name, latitude, longitude, timezone FROM profile WHERE id = 1')
+  if (!row) return null
+  return {
+    birthDate: row.birth_date,
+    birthTime: row.birth_time,
+    name: row.name,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    timezone: row.timezone,
+  }
+}
+
+export async function savePrediction(prediction, input) {
   if (!prediction || !prediction.date) return
   const db = await getDb()
   await db.runAsync(
-    'INSERT INTO prediction (id, date, data_json) VALUES (1, ?, ?) ON CONFLICT (id) DO UPDATE SET date = excluded.date, data_json = excluded.data_json',
+    'INSERT INTO prediction (id, date, data_key, data_json) VALUES (1, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET date = excluded.date, data_key = excluded.data_key, data_json = excluded.data_json',
     prediction.date,
+    buildDataKey(input),
     JSON.stringify(prediction),
   )
 }
 
-export async function loadPrediction() {
+export async function loadPrediction(input) {
   const db = await getDb()
-  const row = await db.getFirstAsync('SELECT data_json FROM prediction WHERE id = 1')
+  const row = await db.getFirstAsync('SELECT data_json FROM prediction WHERE id = 1 AND data_key = ?', buildDataKey(input))
   if (!row) return null
   return JSON.parse(row.data_json)
 }

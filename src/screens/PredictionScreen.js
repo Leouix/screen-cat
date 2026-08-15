@@ -8,8 +8,8 @@ import AspectCardDeck from '../components/AspectCardDeck'
 import GoogleAuthOverlay from '../components/GoogleAuthOverlay'
 import { BackButtonCenter, BackgroundView } from '../components/shared/StyledComponents'
 import { buildPredictionPaths } from '../utils/prediction'
-import { getPrediction, postGoogleAuth } from '../services/api'
-import { saveAuth, savePrediction as persistPrediction, loadPrediction } from '../services/db'
+import { getPrediction, postGoogleAuth, updateProfile } from '../services/api'
+import { saveAuth, savePrediction as persistPrediction, loadPrediction, saveProfile, loadProfile, loadAuth } from '../services/db'
 import { signInWithGoogle } from '../services/auth'
 
 export default function PredictionScreen({ birthDate, birthTime, name, selectedCity, onBack, isLoggedIn, onAuthChange }) {
@@ -26,6 +26,30 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
   const size = Math.min(width, height)
   const mapRef = useRef(null)
 
+  const predictionInput = useMemo(() => ({
+    birthDate,
+    birthTime,
+    latitude: selectedCity?.latitude,
+    longitude: selectedCity?.longitude,
+  }), [birthDate, birthTime, selectedCity])
+
+  const currentProfile = useMemo(() => ({
+    name,
+    birthDate,
+    birthTime,
+    latitude: selectedCity?.latitude,
+    longitude: selectedCity?.longitude,
+    timezone: selectedCity?.timezone,
+  }), [name, birthDate, birthTime, selectedCity])
+
+  const profilesEqual = (a, b) =>
+    (a.name ?? null) === (b.name ?? null)
+    && (a.birthDate ?? null) === (b.birthDate ?? null)
+    && (a.birthTime ?? null) === (b.birthTime ?? null)
+    && (a.latitude ?? null) === (b.latitude ?? null)
+    && (a.longitude ?? null) === (b.longitude ?? null)
+    && (a.timezone ?? null) === (b.timezone ?? null)
+
   const fetchPublicPrediction = useCallback(async () => {
     setLoading(true)
     setError(null)
@@ -41,19 +65,44 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
         return
       }
       setPrediction(data)
-      persistPrediction(data)
+      persistPrediction(data, predictionInput)
     } catch (err) {
       setError(err.message || 'Failed to load prediction')
     } finally {
       setLoading(false)
     }
-  }, [birthDate, birthTime, selectedCity])
+  }, [birthDate, birthTime, selectedCity, predictionInput])
+
+  const syncProfile = useCallback(async (token, profile) => {
+    setLoading(true)
+    setError(null)
+    try {
+      const { ok, data, error } = await updateProfile({ token, ...profile })
+      if (!ok) {
+        setError(error || 'Failed to sync profile')
+        return
+      }
+      await saveProfile(profile)
+      if (data.prediction) {
+        await persistPrediction(data.prediction, predictionInput)
+        setPrediction(data.prediction)
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to sync profile')
+    } finally {
+      setLoading(false)
+    }
+  }, [predictionInput])
 
   useEffect(() => {
     let cancelled = false
 
     async function init() {
-      const cached = await loadPrediction()
+      const [cached, auth, storedProfile] = await Promise.all([
+        loadPrediction(predictionInput),
+        loadAuth(),
+        loadProfile(),
+      ])
       if (cancelled) return
 
       const today = dayjs().format('YYYY-MM-DD')
@@ -62,8 +111,12 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       if (cached) setPrediction(cached)
       setLoading(!hasFreshCache)
 
-      if (isLoggedIn && !hasFreshCache) {
-        fetchPublicPrediction()
+      if (isLoggedIn && auth?.token) {
+        if (!storedProfile || !profilesEqual(storedProfile, currentProfile)) {
+          await syncProfile(auth.token, currentProfile)
+        } else if (!hasFreshCache) {
+          fetchPublicPrediction()
+        }
       }
     }
 
@@ -71,7 +124,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
     return () => {
       cancelled = true
     }
-  }, [fetchPublicPrediction, isLoggedIn])
+  }, [fetchPublicPrediction, isLoggedIn, predictionInput, currentProfile, syncProfile])
 
   useEffect(() => {
     if (isLoggedIn === null) {
@@ -104,8 +157,9 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       if (!ok) throw new Error(error || 'Sign-in failed')
 
       await saveAuth({ token: data.token, user: { google_name: user.googleName, name, email: user.email, user_id: data.user_id } })
+      await saveProfile(currentProfile)
       if (data.prediction) {
-        await persistPrediction(data.prediction)
+        await persistPrediction(data.prediction, predictionInput)
         setPrediction(data.prediction)
       }
       setAuthState('signed_in')
@@ -117,7 +171,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       setSignInLoading(false)
       setLoading(false)
     }
-  }, [birthDate, birthTime, selectedCity])
+  }, [birthDate, birthTime, selectedCity, currentProfile, predictionInput])
 
   const paths = useMemo(() => {
     if (!prediction) return []
