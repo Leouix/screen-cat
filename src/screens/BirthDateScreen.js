@@ -4,6 +4,7 @@ import { DatePicker } from '@quidone/react-native-wheel-picker'
 import WheelPicker from '@quidone/react-native-wheel-picker'
 import StarryBackground from '../components/StarryBackground'
 import SunDecoration from '../components/SunDecoration';
+import { useWindowDimensions } from 'react-native'
 
 import {
   BackgroundView,
@@ -13,7 +14,6 @@ import {
   SecondaryButton,
   Divider
 } from '../components/shared/StyledComponents'
-import { TextDecoration } from '@shopify/react-native-skia'
 
 const HOURS = Array.from({ length: 24 }, (_, i) => ({
   value: i,
@@ -45,20 +45,33 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
     overlayItemStyle: { backgroundColor: 'rgba(248, 223, 97, 0.15)', borderRadius: 8 },
   }
 
+  const { width } = useWindowDimensions()
+  const isSmallScreen = width <= 360
+
   return (
     <YStack flex={1}>
       <BackgroundView>
         <StarryBackground />
 
         <SunDecoration 
-        dimOverlay={0.3}
-          style={{  marginTop: 85, position: 'absolute', left: -20}} 
+          size={isSmallScreen ? 200 : 350}
+          dimOverlay={0.3}
+          style={{  
+            marginTop: isSmallScreen ? 25 : 85, 
+            position: 'absolute', 
+            left: -20
+          }} 
         />
 
       </BackgroundView>
 
-      <MainContainer>
-        <Label>when were you born?</Label>
+      <MainContainer 
+        paddingVertical={isSmallScreen ? 20 : 30}
+      >
+        <Label style={{
+          fontSize: isSmallScreen ? 15 : 18,
+          marginBottom: isSmallScreen ? 20 : 20,
+        }}>when were you born?</Label>
 
          <XStack alignItems="center" gap={3} marginBottom={10}>
           {time ? (
@@ -97,22 +110,34 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
 
        
 
-        <Divider marginVertical={5} />
+        <Divider marginVertical={isSmallScreen ? 0 : 5} />
 
         <DatePicker
           date={date}
           onDateChanged={({ date }) => setDate(date)}
-          itemHeight={44}
+          itemHeight={isSmallScreen ? 36: 44}
           visibleItemCount={5}
           minDate="1930-01-01"
           maxDate="2010-12-31"
           locale="en-GB"
-          itemTextStyle={{ color: '#f8df61', fontSize: 18 }}
+          itemTextStyle={{ color: '#f8df61', fontSize: isSmallScreen ? 14 : 18 }}
           overlayItemStyle={{ backgroundColor: 'rgba(248, 223, 97, 0.15)', borderRadius: 8 }}
         />
 
-        <PrimaryButton onPress={() => onNext(date, timeString)}>NEXT</PrimaryButton>
-        <SecondaryButton onPress={() => onNext(date, timeString)}>Skip</SecondaryButton>
+        <PrimaryButton 
+          onPress={() => onNext(date, timeString)}
+          fontSize = {isSmallScreen ? 14 : 18}
+          height={isSmallScreen ? 40 : 45}
+          >NEXT</PrimaryButton>
+
+        <SecondaryButton 
+          onPress={() => onNext(date, timeString)}
+          fontSize={10}
+          paddingVertical={isSmallScreen ? 0 : 5} 
+          style={{
+            marginTop: isSmallScreen ? 3 : 15,
+          }}
+          >Skip</SecondaryButton>
       </MainContainer>
     </YStack>
   )
