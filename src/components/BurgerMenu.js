@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import { YStack, XStack, Text } from 'tamagui'
 import { LogoutButton } from './shared/StyledComponents'
+import { useWindowDimensions } from 'react-native'
 
 export default function BurgerMenu({ onLogout }) {
   const [open, setOpen] = useState(false)
 
+  const { width } = useWindowDimensions()
+  const isSmallScreen = width <= 360
+
   return (
     <YStack position="absolute" top={0} left={0} right={0} bottom={open ? 0 : undefined} zIndex={30}>
-      <XStack justifyContent="flex-end" paddingTop={50} paddingRight={20} zIndex={40}>
+      <XStack justifyContent="flex-end" paddingTop={isSmallScreen ? 30 : 50} paddingRight={20} zIndex={40}>
         <XStack
           onPress={() => setOpen((prev) => !prev)}
           flexDirection="column"

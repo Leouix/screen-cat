@@ -33,6 +33,9 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
     return { hours, minutes }
   })
 
+  const { width } = useWindowDimensions()
+  const isSmallScreen = width <= 360
+
   const timeString = useMemo(
     () => (time ? `${String(time.hours).padStart(2, '0')}:${String(time.minutes).padStart(2, '0')}` : null),
     [time],
@@ -41,12 +44,9 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
   const wheelProps = {
     itemHeight: 34,
     visibleItemCount: 1,
-    itemTextStyle: { color: '#f8df61', fontSize: 18 },
+    itemTextStyle: { color: '#f8df61', fontSize: isSmallScreen ? 15 : 18 },
     overlayItemStyle: { backgroundColor: 'rgba(248, 223, 97, 0.15)', borderRadius: 8 },
   }
-
-  const { width } = useWindowDimensions()
-  const isSmallScreen = width <= 360
 
   return (
     <YStack flex={1}>
@@ -73,7 +73,7 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
           marginBottom: isSmallScreen ? 20 : 20,
         }}>when were you born?</Label>
 
-         <XStack alignItems="center" gap={3} marginBottom={10}>
+         <XStack alignItems="center" gap={isSmallScreen ? 0 : 3} marginBottom={10}>
           {time ? (
             <>
               <WheelPicker
@@ -83,7 +83,7 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
                 width={32}
                 {...wheelProps}
               />
-              <Text color="#f8df61" fontSize={18} fontWeight="bold">:</Text>
+              <Text color="#f8df61" fontSize={isSmallScreen ? 14 : 16} fontWeight="bold">:</Text>
               <WheelPicker
                 data={MINUTES}
                 value={time.minutes}
@@ -107,8 +107,6 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
             </XStack>
           )}
         </XStack>
-
-       
 
         <Divider marginVertical={isSmallScreen ? 0 : 5} />
 
