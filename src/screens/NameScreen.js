@@ -158,7 +158,6 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
           <PlanetImage
             source={planetAsset}
             size={sizePlanet}
-            dimOverlay={0.4}
             innerShadow={{
               side: 'bottom',
               spread: 0.5,
@@ -171,6 +170,7 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
               bottom: -50,
               right: -150,
               zIndex: -1,
+              opacity:0.7
             }}
           />
 
