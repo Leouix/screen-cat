@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { BackHandler } from 'react-native'
 import { TamaguiProvider, YStack } from 'tamagui'
 import {
@@ -9,15 +9,18 @@ import {
   Montserrat_700Bold,
 } from '@expo-google-fonts/montserrat'
 import config from './tamagui.config'
+import SplashScreen from './src/screens/SplashScreen'
 import BirthDateScreen from './src/screens/BirthDateScreen'
 import NameScreen from './src/screens/NameScreen'
 import EarthWithCity from './src/screens/EarthWithCity'
 import PredictionScreen from './src/screens/PredictionScreen'
 import BurgerMenu from './src/components/BurgerMenu'
-import { loadAuth, clearAuth } from './src/services/db'
+import { loadAuth, clearAuth, loadProfile } from './src/services/db'
 import { googleSignOut } from './src/services/auth'
 
-const SCREEN_ORDER = ['birthDate', 'name', 'city', 'prediction']
+const SCREEN_ORDER = ['splash', 'birthDate', 'name', 'city', 'prediction']
+
+const SPLASH_MIN_MS = 1600000000000
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,23 +30,58 @@ export default function App() {
     Montserrat_700Bold,
   })
 
-  const [screen, setScreen] = useState('birthDate')
+  const [screen, setScreen] = useState('splash')
   const [birthDate, setBirthDate] = useState('')
   const [birthTime, setBirthTime] = useState('')
   const [name, setName] = useState('')
   const [selectedCity, setSelectedCity] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(null)
+  const [storedProfile, setStoredProfile] = useState(null)
+  const mountTimeRef = useRef(Date.now())
 
   useEffect(() => {
     let cancelled = false
-    loadAuth().then((auth) => {
+    Promise.all([loadAuth(), loadProfile()]).then(([auth, profile]) => {
       if (cancelled) return
       setIsLoggedIn(!!auth?.token)
+      setStoredProfile(profile)
     })
     return () => {
       cancelled = true
     }
   }, [])
+
+  const splashReady = fontsLoaded && isLoggedIn !== null
+
+  useEffect(() => {
+    if (!splashReady) return
+    let cancelled = false
+    const delay = Math.max(0, SPLASH_MIN_MS - (Date.now() - mountTimeRef.current))
+    const timer = setTimeout(() => {
+      if (cancelled) return
+      if (isLoggedIn && storedProfile) {
+        setBirthDate(storedProfile.birthDate ?? '')
+        setBirthTime(storedProfile.birthTime ?? null)
+        setName(storedProfile.name ?? '')
+        setSelectedCity(
+          storedProfile.latitude != null
+            ? {
+                latitude: storedProfile.latitude,
+                longitude: storedProfile.longitude,
+                timezone: storedProfile.timezone,
+              }
+            : null,
+        )
+        setScreen('prediction')
+      } else {
+        setScreen('birthDate')
+      }
+    }, delay)
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
+    }
+  }, [splashReady, isLoggedIn, storedProfile])
 
   const handleLogout = useCallback(async () => {
     await googleSignOut()
@@ -91,49 +129,14 @@ export default function App() {
     return () => subscription.remove()
   }, [screen, goBack])
 
-  if (!fontsLoaded) return null
-
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
 
       <YStack flex={1}>
-        {screen === 'birthDate' && (
-          <BirthDateScreen birthDate={birthDate} birthTime={birthTime} onNext={handleBirthDateNext} />
-        )}
-        {screen === 'name' && (
-          <NameScreen
-            birthDate={birthDate}
-            birthTime={birthTime}
-            name={name}
-            onNameChange={setName}
-            onNext={handleNameNext}
-            onBack={goBack}
-          />
-        )}
-        {screen === 'city' && (
-          <EarthWithCity
-            birthDate={birthDate}
-            birthTime={birthTime}
-            name={name}
-            selectedCity={selectedCity}
-            onCitySelect={handleCitySelect}
-            onBack={goBack}
-            onNext={handleCityNext}
-          />
-        )}
-        {screen === 'prediction' && (
-          <PredictionScreen
-            birthDate={birthDate}
-            birthTime={birthTime}
-            name={name}
-            selectedCity={selectedCity}
-            onBack={goBack}
-            isLoggedIn={isLoggedIn}
-            onAuthChange={handleAuthChange}
-          />
-        )}
 
-        {isLoggedIn && <BurgerMenu onLogout={handleLogout} />}
+        { <SplashScreen fontsLoaded={fontsLoaded} />}
+
+        
       </YStack>
 
      
