@@ -1,5 +1,4 @@
 import { YStack, Text, Button, Spinner } from 'tamagui'
-import StarryBackground from './StarryBackground'
 
 export default function GoogleAuthOverlay({ visible, loading, error, onSignIn }) {
   if (!visible) return null

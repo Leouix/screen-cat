@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { YStack, XStack, Input, Button } from 'tamagui'
+import { YStack, XStack } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import SunDecoration from '../components/SunDecoration';
 import PlanetImage from '../components/PlanetImage'
