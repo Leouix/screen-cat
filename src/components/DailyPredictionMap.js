@@ -1,7 +1,8 @@
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import { StyleSheet, View, Pressable } from 'react-native'
 import { Canvas, Group, Circle, Line, Path, Text, RoundedRect, BlurMask, useFont } from '@shopify/react-native-skia'
-import { Montserrat_500Medium } from '@expo-google-fonts/montserrat'
+import { Montserrat_500Medium } from '@expo-google-fonts/montserrat';
+import { useWindowDimensions } from 'react-native';
 import {
   useSharedValue,
   useDerivedValue,
@@ -217,8 +218,13 @@ function PlanetLabel({
 }
 
 export default forwardRef(function DailyPredictionMap({ paths, size, height = size, selectedId = null, onSelect }, ref) {
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width <= 360;
+  
   const cx = size / 2
-  const cy = height * 0.45 - 60
+  const cy = isSmallScreen 
+              ? height * 0.45 - 75 
+              : height * 0.45 - 60;
 
   const CHART_R = size * CHART_R_F
   const NATAL_R = CHART_R * NATAL_R_F

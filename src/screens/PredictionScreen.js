@@ -10,16 +10,18 @@ import { BackButtonCenter, BackgroundView } from '../components/shared/StyledCom
 import { buildPredictionPaths } from '../utils/prediction'
 import { getPrediction, postGoogleAuth, updateProfile } from '../services/api'
 import { saveAuth, savePrediction as persistPrediction, loadPrediction, saveProfile, loadProfile, loadAuth } from '../services/db'
-import { signInWithGoogle } from '../services/auth'
+import { signInWithGoogle } from '../services/auth';
 
-export default function PredictionScreen({ birthDate, birthTime, name, selectedCity, onBack, isLoggedIn, onAuthChange }) {
+export default function PredictionScreen({ birthDate, birthTime, name, selectedCity, onBack, isLoggedIn, onAuthChange }) { 
+
   const { width, height } = useWindowDimensions()
+  const isSmallScreen = width <= 360;
   const [selectedPath, setSelectedPath] = useState(null)
   const [prediction, setPrediction] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const [authState, setAuthState] = useState('loading') // 'loading' | 'signed_in' | 'auth_required'
+  const [authState, setAuthState] = useState('loading') 
   const [authError, setAuthError] = useState(null)
   const [signInLoading, setSignInLoading] = useState(false)
 
@@ -182,6 +184,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
 
   return (
     <YStack flex={1}>
+
       <BackgroundView>
         <StarryBackground />
       </BackgroundView>
@@ -195,9 +198,19 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       {authState === 'signed_in' && (
       <YStack flex={1} zIndex={1} alignItems="center" justifyContent="center" paddingHorizontal={20}>
 
-        <Text color="#b2b2bc" fontSize={18} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={110} zIndex={2}>
-            Your sky today
-          </Text>
+        {isSmallScreen && !selectedPath && (
+          <Text 
+            color="#b2b2bc" 
+            fontSize={18} 
+            fontFamily="Montserrat_400Regular" 
+            textAlign="center" 
+            position='absolute' 
+            top={110} 
+            zIndex={2}
+          >
+              Your sky today
+            </Text>
+        )}
 
        {!selectedPath && (
           <Text color="#b2b2bc" fontSize={12} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={140} zIndex={2}>
@@ -231,10 +244,20 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
           <>
             <DailyPredictionMap paths={paths} size={size} height={height} selectedId={selectedPath?.id} onSelect={setSelectedPath} ref={mapRef} />
 
-            <AspectCardDeck aspects={paths} hidden={!!selectedPath} onSelect={(aspect) => mapRef.current?.focus(aspect.id)} />
+            <AspectCardDeck 
+              aspects={paths} 
+              hidden={!!selectedPath} 
+              onSelect={(aspect) => mapRef.current?.focus(aspect.id)} 
+            />
 
             {selectedPath && (
-              <YStack width="100%"  paddingTop={8} position='absolute' bottom={120} zIndex={4}>
+              <YStack 
+                width="100%" 
+                paddingTop={8} 
+                position='absolute' 
+                bottom={isSmallScreen ? 60 : 120} 
+                zIndex={4}
+              >
                 <XStack
                   alignItems="flex-start"
                   gap={10}
@@ -270,9 +293,12 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       />
 
        {onBack && (
-            <BackButtonCenter onPress={onBack}>Back</BackButtonCenter>
-           
-          )}
+            <BackButtonCenter 
+              onPress={onBack}
+              fontSize= {isSmallScreen ? 10 : 12}
+              bottom= {isSmallScreen ? 15 : 20}
+            >Back</BackButtonCenter>   
+        )}
     </YStack>
   )
 }

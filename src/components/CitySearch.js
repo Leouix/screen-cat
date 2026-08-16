@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
-import { YStack, XStack, Text, Input, ScrollView } from 'tamagui'
-import { Pressable } from 'react-native'
-import { searchCities } from '../services/geo'
+import { useState, useEffect, useRef } from 'react';
+import { YStack, XStack, Text, Input, ScrollView } from 'tamagui';
+import { Pressable } from 'react-native';
+import { searchCities } from '../services/geo';
+import { useWindowDimensions } from 'react-native';
 
 export default function CitySearch({ onSelect, selectedCity }) {
   const [query, setQuery] = useState(selectedCity ? `${selectedCity.name}, ${selectedCity.country}` : '')
@@ -9,6 +10,9 @@ export default function CitySearch({ onSelect, selectedCity }) {
   const [showDropdown, setShowDropdown] = useState(false)
   const timerRef = useRef(null)
 
+  const { width } = useWindowDimensions()
+  const isSmallScreen = width <= 360
+  
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
 
@@ -50,7 +54,7 @@ export default function CitySearch({ onSelect, selectedCity }) {
           borderColor="#ffffff20"
           borderRadius={12}
           color="#ffffff"
-          fontSize={16}
+          fontSize={isSmallScreen ? 14 : 16}
           paddingRight={40}
         />
         {query.length > 0 && (

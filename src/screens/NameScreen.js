@@ -81,8 +81,6 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
         />
       </BackgroundView>
 
-   
-
       <MainContainer 
         paddingVertical={isSmallScreen ? 20 : 30}
         style={{

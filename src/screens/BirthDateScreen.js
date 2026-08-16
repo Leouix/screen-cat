@@ -4,7 +4,7 @@ import { DatePicker } from '@quidone/react-native-wheel-picker'
 import WheelPicker from '@quidone/react-native-wheel-picker'
 import StarryBackground from '../components/StarryBackground'
 import SunDecoration from '../components/SunDecoration';
-import { useWindowDimensions } from 'react-native'
+import { useWindowDimensions } from 'react-native';
 
 import {
   BackgroundView,

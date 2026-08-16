@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated'
-import { YStack, XStack, Text } from 'tamagui'
+import { YStack, XStack, Text } from 'tamagui';
+import { useWindowDimensions } from 'react-native';
 
 const CARD_H = 114
 const PEEK = 64
@@ -30,6 +31,9 @@ function DeckCard({ aspect, slot, count, onPress, onSelect, hidden, peek }) {
     transform: [{ translateY: ty.value }],
   }))
 
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width <= 360;
+
   return (
     <Animated.View
       style={[
@@ -51,7 +55,7 @@ function DeckCard({ aspect, slot, count, onPress, onSelect, hidden, peek }) {
         borderWidth={1}
         borderColor="#ffffff2b"
         borderRadius={16}
-        paddingHorizontal={12}
+        paddingHorizontal={isSmallScreen ? 10 : 12}
         paddingVertical={14}
         width="100%"
         height="100%"
@@ -60,12 +64,17 @@ function DeckCard({ aspect, slot, count, onPress, onSelect, hidden, peek }) {
       >
         <YStack width={14} height={14} borderRadius={7} backgroundColor={aspect.color} marginTop={2} />
         <YStack flex={1} gap={5}>
-          <Text color="#ffffff" fontSize={14} fontFamily="Montserrat_600SemiBold" numberOfLines={1}>
+          <Text 
+            color="#ffffff" 
+            fontSize={isSmallScreen ? 13 : 14} 
+            fontFamily="Montserrat_600SemiBold" 
+            numberOfLines={1}
+          >
             {aspect.title}
           </Text>
           <Text
             color="#b2b2bc"
-            fontSize={16}
+            fontSize={isSmallScreen ? 14 : 16}
             fontFamily="Montserrat_500Regular"
             lineHeight={20}
             numberOfLines={3}
@@ -81,6 +90,10 @@ function DeckCard({ aspect, slot, count, onPress, onSelect, hidden, peek }) {
 export default function AspectCardDeck({ aspects, hidden = false, maxHeight = CARD_H + 3 * PEEK, onSelect }) {
   const [order, setOrder] = useState(() => aspects.map((a) => a.id).reverse())
 
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width <= 360;
+
+  const peekComputed = isSmallScreen ? 30 : PEEK;
   useEffect(() => {
     setOrder(aspects.map((a) => a.id).reverse())
   }, [aspects])
@@ -96,7 +109,10 @@ export default function AspectCardDeck({ aspects, hidden = false, maxHeight = CA
   }, [])
 
   const count = order.length
-  const peek = count > 1 ? Math.max(MIN_PEEK, Math.min(PEEK, (maxHeight - CARD_H) / (count - 1))) : PEEK
+  const peek = count > 1 
+          ? Math.max(MIN_PEEK, Math.min(peekComputed, (maxHeight - CARD_H) / (count - 1))) 
+          : peekComputed
+
   const deckH = CARD_H + (count - 1) * peek
 
   return (
@@ -105,7 +121,7 @@ export default function AspectCardDeck({ aspects, hidden = false, maxHeight = CA
         width: '100%',
         height: deckH,
         position: 'absolute',
-        bottom: 70,
+        bottom: isSmallScreen ? 60 : 70,
         zIndex: 3,
       }}
       pointerEvents={hidden || count === 0 ? 'none' : 'box-none'}
