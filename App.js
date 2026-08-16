@@ -20,7 +20,7 @@ import { googleSignOut } from './src/services/auth'
 
 const SCREEN_ORDER = ['splash', 'birthDate', 'name', 'city', 'prediction']
 
-const SPLASH_MIN_MS = 1600000000000
+const SPLASH_MIN_MS = 1600
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -133,10 +133,45 @@ export default function App() {
     <TamaguiProvider config={config} defaultTheme="dark">
 
       <YStack flex={1}>
-
-        { <SplashScreen fontsLoaded={fontsLoaded} />}
-
         
+        {screen === 'splash' && <SplashScreen fontsLoaded={fontsLoaded} />}
+        {screen === 'birthDate' && (
+          <BirthDateScreen birthDate={birthDate} birthTime={birthTime} onNext={handleBirthDateNext} />
+        )}
+        {screen === 'name' && (
+          <NameScreen
+            birthDate={birthDate}
+            birthTime={birthTime}
+            name={name}
+            onNameChange={setName}
+            onNext={handleNameNext}
+            onBack={goBack}
+          />
+        )}
+        {screen === 'city' && (
+          <EarthWithCity
+            birthDate={birthDate}
+            birthTime={birthTime}
+            name={name}
+            selectedCity={selectedCity}
+            onCitySelect={handleCitySelect}
+            onBack={goBack}
+            onNext={handleCityNext}
+          />
+        )}
+        {screen === 'prediction' && (
+          <PredictionScreen
+            birthDate={birthDate}
+            birthTime={birthTime}
+            name={name}
+            selectedCity={selectedCity}
+            onBack={goBack}
+            isLoggedIn={isLoggedIn}
+            onAuthChange={handleAuthChange}
+          />
+        )}
+
+        {isLoggedIn && screen !== 'splash' && <BurgerMenu onLogout={handleLogout} />}
       </YStack>
 
      

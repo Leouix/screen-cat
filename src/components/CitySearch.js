@@ -5,7 +5,7 @@ import { searchCities } from '../services/geo';
 import { useWindowDimensions } from 'react-native';
 
 export default function CitySearch({ onSelect, selectedCity }) {
-  const [query, setQuery] = useState(selectedCity ? `${selectedCity.name}, ${selectedCity.country}` : '')
+  const [query, setQuery] = useState(selectedCity?.name ? `${selectedCity.name}, ${selectedCity.country}` : '')
   const [results, setResults] = useState([])
   const [showDropdown, setShowDropdown] = useState(false)
   const timerRef = useRef(null)

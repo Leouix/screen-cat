@@ -59,7 +59,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
         alignItems="center"
       >
         
-         {selectedCity && (
+         {selectedCity?.name && (
           <YStack alignItems="center">
             <Text color="#ffffff" fontSize={14} fontWeight="500">
               {selectedCity.name}, {selectedCity.country}
@@ -93,7 +93,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
               </BackButton>
           )}
           <SecondaryButton 
-            onPress={() => onNext(name)} 
+            onPress={() => onNext(selectedCity)} 
             marginTop = {isSmallScreen ? 5 : 15}
             fontSize = {isSmallScreen ? 10 : 12}
             >
