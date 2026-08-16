@@ -55,7 +55,6 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
 
         <SunDecoration 
           size={isSmallScreen ? 200 : 350}
-          dimOverlay={0.3}
           style={{  
             marginTop: isSmallScreen ? 25 : 85, 
             position: 'absolute', 

@@ -72,7 +72,7 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
 
         <SunDecoration
           size={isSmallScreen ? 200 : 350}
-          dimOverlay={0.3}
+          dimOverlay={0}
           style={{  
             marginTop: isSmallScreen ? 25 : 85, 
             position: 'absolute', 
