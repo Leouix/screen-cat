@@ -86,7 +86,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
         setError(error || 'Failed to sync profile')
         return
       }
-      await saveProfile(profile)
+      await saveProfile(profile, { synced: true })
       if (data.prediction) {
         await persistPrediction(data.prediction, predictionInput)
         setPrediction(data.prediction)
@@ -116,7 +116,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       setLoading(!hasFreshCache)
 
       if (isLoggedIn && auth?.token) {
-        if (!storedProfile || !profilesEqual(storedProfile, currentProfile)) {
+        if (!storedProfile || !profilesEqual(storedProfile, currentProfile) || !storedProfile.synced) {
           await syncProfile(auth.token, currentProfile)
         } else if (!hasFreshCache) {
           fetchPublicPrediction()
@@ -147,27 +147,42 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       const { idToken, user, cancelled } = await signInWithGoogle()
       if (cancelled) return
 
-      const { ok, data, error } = await postGoogleAuth({
-        idToken,
-        googleName: user.googleName,
-        name,
-        email: user.email,
-        birthDate,
-        birthTime,
-        latitude: selectedCity?.latitude,
-        longitude: selectedCity?.longitude,
-        timezone: selectedCity?.timezone,
-      })
+      const storedProfile = await loadProfile()
+      const profileChanged = !storedProfile || !profilesEqual(storedProfile, currentProfile)
+      const needsSync = profileChanged || !storedProfile?.synced
+
+      const authPayload = needsSync
+        ? {
+            idToken,
+            googleName: user.googleName,
+            name,
+            email: user.email,
+            birthDate,
+            birthTime,
+            latitude: selectedCity?.latitude,
+            longitude: selectedCity?.longitude,
+            timezone: selectedCity?.timezone,
+          }
+        : {
+            idToken,
+            googleName: user.googleName,
+            email: user.email,
+          }
+
+      const { ok, data, error } = await postGoogleAuth(authPayload)
       if (!ok) throw new Error(error || 'Sign-in failed')
 
       await saveAuth({ token: data.token, user: { google_name: user.googleName, name, email: user.email, user_id: data.user_id } })
-      await saveProfile(currentProfile)
+
+      if (needsSync) {
+        await saveProfile(currentProfile, { synced: true })
+      }
       if (data.prediction) {
         await persistPrediction(data.prediction, predictionInput)
         setPrediction(data.prediction)
       }
       setAuthState('signed_in')
-      onAuthChange?.(true)
+      onAuthChange?.(true, currentProfile)
       setError(null)
     } catch (err) {
       setAuthError(err.message || 'Sign-in failed. Try again.')
@@ -175,7 +190,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
       setSignInLoading(false)
       setLoading(false)
     }
-  }, [birthDate, birthTime, selectedCity, currentProfile, predictionInput])
+  }, [birthDate, birthTime, selectedCity, currentProfile, predictionInput, name])
 
   const paths = useMemo(() => {
     if (!prediction) return []

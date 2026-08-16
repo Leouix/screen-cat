@@ -15,7 +15,7 @@ import NameScreen from './src/screens/NameScreen'
 import EarthWithCity from './src/screens/EarthWithCity'
 import PredictionScreen from './src/screens/PredictionScreen'
 import BurgerMenu from './src/components/BurgerMenu'
-import { loadAuth, clearAuth, loadProfile } from './src/services/db'
+import { loadAuth, clearAuth, loadProfile, saveProfile } from './src/services/db'
 import { googleSignOut } from './src/services/auth'
 
 const SCREEN_ORDER = ['splash', 'birthDate', 'name', 'city', 'prediction']
@@ -38,6 +38,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null)
   const [storedProfile, setStoredProfile] = useState(null)
   const mountTimeRef = useRef(Date.now())
+  const splashHandledRef = useRef(false)
 
   useEffect(() => {
     let cancelled = false
@@ -55,6 +56,8 @@ export default function App() {
 
   useEffect(() => {
     if (!splashReady) return
+    if (splashHandledRef.current) return
+    splashHandledRef.current = true
     let cancelled = false
     const delay = Math.max(0, SPLASH_MIN_MS - (Date.now() - mountTimeRef.current))
     const timer = setTimeout(() => {
@@ -87,20 +90,38 @@ export default function App() {
     await googleSignOut()
     await clearAuth()
     setIsLoggedIn(false)
+    setScreen('birthDate')
   }, [])
 
-  const handleAuthChange = useCallback((signedIn) => {
+  const handleAuthChange = useCallback((signedIn, profile) => {
     setIsLoggedIn(!!signedIn)
+    if (profile) setStoredProfile(profile)
   }, [])
 
   const handleBirthDateNext = (date, time) => {
     setBirthDate(date)
     setBirthTime(time)
+    saveProfile({
+      birthDate: date,
+      birthTime: time,
+      name,
+      latitude: selectedCity?.latitude ?? null,
+      longitude: selectedCity?.longitude ?? null,
+      timezone: selectedCity?.timezone ?? null,
+    })
     setScreen('name')
   }
 
   const handleNameNext = (name) => {
     setName(name)
+    saveProfile({
+      birthDate,
+      birthTime,
+      name,
+      latitude: selectedCity?.latitude ?? null,
+      longitude: selectedCity?.longitude ?? null,
+      timezone: selectedCity?.timezone ?? null,
+    })
     setScreen('city')
   }
 
@@ -110,6 +131,14 @@ export default function App() {
 
   const handleCityNext = (city) => {
     setSelectedCity(city)
+    saveProfile({
+      birthDate,
+      birthTime,
+      name,
+      latitude: city?.latitude ?? null,
+      longitude: city?.longitude ?? null,
+      timezone: city?.timezone ?? null,
+    })
     setScreen('prediction')
   }
 

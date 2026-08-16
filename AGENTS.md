@@ -59,3 +59,8 @@
 
 
 Пиши ответ мне на русском языке.
+
+Первый экран приложения: компонент src/screens/BirthDateScreen.js
+Второй экран приложения: компонент src/screens/NameScreen.js
+Третий экран приложения: компонент src/screens/EarthWithCity.js
+Четвертый экран приложения: компонент src/screens/PredictionScreen.js

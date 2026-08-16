@@ -63,10 +63,11 @@ export async function updateProfile({ token, name, birthDate, birthTime, latitud
 }
 
 export async function postGoogleAuth({ idToken, googleName, name, email, birthDate, birthTime, latitude, longitude, timezone }) {
-  const body = { id_token: idToken, birth_date: birthDate }
+  const body = { id_token: idToken }
   if (googleName) body.google_name = googleName
   if (name) body.name = name
   if (email) body.email = email
+  if (birthDate) body.birth_date = birthDate
   if (birthTime) body.birth_time = birthTime
   if (latitude != null) body.latitude = latitude
   if (longitude != null) body.longitude = longitude
