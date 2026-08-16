@@ -27,7 +27,6 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
           <StarryBackground />
 
           <SunDecoration 
-            dimOverlay={0.3}
             size={isSmallScreen ? 200 : 300}
             style={{ 
               marginTop: isSmallScreen ? 35 : 25, 
