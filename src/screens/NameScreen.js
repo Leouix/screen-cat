@@ -94,7 +94,7 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
               </Label>
 
         {planetContent ? (
-          <Label style={{  marginBottom: 100, fontSize: 13 }}>
+          <Label style={{  marginBottom: 100, fontSize: 13,  alignSelf: 'start', }}>
             {planetContent}
           </Label>
         ) : null}

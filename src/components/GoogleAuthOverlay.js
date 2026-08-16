@@ -27,6 +27,7 @@ export default function GoogleAuthOverlay({ visible, loading, error, onSignIn })
         borderRadius={24}
         paddingVertical={28}
         paddingHorizontal={20}
+        maxWidth={550}
       >
         <Text color="#f8df61" fontSize={28} fontWeight="bold">
           ✦
