@@ -182,18 +182,6 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
     return buildPredictionPaths(prediction.aspects)
   }, [prediction])
 
-  useEffect(() => {
-    if (prediction) {
-      console.log('[PredictionScreen] backend prediction:', JSON.stringify(prediction, null, 2))
-    }
-  }, [prediction])
-
-  useEffect(() => {
-    if (paths.length) {
-      console.log('[PredictionScreen] map paths:', JSON.stringify(paths, null, 2))
-    }
-  }, [paths])
-
   return (
     <YStack flex={1}>
 

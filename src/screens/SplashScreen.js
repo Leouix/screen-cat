@@ -4,11 +4,12 @@ import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reani
 import { YStack, Text } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import DailyPredictionMap from '../components/DailyPredictionMap'
+import AspectCardStack from '../components/AspectCardStack'
 
 const HARDCODED_PATHS = [
   {
     "id": "sun-conjunction-venus",
-    "color": "#f8df61",
+    "color": "yellow",
     "aspectType": "conjunction",
     "orb": 0.4,
     "separation": 0.4,
@@ -23,7 +24,7 @@ const HARDCODED_PATHS = [
   },
   {
     "id": "mars-square-saturn",
-    "color": "#ff6b6b",
+    "color": "red",
     "aspectType": "square",
     "orb": 0.9,
     "separation": 90.9,
@@ -38,7 +39,7 @@ const HARDCODED_PATHS = [
   },
   {
     "id": "jupiter-trine-moon",
-    "color": "#4ecdc4",
+    "color": "green",
     "aspectType": "trine",
     "orb": 0.7,
     "separation": 120.7,
@@ -53,7 +54,7 @@ const HARDCODED_PATHS = [
   },
   {
     "id": "mercury-sextile-mars",
-    "color": "#4ecdc4",
+    "color": "green",
     "aspectType": "sextile",
     "orb": 1.0,
     "separation": 60,
@@ -68,7 +69,7 @@ const HARDCODED_PATHS = [
   },
   {
     "id": "venus-opposition-pluto",
-    "color": "#ff6b6b",
+    "color": "red",
     "aspectType": "opposition",
     "orb": 0.8,
     "separation": 180.8,
@@ -201,6 +202,8 @@ export default function SplashScreen({ fontsLoaded }) {
           height={450}
           ref={mapRef}
         />
+
+        <AspectCardStack items={HARDCODED_PATHS.slice(0, 5)} />
         
       </Animated.View>
     </YStack>
