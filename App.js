@@ -20,7 +20,7 @@ import { googleSignOut } from './src/services/auth'
 
 const SCREEN_ORDER = ['splash', 'birthDate', 'name', 'city', 'prediction']
 
-const SPLASH_MIN_MS = 1600
+const SPLASH_MIN_MS = 16000
 
 export default function App() {
   const [fontsLoaded] = useFonts({

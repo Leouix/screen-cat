@@ -123,6 +123,7 @@ export default function AspectCardStack({ items, startDelay = 300, revealDelay =
         position: 'absolute',
         bottom: isSmallScreen ? 10 : 30,
         zIndex: 3,
+        maxWidth: 650, 
       }}
       pointerEvents="none"
     >
@@ -132,7 +133,6 @@ export default function AspectCardStack({ items, startDelay = 300, revealDelay =
           aspect={item}
           index={index}
           count={count}
-          visible={index < revealed}
           peek={peek}
         />
       ))}

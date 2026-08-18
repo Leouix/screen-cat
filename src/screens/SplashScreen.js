@@ -163,26 +163,29 @@ export default function SplashScreen({ fontsLoaded }) {
   const opacity = useSharedValue(0)
   const { width, height } = useWindowDimensions()
   const size = Math.min(width * 0.5, height * 0.5)
-  const [selectedPath, setSelectedPath] = useState(null)
   const mapRef = useRef(null)
 
   useEffect(() => {
     opacity.value = withTiming(1, { duration: 800, easing: Easing.out(Easing.ease) })
   }, [opacity])
+  
+  const isBigScreen = width >= 700
+  const isSmallScreen = width <= 360
 
   return (
-    <YStack flex={1}>
+    <YStack flex={1} >
       <StarryBackground  />
 
       <Animated.View
-       style={{
-        position: 'absolute', 
-        top: 0,
-        bottom: 100,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-      }}
+        style={{
+          position: 'absolute', 
+          top: 0,
+          bottom: isSmallScreen ? 70 : 100,
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',  
+          paddingHorizontal: 25,
+        }}
       >
         
          {fontsLoaded && (
@@ -191,6 +194,7 @@ export default function SplashScreen({ fontsLoaded }) {
             fontSize={24} 
             fontFamily="Montserrat_600SemiBold" 
             letterSpacing={2}
+            marginBottom={isBigScreen ? 50 : 10}
           >
             Your Prediction Map
           </Text>
@@ -199,7 +203,7 @@ export default function SplashScreen({ fontsLoaded }) {
         <DailyPredictionMap
           paths={HARDCODED_PATHS}
           size={size}
-          height={450}
+          height={isSmallScreen ? 350 : 450}
           ref={mapRef}
         />
 
