@@ -1,4 +1,6 @@
-import { API_BASE_URL, API_TIMEOUT_MS } from '../config'
+import { API_BASE_URL, API_TIMEOUT_MS, LOCALIZE_PATH_API } from '../config'
+
+const API_V1 = `${API_BASE_URL}${LOCALIZE_PATH_API}/api/v1`
 
 async function fetchWithTimeout(url, options, timeoutMs = API_TIMEOUT_MS) {
   const controller = new AbortController()
@@ -36,33 +38,38 @@ async function postJSON(url, body, token) {
   return request(url, { method: 'POST', headers, body: JSON.stringify(body) })
 }
 
-export async function getPlanetByBirthDate(birthDate) {
-  return request(`${API_BASE_URL}/api/v1/get-data-planet?birth_date=${birthDate}`)
+export async function getPlanetByBirthDate(birthDate, gender) {
+  const params = new URLSearchParams()
+  params.append('birth_date', birthDate)
+  if (gender) params.append('gender', gender)
+  return request(`${API_V1}/get-data-planet?${params.toString()}`)
 }
 
-export async function getPrediction({ birthDate, birthTime, latitude, longitude, timezone }) {
+export async function getPrediction({ birthDate, birthTime, latitude, longitude, timezone, gender }) {
   const params = new URLSearchParams()
   params.append('birth_date', birthDate)
   if (birthTime) params.append('birth_time', birthTime)
   if (latitude != null) params.append('latitude', String(latitude))
   if (longitude != null) params.append('longitude', String(longitude))
   if (timezone) params.append('timezone', timezone)
+  if (gender) params.append('gender', gender)
 
-  return request(`${API_BASE_URL}/api/v1/prediction?${params.toString()}`)
+  return request(`${API_V1}/prediction?${params.toString()}`)
 }
 
-export async function updateProfile({ token, name, birthDate, birthTime, latitude, longitude, timezone }) {
+export async function updateProfile({ token, name, birthDate, birthTime, latitude, longitude, timezone, gender }) {
   const body = { birth_date: birthDate }
   if (name) body.name = name
   if (birthTime) body.birth_time = birthTime
   if (latitude != null) body.latitude = latitude
   if (longitude != null) body.longitude = longitude
   if (timezone) body.timezone = timezone
+  if (gender) body.gender = gender
 
-  return request(`${API_BASE_URL}/api/v1/profile`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(body) })
+  return request(`${API_V1}/profile`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(body) })
 }
 
-export async function postGoogleAuth({ idToken, googleName, name, email, birthDate, birthTime, latitude, longitude, timezone }) {
+export async function postGoogleAuth({ idToken, googleName, name, email, birthDate, birthTime, latitude, longitude, timezone, gender }) {
   const body = { id_token: idToken }
   if (googleName) body.google_name = googleName
   if (name) body.name = name
@@ -72,6 +79,7 @@ export async function postGoogleAuth({ idToken, googleName, name, email, birthDa
   if (latitude != null) body.latitude = latitude
   if (longitude != null) body.longitude = longitude
   if (timezone) body.timezone = timezone
+  if (gender) body.gender = gender
 
-  return postJSON(`${API_BASE_URL}/api/v1/auth/google`, body)
+  return postJSON(`${API_V1}/auth/google`, body)
 }

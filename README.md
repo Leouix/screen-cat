@@ -124,3 +124,18 @@ UI-кит: [Advisor — Astrology App | Mobile UI Kit](https://www.figma.com/des
 ```
 npx expo run:android
 ```
+
+А как же SEO и ключевые слова в сторах (ASO)?
+В самом коде (app.json) мы оставляем короткое лаконичное имя.
+
+А вот когда вы будете загружать готовый .aab файл в Google Play Console (или App Store Connect), там будет отдельное поле «Название приложения». Туда вы уже впишете расширенное название на английском с ключевыми словами для поиска.
+
+Хорошие варианты для сторов на английском:
+
+Apsis: Daily Astrology & Chart
+
+Apsis — Natal Chart & Transits
+
+Apsis: Astrology & Horoscope
+
+Таким образом, в поиске Google Play вас найдут по словам Astrology и Natal Chart, а после установки на экране телефона будет красоваться аккуратное и стильное Apsis.

@@ -12,7 +12,7 @@ import { getPrediction, postGoogleAuth, updateProfile } from '../services/api'
 import { saveAuth, savePrediction as persistPrediction, loadPrediction, saveProfile, loadProfile, loadAuth } from '../services/db'
 import { signInWithGoogle } from '../services/auth';
 
-export default function PredictionScreen({ birthDate, birthTime, name, selectedCity, onBack, isLoggedIn, onAuthChange }) { 
+export default function PredictionScreen({ birthDate, birthTime, name, gender, selectedCity, onBack, isLoggedIn, onAuthChange }) { 
 
   const { width, height } = useWindowDimensions()
   const isSmallScreen = width <= 360;
@@ -34,7 +34,8 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
     latitude: selectedCity?.latitude,
     longitude: selectedCity?.longitude,
     timezone: selectedCity?.timezone,
-  }), [birthDate, birthTime, selectedCity])
+    gender,
+  }), [birthDate, birthTime, selectedCity, gender])
 
   const currentProfile = useMemo(() => ({
     name,
@@ -43,7 +44,8 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
     latitude: selectedCity?.latitude,
     longitude: selectedCity?.longitude,
     timezone: selectedCity?.timezone,
-  }), [name, birthDate, birthTime, selectedCity])
+    gender,
+  }), [name, birthDate, birthTime, selectedCity, gender])
 
   const profilesEqual = (a, b) =>
     (a.name ?? null) === (b.name ?? null)
@@ -52,6 +54,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
     && (a.latitude ?? null) === (b.latitude ?? null)
     && (a.longitude ?? null) === (b.longitude ?? null)
     && (a.timezone ?? null) === (b.timezone ?? null)
+    && (a.gender ?? null) === (b.gender ?? null)
 
   const fetchPublicPrediction = useCallback(async () => {
     setLoading(true)
@@ -63,6 +66,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
         latitude: selectedCity?.latitude,
         longitude: selectedCity?.longitude,
         timezone: selectedCity?.timezone,
+        gender,
       })
       if (!ok) {
         setError(error || 'Failed to load prediction')
@@ -162,6 +166,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, selectedC
             latitude: selectedCity?.latitude,
             longitude: selectedCity?.longitude,
             timezone: selectedCity?.timezone,
+            gender,
           }
         : {
             idToken,

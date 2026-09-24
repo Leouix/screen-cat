@@ -34,6 +34,7 @@ export default function App() {
   const [birthDate, setBirthDate] = useState('')
   const [birthTime, setBirthTime] = useState('')
   const [name, setName] = useState('')
+  const [gender, setGender] = useState('male')
   const [selectedCity, setSelectedCity] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(null)
   const [storedProfile, setStoredProfile] = useState(null)
@@ -66,6 +67,7 @@ export default function App() {
         setBirthDate(storedProfile.birthDate ?? '')
         setBirthTime(storedProfile.birthTime ?? null)
         setName(storedProfile.name ?? '')
+        setGender(storedProfile.gender ?? 'male')
         setSelectedCity(
           storedProfile.latitude != null
             ? {
@@ -105,6 +107,7 @@ export default function App() {
       birthDate: date,
       birthTime: time,
       name,
+      gender,
       latitude: selectedCity?.latitude ?? null,
       longitude: selectedCity?.longitude ?? null,
       timezone: selectedCity?.timezone ?? null,
@@ -118,6 +121,7 @@ export default function App() {
       birthDate,
       birthTime,
       name,
+      gender,
       latitude: selectedCity?.latitude ?? null,
       longitude: selectedCity?.longitude ?? null,
       timezone: selectedCity?.timezone ?? null,
@@ -135,6 +139,7 @@ export default function App() {
       birthDate,
       birthTime,
       name,
+      gender,
       latitude: city?.latitude ?? null,
       longitude: city?.longitude ?? null,
       timezone: city?.timezone ?? null,
@@ -172,7 +177,9 @@ export default function App() {
             birthDate={birthDate}
             birthTime={birthTime}
             name={name}
+            gender={gender}
             onNameChange={setName}
+            onGenderChange={setGender}
             onNext={handleNameNext}
             onBack={goBack}
           />
@@ -193,6 +200,7 @@ export default function App() {
             birthDate={birthDate}
             birthTime={birthTime}
             name={name}
+            gender={gender}
             selectedCity={selectedCity}
             onBack={goBack}
             isLoggedIn={isLoggedIn}

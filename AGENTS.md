@@ -47,7 +47,14 @@
 - Экраны: `BirthDate` → `Name` → `City` → `Prediction` — реализованы (см. `SCREENS.md`).
 - Skia: `StarryBackground`, `SunDecoration`, `PlanetImage`, `Earth3d`, `DailyPredictionMap`.
 - API: `get-data-planet`, `prediction`, `auth/google`, `PUT profile`.
-- Локальная БД (expo-sqlite): `auth`, `profile`, кэш `prediction`.
+- Локальная БД (expo-sqlite): `auth`, `profile` (включая `gender`), кэш `prediction`.
+
+## Локализация и пол
+
+- `EXPO_PUBLIC_LOCALIZE_PATH_API` (см. `.env.example`) — префикс API: `/ru` для RU-стора (русские тексты), пусто для Google Play (английские). URL собирается в `src/services/api.js` (`API_V1`).
+- `gender` (`male`/`female`) хранится в локальном профиле и в `users.gender` на бэкенде; передаётся в `get-data-planet`, `prediction`, `PUT profile`, `auth/google`.
+- Тумблер пола — на `NameScreen`; смена пола перезапрашивает интерпретацию.
+- `scripts/translate-interpretations.mjs` — оффлайн-генератор русских переводов бэкенда через Groq (`GROQ_API_KEY` из `.env`). Пишет `../nm-astrology/data/seed_interpretations_ru.sql`, прогресс кэширует в `scripts/out/ru-translations.jsonl` (resume).
 
 ## Полезные ссылки
 

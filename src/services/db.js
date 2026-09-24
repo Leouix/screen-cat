@@ -4,8 +4,8 @@ const DB_NAME = 'sprite-app.db'
 
 let dbPromise = null
 
-function buildDataKey({ birthDate, birthTime, latitude, longitude, timezone }) {
-  return [birthDate ?? '', birthTime ?? '', latitude ?? '', longitude ?? '', timezone ?? ''].join('|')
+function buildDataKey({ birthDate, birthTime, latitude, longitude, timezone, gender }) {
+  return [birthDate ?? '', birthTime ?? '', latitude ?? '', longitude ?? '', timezone ?? '', gender ?? ''].join('|')
 }
 
 function getDb() {
@@ -32,6 +32,7 @@ function getDb() {
           latitude REAL,
           longitude REAL,
           timezone TEXT,
+          gender TEXT,
           synced INTEGER NOT NULL DEFAULT 0
         );
       `)
@@ -40,6 +41,9 @@ function getDb() {
       } catch {}
       try {
         await db.execAsync('ALTER TABLE profile ADD COLUMN synced INTEGER NOT NULL DEFAULT 0')
+      } catch {}
+      try {
+        await db.execAsync('ALTER TABLE profile ADD COLUMN gender TEXT')
       } catch {}
       return db
     })
@@ -72,7 +76,7 @@ export async function saveProfile(profile, { synced } = {}) {
   if (!profile) return
   const db = await getDb()
   if (synced === undefined) {
-    const row = await db.getFirstAsync('SELECT birth_date, birth_time, name, latitude, longitude, timezone, synced FROM profile WHERE id = 1')
+    const row = await db.getFirstAsync('SELECT birth_date, birth_time, name, latitude, longitude, timezone, gender, synced FROM profile WHERE id = 1')
     const same =
       !!row &&
       (row.birth_date ?? null) === (profile.birthDate ?? null) &&
@@ -80,27 +84,30 @@ export async function saveProfile(profile, { synced } = {}) {
       (row.name ?? null) === (profile.name ?? null) &&
       (row.latitude ?? null) === (profile.latitude ?? null) &&
       (row.longitude ?? null) === (profile.longitude ?? null) &&
-      (row.timezone ?? null) === (profile.timezone ?? null)
+      (row.timezone ?? null) === (profile.timezone ?? null) &&
+      (row.gender ?? null) === (profile.gender ?? null)
     const syncValue = same && row ? row.synced : 0
     await db.runAsync(
-      'INSERT INTO profile (id, birth_date, birth_time, name, latitude, longitude, timezone, synced) VALUES (1, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET birth_date = excluded.birth_date, birth_time = excluded.birth_time, name = excluded.name, latitude = excluded.latitude, longitude = excluded.longitude, timezone = excluded.timezone, synced = excluded.synced',
+      'INSERT INTO profile (id, birth_date, birth_time, name, latitude, longitude, timezone, gender, synced) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET birth_date = excluded.birth_date, birth_time = excluded.birth_time, name = excluded.name, latitude = excluded.latitude, longitude = excluded.longitude, timezone = excluded.timezone, gender = excluded.gender, synced = excluded.synced',
       profile.birthDate ?? null,
       profile.birthTime ?? null,
       profile.name ?? null,
       profile.latitude ?? null,
       profile.longitude ?? null,
       profile.timezone ?? null,
+      profile.gender ?? null,
       syncValue,
     )
   } else {
     await db.runAsync(
-      'INSERT INTO profile (id, birth_date, birth_time, name, latitude, longitude, timezone, synced) VALUES (1, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET birth_date = excluded.birth_date, birth_time = excluded.birth_time, name = excluded.name, latitude = excluded.latitude, longitude = excluded.longitude, timezone = excluded.timezone, synced = excluded.synced',
+      'INSERT INTO profile (id, birth_date, birth_time, name, latitude, longitude, timezone, gender, synced) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET birth_date = excluded.birth_date, birth_time = excluded.birth_time, name = excluded.name, latitude = excluded.latitude, longitude = excluded.longitude, timezone = excluded.timezone, gender = excluded.gender, synced = excluded.synced',
       profile.birthDate ?? null,
       profile.birthTime ?? null,
       profile.name ?? null,
       profile.latitude ?? null,
       profile.longitude ?? null,
       profile.timezone ?? null,
+      profile.gender ?? null,
       synced ? 1 : 0,
     )
   }
@@ -108,7 +115,7 @@ export async function saveProfile(profile, { synced } = {}) {
 
 export async function loadProfile() {
   const db = await getDb()
-  const row = await db.getFirstAsync('SELECT birth_date, birth_time, name, latitude, longitude, timezone, synced FROM profile WHERE id = 1')
+  const row = await db.getFirstAsync('SELECT birth_date, birth_time, name, latitude, longitude, timezone, gender, synced FROM profile WHERE id = 1')
   if (!row) return null
   return {
     birthDate: row.birth_date,
@@ -117,6 +124,7 @@ export async function loadProfile() {
     latitude: row.latitude,
     longitude: row.longitude,
     timezone: row.timezone,
+    gender: row.gender,
     synced: row.synced === 1,
   }
 }

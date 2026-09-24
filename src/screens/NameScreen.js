@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { YStack, XStack } from 'tamagui'
+import { YStack, XStack, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import SunDecoration from '../components/SunDecoration';
 import PlanetImage from '../components/PlanetImage'
@@ -37,7 +37,7 @@ function getPlanetAsset(planetName) {
   return PLANET_ASSETS[planetName]
 }
 
-export default function NameScreen({ birthDate, birthTime, name, onNameChange, onNext, onBack }) {
+export default function NameScreen({ birthDate, birthTime, name, gender = 'male', onNameChange, onGenderChange, onNext, onBack }) {
   const [planetData, setPlanetData] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -53,11 +53,11 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
   useEffect(() => {
     if (!birthDate) return
     setLoading(true)
-    getPlanetByBirthDate(birthDate).then(({ ok, data }) => {
+    getPlanetByBirthDate(birthDate, gender).then(({ ok, data }) => {
       setPlanetData(ok ? data : null)
       setLoading(false)
     })
-  }, [birthDate])
+  }, [birthDate, gender])
 
   const PLANET_SIZES = {
     [PLANET_NAMES.saturn]: 600,
@@ -114,6 +114,27 @@ export default function NameScreen({ birthDate, birthTime, name, onNameChange, o
             {planetContent}
           </Label>
         ) : null}
+
+        <XStack width="100%" gap={10} marginBottom={isSmallScreen ? 10 : 15}>
+          {['male', 'female'].map((option) => (
+            <Button
+              key={option}
+              flex={1}
+              height={isSmallScreen ? 36 : 42}
+              onPress={() => onGenderChange?.(option)}
+              backgroundColor={gender === option ? '#f8df6133' : '#ffffff08'}
+              borderWidth={1}
+              borderColor={gender === option ? '#f8df61b3' : '#ffffff20'}
+              color="#ffffff"
+              borderRadius={12}
+              fontSize={isSmallScreen ? 12 : 14}
+              fontWeight="600"
+              pressStyle={{ opacity: 0.7 }}
+            >
+              {option === 'male' ? 'Male' : 'Female'}
+            </Button>
+          ))}
+        </XStack>
 
         <Label style={{
             fontWeight: 700, 

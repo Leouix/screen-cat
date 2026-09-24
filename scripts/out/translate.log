@@ -1,0 +1,197 @@
+Parsed 1240 records
+Cache: 1286 translated entries
+Pending: 597, processing: 597
+[male] 20/597 ... ok
+[female] 20/597 ... ok
+[male] 40/597 ... ok
+[female] 40/597 ...   retry female 20 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 20 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 60/597 ...   retry male 40 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 40 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 40 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 60/597 ... ok
+[male] 80/597 ...   retry male 60 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 60 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 60 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 80/597 ...   retry female 60 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 60 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 60 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 100/597 ...   retry male 80 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 80 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 100/597 ...   retry female 80 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 80 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 80 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 120/597 ...   retry male 100 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 100 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 100 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 120/597 ...   retry female 100 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 140/597 ...   retry male 120 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 120 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 120 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 140/597 ...   retry female 120 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 120 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 160/597 ...   retry male 140 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 140 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 140 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 160/597 ...   retry female 140 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 140 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 180/597 ...   retry male 160 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 160 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 160 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 180/597 ...   retry female 160 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 160 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 200/597 ...   retry male 180 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 180 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 180 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 200/597 ...   retry female 180 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 180 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 220/597 ...   retry male 200 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 200 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 200 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 220/597 ...   retry female 200 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 200 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 240/597 ...   retry male 220 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 220 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 220 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 240/597 ...   retry female 220 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 260/597 ...   retry male 240 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 240 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 240 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 260/597 ...   retry female 240 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 240 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 280/597 ...   retry male 260 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 260 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 260 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 280/597 ...   retry female 260 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 260 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 300/597 ...   retry male 280 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 280 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 280 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 300/597 ...   retry female 280 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 280 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 320/597 ...   retry male 300 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 300 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 300 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 320/597 ...   retry female 300 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 300 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 340/597 ...   retry male 320 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 320 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 320 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 340/597 ...   retry female 320 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 360/597 ...   retry male 340 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 340 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 340 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 360/597 ...   retry female 340 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 340 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 380/597 ...   retry male 360 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 360 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 360 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 380/597 ... ok
+[male] 400/597 ...   retry male 380 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 380 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 380 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 400/597 ...   retry female 380 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 380 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 420/597 ...   retry male 400 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 400 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 400 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 420/597 ...   retry female 400 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 400 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 440/597 ...   retry male 420 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 420 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 420 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 440/597 ...   retry female 420 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 420 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 460/597 ...   retry male 440 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 440 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 440 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 460/597 ...   retry female 440 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 440 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 480/597 ...   retry male 460 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 460 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 460 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 480/597 ...   retry female 460 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 460 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 460 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 500/597 ... ok
+[female] 500/597 ...   retry female 480 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 480 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 480 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 520/597 ...   retry male 500 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 520/597 ...   retry female 500 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 500 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 500 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 540/597 ...   retry male 520 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 520 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 540/597 ...   retry female 520 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 520 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 520 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 560/597 ...   retry male 540 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 540 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 560/597 ...   retry female 540 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 540 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 540 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 580/597 ...   retry male 560 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry male 560 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 580/597 ...   retry female 560 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 560 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 560 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[male] 597/597 ...   retry male 580 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+[female] 597/597 ...   retry female 580 in 2s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 580 in 5s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+  retry female 580 in 15s (429 Groq 429: {"error":{"message":"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3a5frm7ecgrqnv)
+ok
+Wrote /home/leouix/apps/nm-astrology/data/seed_interpretations_ru.sql (missing translations: 0)

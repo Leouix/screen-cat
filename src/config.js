@@ -7,6 +7,10 @@ const DEV_FALLBACK = Platform.select({
 
 export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || DEV_FALLBACK
 
+// Locale path prefix of the backend routes: '/ru' for the Russian store build,
+// empty (English) for the Google Play build.
+export const LOCALIZE_PATH_API = process.env.EXPO_PUBLIC_LOCALIZE_PATH_API || ''
+
 export const API_TIMEOUT_MS = 10000
 
 export const GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || ''
