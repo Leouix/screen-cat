@@ -52,7 +52,7 @@ export default function BurgerMenu({ isLoggedIn, onLogout }) {
           left={0}
           right={0}
           bottom={0}
-          zIndex={50}
+          zIndex={20}
           onPress={() => setOpen(false)}
         />
       )}
