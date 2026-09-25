@@ -209,6 +209,7 @@ export default function SplashScreen({ fontsLoaded }) {
             fontFamily="Montserrat_600SemiBold" 
             letterSpacing={2}
             marginBottom={isBigScreen ? 50 : 10}
+            textAlign="center"
           >
             {t('splash.title')}
           </Text>

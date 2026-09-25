@@ -4,7 +4,7 @@ import { YStack, XStack, Text, Button } from 'tamagui'
 import { LogoutButton } from './shared/StyledComponents'
 import { useWindowDimensions } from 'react-native'
 
-const LANGUAGES = ['ru', 'en']
+const LANGUAGES = ['en', 'ru']
 
 export default function BurgerMenu({ isLoggedIn, onLogout }) {
   const { t, i18n } = useTranslation()
@@ -66,9 +66,7 @@ export default function BurgerMenu({ isLoggedIn, onLogout }) {
           </Text>
 
           <XStack alignItems="center" gap={10} marginTop={10}>
-            <Text color="#ffffff7a" fontSize={12} fontFamily="Montserrat_500Medium">
-              {t('common.language')}
-            </Text>
+            
             {LANGUAGES.map((code) => {
               const active = currentLang === code
               return (
