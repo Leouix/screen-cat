@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from 'react-native-reanimated'
+import { useEffect, useRef } from 'react'
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withDelay } from 'react-native-reanimated'
 import { YStack, XStack, Text } from 'tamagui'
 import { useWindowDimensions } from 'react-native'
 
 const CARD_H = 114
 const PEEK = 54
 
-function StackCard({ aspect, index, count, visible, peek }) {
+function StackCard({ aspect, index, count, delay, peek }) {
   const target = index * peek
   const ty = useSharedValue(target + 48)
   const opacity = useSharedValue(0)
@@ -14,12 +14,12 @@ function StackCard({ aspect, index, count, visible, peek }) {
   const started = useRef(false)
 
   useEffect(() => {
-    if (!visible || started.current) return
+    if (started.current) return
     started.current = true
-    ty.value = withSpring(target, { damping: 17, stiffness: 160 })
-    opacity.value = withTiming(1, { duration: 260 })
-    scale.value = withSpring(1, { damping: 17, stiffness: 160 })
-  }, [visible, target, ty, opacity, scale])
+    ty.value = withDelay(delay, withSpring(target, { damping: 17, stiffness: 160 }))
+    opacity.value = withDelay(delay, withTiming(1, { duration: 260 }))
+    scale.value = withDelay(delay, withSpring(1, { damping: 17, stiffness: 160 }))
+  }, [delay, target, ty, opacity, scale])
 
   const style = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -93,27 +93,6 @@ export default function AspectCardStack({ items, startDelay = 300, revealDelay =
   const peek = isSmallScreen ? 30 : PEEK
   const count = items.length
   const deckH = CARD_H + (count - 1) * peek
-  const [revealed, setRevealed] = useState(0)
-
-  useEffect(() => {
-    let interval
-    const timer = setTimeout(() => {
-      setRevealed(1)
-      interval = setInterval(() => {
-        setRevealed((r) => {
-          if (r >= count) {
-            clearInterval(interval)
-            return r
-          }
-          return r + 1
-        })
-      }, revealDelay)
-    }, startDelay)
-    return () => {
-      clearTimeout(timer)
-      if (interval) clearInterval(interval)
-    }
-  }, [count, startDelay, revealDelay])
 
   return (
     <Animated.View
@@ -134,7 +113,7 @@ export default function AspectCardStack({ items, startDelay = 300, revealDelay =
           index={index}
           count={count}
           peek={peek}
-          visible={index < revealed}
+          delay={startDelay + index * revealDelay}
         />
       ))}
     </Animated.View>
