@@ -43,3 +43,4 @@ yarn-error.*
 
 # GeoNames source archives (build-cities.mjs cache)
 /scripts/out/geonames/
+*.apk
