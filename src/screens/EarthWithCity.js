@@ -6,6 +6,7 @@ import { cityPrimary, citySecondary } from '../services/geo';
 import StarryBackground from '../components/StarryBackground';
 import SunDecoration from '../components/SunDecoration';
 import { useWindowDimensions } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 import {
   BackgroundView,
@@ -54,12 +55,16 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
           }}
         />
 
-      <YStack
-        position="absolute"
-        bottom={ isSmallScreen ? 20 : 30}
-        left={20}
-        right={20}
-        alignItems="center"
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={0}
+        style={{
+          position: 'absolute',
+          bottom: isSmallScreen ? 20 : 30,
+          left: 20,
+          right: 20,
+          alignItems: 'center',
+        }}
       >
         
          {selectedCity?.name && (
@@ -107,7 +112,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
           </SecondaryButton>
         </XStack>
 
-      </YStack>
+      </KeyboardAvoidingView>
     </YStack>
   )
 }

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { BackHandler } from 'react-native'
 import { TamaguiProvider, YStack } from 'tamagui'
+import { KeyboardProvider } from 'react-native-keyboard-controller'
 import {
   useFonts,
   Montserrat_400Regular,
@@ -21,7 +22,7 @@ import { initI18n } from './src/i18n'
 
 const SCREEN_ORDER = ['splash', 'birthDate', 'name', 'city', 'prediction']
 
-const SPLASH_MIN_MS = 1600
+const SPLASH_MIN_MS = 3000
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -168,6 +169,7 @@ export default function App() {
   return (
     <TamaguiProvider config={config} defaultTheme="dark">
 
+      <KeyboardProvider preload={false}>
       <YStack flex={1}>
         
         {screen === 'splash' && <SplashScreen fontsLoaded={fontsLoaded} />}
@@ -212,6 +214,7 @@ export default function App() {
 
         {screen !== 'splash' && <BurgerMenu isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
       </YStack>
+      </KeyboardProvider>
 
      
     </TamaguiProvider>

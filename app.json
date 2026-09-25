@@ -32,6 +32,11 @@
       "expo-font",
       "expo-status-bar",
       "@react-native-google-signin/google-signin"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "fe4bee59-1db6-4123-9768-f9c5b09f9b0c"
+      }
+    }
   }
 }

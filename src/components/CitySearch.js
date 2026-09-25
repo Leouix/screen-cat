@@ -102,7 +102,7 @@ export default function CitySearch({ onSelect, selectedCity }) {
           maxHeight={200}
           zIndex={100}
         >
-          <ScrollView>
+          <ScrollView keyboardShouldPersistTaps="handled">
             {results.map((city, i) => (
               <Pressable key={`${city.name}-${city.latitude}-${city.longitude}-${i}`} onPress={() => handleSelect(city)}>
                 <YStack

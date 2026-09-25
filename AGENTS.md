@@ -73,3 +73,8 @@
 Второй экран приложения: компонент src/screens/NameScreen.js
 Третий экран приложения: компонент src/screens/EarthWithCity.js
 Четвертый экран приложения: компонент src/screens/PredictionScreen.js
+
+собрать приложение 
+```
+npx eas-cli build --platform android --profile production
+```

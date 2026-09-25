@@ -16,6 +16,7 @@ import {
 import { getPlanetByBirthDate } from '../services/api'
 import { getRulingPlanet, planetLabel, PLANET_NAMES } from '../utils/planets'
 import { useWindowDimensions } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
 const PLANET_ASSETS = {
   [PLANET_NAMES.mercury]: require('../../assets/planets/mercury.png'),
@@ -90,6 +91,12 @@ export default function NameScreen({ birthDate, birthTime, name, gender = 'male'
           zIndex: 1
         }}
       >
+        <KeyboardAwareScrollView
+          style={{ flex: 1, width: '100%' }}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
             <Label style={{
               fontSize: isSmallScreen ? 14 : 18,
               alignSelf: 'start',
@@ -178,6 +185,7 @@ export default function NameScreen({ birthDate, birthTime, name, gender = 'male'
             {t('common.skip')} →
           </SecondaryButton>
         </XStack>
+        </KeyboardAwareScrollView>
 
           <PlanetImage
             source={planetAsset}
