@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, View, Pressable } from 'react-native'
 import { Canvas, Group, Circle, Line, Path, Text, RoundedRect, BlurMask, useFont } from '@shopify/react-native-skia'
 import { Montserrat_500Medium } from '@expo-google-fonts/montserrat';
@@ -218,6 +219,7 @@ function PlanetLabel({
 }
 
 export default forwardRef(function DailyPredictionMap({ paths, size, height = size, selectedId = null, onSelect }, ref) {
+  const { t } = useTranslation()
   const { width } = useWindowDimensions();
   const isSmallScreen = width <= 360;
   
@@ -526,7 +528,7 @@ export default forwardRef(function DailyPredictionMap({ paths, size, height = si
               cy={cy}
               color={l.color}
               font={labelFont}
-              subtitle="natal"
+              subtitle={t('map.natal')}
               subtitleFont={subtitleFont}
               dimmed={selectedPath !== null && l.name !== selectedPath.natal_planet}
             />

@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { YStack, Text, Button, Spinner } from 'tamagui'
 
 export default function GoogleAuthOverlay({ visible, loading, error, onSignIn }) {
+  const { t } = useTranslation()
   if (!visible) return null
 
   return (
@@ -33,18 +35,18 @@ export default function GoogleAuthOverlay({ visible, loading, error, onSignIn })
         </Text>
 
         <Text color="#ffffff" fontSize={18} fontFamily="Montserrat_600SemiBold" textAlign="center">
-          Preserve your starry sky!
+          {t('auth.overlayTitle')}
         </Text>
 
         <Text color="#b2b2bc" fontSize={13} fontFamily="Montserrat_400Regular" textAlign="center" lineHeight={19}>
-          Sign in with Google to save your birth data and unlock your daily prediction.
+          {t('auth.overlayText')}
         </Text>
 
         {loading ? (
           <YStack alignItems="center" gap={10} paddingVertical={8}>
             <Spinner color="#f8df61" size="large" />
             <Text color="#b2b2bc" fontSize={12} fontFamily="Montserrat_400Regular">
-              Signing in…
+              {t('auth.signingIn')}
             </Text>
           </YStack>
         ) : (
@@ -62,7 +64,7 @@ export default function GoogleAuthOverlay({ visible, loading, error, onSignIn })
                   G
                 </Text>
                 <Text color="#202124" fontSize={16} fontWeight="600" fontFamily="Montserrat_500Medium">
-                  Continue with Google
+                  {t('auth.continueWithGoogle')}
                 </Text>
               </YStack>
             </Button>

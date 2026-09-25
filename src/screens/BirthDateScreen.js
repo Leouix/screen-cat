@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { YStack, XStack, Text } from 'tamagui'
 import { DatePicker } from '@quidone/react-native-wheel-picker'
 import WheelPicker from '@quidone/react-native-wheel-picker'
@@ -26,6 +27,7 @@ const MINUTES = Array.from({ length: 60 }, (_, i) => ({
 }))
 
 export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
+  const { t, i18n } = useTranslation()
   const [date, setDate] = useState(birthDate || '1995-01-01')
   const [time, setTime] = useState(() => {
     if (!birthTime) return null
@@ -70,7 +72,7 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
         <Label style={{
           fontSize: isSmallScreen ? 15 : 18,
           marginBottom: isSmallScreen ? 20 : 20,
-        }}>when were you born?</Label>
+        }}>{t('birthDate.question')}</Label>
 
          <XStack alignItems="center" gap={isSmallScreen ? 0 : 3} marginBottom={10}>
           {time ? (
@@ -116,7 +118,7 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
           visibleItemCount={5}
           minDate="1930-01-01"
           maxDate="2010-12-31"
-          locale="en-GB"
+          locale={i18n.language === 'ru' ? 'ru-RU' : 'en-GB'}
           itemTextStyle={{ color: '#f8df61', fontSize: isSmallScreen ? 14 : 18 }}
           overlayItemStyle={{ backgroundColor: 'rgba(248, 223, 97, 0.15)', borderRadius: 8 }}
         />
@@ -125,7 +127,7 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
           onPress={() => onNext(date, timeString)}
           fontSize = {isSmallScreen ? 14 : 18}
           height={isSmallScreen ? 40 : 45}
-          >NEXT</PrimaryButton>
+          >{t('common.next')}</PrimaryButton>
 
         <SecondaryButton 
           onPress={() => onNext(date, timeString)}
@@ -134,7 +136,7 @@ export default function BirthDateScreen({ birthDate, birthTime, onNext }) {
           style={{
             marginTop: isSmallScreen ? 3 : 15,
           }}
-          >Skip</SecondaryButton>
+          >{t('common.skip')}</SecondaryButton>
       </MainContainer>
     </YStack>
   )

@@ -17,6 +17,7 @@ import PredictionScreen from './src/screens/PredictionScreen'
 import BurgerMenu from './src/components/BurgerMenu'
 import { loadAuth, clearAuth, loadProfile, saveProfile } from './src/services/db'
 import { googleSignOut } from './src/services/auth'
+import { initI18n } from './src/i18n'
 
 const SCREEN_ORDER = ['splash', 'birthDate', 'name', 'city', 'prediction']
 
@@ -43,6 +44,7 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false
+    initI18n().catch(() => {})
     Promise.all([loadAuth(), loadProfile()]).then(([auth, profile]) => {
       if (cancelled) return
       setIsLoggedIn(!!auth?.token)
@@ -208,7 +210,7 @@ export default function App() {
           />
         )}
 
-        {isLoggedIn && screen !== 'splash' && <BurgerMenu onLogout={handleLogout} />}
+        {screen !== 'splash' && <BurgerMenu isLoggedIn={isLoggedIn} onLogout={handleLogout} />}
       </YStack>
 
      

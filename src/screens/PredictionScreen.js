@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useWindowDimensions } from 'react-native'
 import { YStack, XStack, Text, Spinner, Button } from 'tamagui'
 import dayjs from 'dayjs'
@@ -14,6 +15,7 @@ import { signInWithGoogle } from '../services/auth';
 
 export default function PredictionScreen({ birthDate, birthTime, name, gender, selectedCity, onBack, isLoggedIn, onAuthChange }) { 
 
+  const { t, i18n } = useTranslation()
   const { width, height } = useWindowDimensions()
   const isSmallScreen = width <= 360;
   const [selectedPath, setSelectedPath] = useState(null)
@@ -35,7 +37,8 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
     longitude: selectedCity?.longitude,
     timezone: selectedCity?.timezone,
     gender,
-  }), [birthDate, birthTime, selectedCity, gender])
+    lang: i18n.language,
+  }), [birthDate, birthTime, selectedCity, gender, i18n.language])
 
   const currentProfile = useMemo(() => ({
     name,
@@ -69,17 +72,17 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
         gender,
       })
       if (!ok) {
-        setError(error || 'Failed to load prediction')
+        setError(error || t('prediction.loadFailed'))
         return
       }
       setPrediction(data)
       persistPrediction(data, predictionInput)
     } catch (err) {
-      setError(err.message || 'Failed to load prediction')
+      setError(err.message || t('prediction.loadFailed'))
     } finally {
       setLoading(false)
     }
-  }, [birthDate, birthTime, selectedCity, predictionInput])
+  }, [birthDate, birthTime, selectedCity, predictionInput, t])
 
   const syncProfile = useCallback(async (token, profile) => {
     setLoading(true)
@@ -87,7 +90,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
     try {
       const { ok, data, error } = await updateProfile({ token, ...profile })
       if (!ok) {
-        setError(error || 'Failed to sync profile')
+        setError(error || t('prediction.syncFailed'))
         return
       }
       await saveProfile(profile, { synced: true })
@@ -96,11 +99,11 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
         setPrediction(data.prediction)
       }
     } catch (err) {
-      setError(err.message || 'Failed to sync profile')
+      setError(err.message || t('prediction.syncFailed'))
     } finally {
       setLoading(false)
     }
-  }, [predictionInput])
+  }, [predictionInput, t])
 
   useEffect(() => {
     let cancelled = false
@@ -175,7 +178,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
           }
 
       const { ok, data, error } = await postGoogleAuth(authPayload)
-      if (!ok) throw new Error(error || 'Sign-in failed')
+      if (!ok) throw new Error(error || t('prediction.signInFailed'))
 
       await saveAuth({ token: data.token, user: { google_name: user.googleName, name, email: user.email, user_id: data.user_id } })
 
@@ -190,17 +193,17 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
       onAuthChange?.(true, currentProfile)
       setError(null)
     } catch (err) {
-      setAuthError(err.message || 'Sign-in failed. Try again.')
+      setAuthError(err.message || t('prediction.signInFailedRetry'))
     } finally {
       setSignInLoading(false)
       setLoading(false)
     }
-  }, [birthDate, birthTime, selectedCity, currentProfile, predictionInput, name])
+  }, [birthDate, birthTime, selectedCity, currentProfile, predictionInput, name, t])
 
   const paths = useMemo(() => {
     if (!prediction) return []
-    return buildPredictionPaths(prediction.aspects)
-  }, [prediction])
+    return buildPredictionPaths(prediction.aspects, t)
+  }, [prediction, t, i18n.language])
 
   return (
     <YStack flex={1}>
@@ -228,13 +231,13 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
             top={110} 
             zIndex={2}
           >
-              Your sky today
+              {t('prediction.title')}
             </Text>
         )}
 
        {!selectedPath && (
           <Text color="#b2b2bc" fontSize={12} fontFamily="Montserrat_400Regular" textAlign="center" position='absolute' top={140} zIndex={2}>
-            Tap an aspect line to inspect it
+            {t('prediction.hint')}
           </Text>
         )}
 
@@ -242,7 +245,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
           <YStack flex={1} alignItems="center" justifyContent="center" gap={14}>
             <Spinner color="#ffffff" size="large" />
             <Text color="#b2b2bc" fontSize={13} fontFamily="Montserrat_400Regular">
-              Calculating today's transits…
+              {t('prediction.calculating')}
             </Text>
           </YStack>
         ) : error ? (
@@ -251,13 +254,13 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
               {error}
             </Text>
             <Button backgroundColor="#ffffff18" color="#ffffff" onPress={fetchPublicPrediction}>
-              Try again
+              {t('prediction.tryAgain')}
             </Button>
           </YStack>
         ) : paths.length === 0 ? (
           <YStack flex={1} alignItems="center" justifyContent="center">
             <Text color="#b2b2bc" fontSize={13} fontFamily="Montserrat_400Regular" textAlign="center">
-              No active aspects today
+              {t('prediction.noAspects')}
             </Text>
           </YStack>
         ) : (
@@ -317,7 +320,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
               onPress={onBack}
               fontSize= {isSmallScreen ? 10 : 12}
               bottom= {isSmallScreen ? 15 : 20}
-            >Back</BackButtonCenter>   
+            >{t('common.back')}</BackButtonCenter>   
         )}
     </YStack>
   )

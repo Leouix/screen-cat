@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { YStack, XStack, Text, Input, ScrollView } from 'tamagui';
 import { Pressable } from 'react-native';
 import { searchCities } from '../services/geo';
 import { useWindowDimensions } from 'react-native';
 
 export default function CitySearch({ onSelect, selectedCity }) {
+  const { t } = useTranslation()
   const [query, setQuery] = useState(selectedCity?.name ? `${selectedCity.name}, ${selectedCity.country}` : '')
   const [results, setResults] = useState([])
   const [showDropdown, setShowDropdown] = useState(false)
@@ -46,7 +48,7 @@ export default function CitySearch({ onSelect, selectedCity }) {
         <Input
           value={query}
           onChangeText={setQuery}
-          placeholder="Search city..."
+          placeholder={t('city.searchPlaceholder')}
           placeholderTextColor="#b2b2bc"
           width="100%"
           backgroundColor="#ffffff08"

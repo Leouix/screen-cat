@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useWindowDimensions } from 'react-native'
 import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated'
 import { YStack, Text } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import DailyPredictionMap from '../components/DailyPredictionMap'
 import AspectCardStack from '../components/AspectCardStack'
+import { planetLabel } from '../utils/planets'
 
 const HARDCODED_PATHS = [
   {
@@ -160,10 +162,22 @@ const HARDCODED_PATHS = [
 ]
 
 export default function SplashScreen({ fontsLoaded }) {
+  const { t } = useTranslation()
   const opacity = useSharedValue(0)
   const { width, height } = useWindowDimensions()
   const size = Math.min(width * 0.5, height * 0.5)
   const mapRef = useRef(null)
+
+  const paths = useMemo(
+    () => HARDCODED_PATHS.map((p) => ({
+      ...p,
+      title: t(`splashDemo.${p.id}.title`),
+      content: t(`splashDemo.${p.id}.content`),
+      natal_planet: planetLabel(p.natal_planet, t),
+      transit_planet: planetLabel(p.transit_planet, t),
+    })),
+    [t],
+  )
 
   useEffect(() => {
     opacity.value = withTiming(1, { duration: 800, easing: Easing.out(Easing.ease) })
@@ -196,18 +210,18 @@ export default function SplashScreen({ fontsLoaded }) {
             letterSpacing={2}
             marginBottom={isBigScreen ? 50 : 10}
           >
-            Your Prediction Map
+            {t('splash.title')}
           </Text>
         )}
 
         <DailyPredictionMap
-          paths={HARDCODED_PATHS}
+          paths={paths}
           size={size}
           height={isSmallScreen ? 350 : 450}
           ref={mapRef}
         />
 
-        <AspectCardStack items={HARDCODED_PATHS.slice(0, 5)} />
+        <AspectCardStack items={paths.slice(0, 5)} />
         
       </Animated.View>
     </YStack>

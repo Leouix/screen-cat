@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { YStack, XStack, Button } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import SunDecoration from '../components/SunDecoration';
@@ -13,7 +14,7 @@ import {
   StyledInput,
 } from '../components/shared/StyledComponents'
 import { getPlanetByBirthDate } from '../services/api'
-import { getRulingPlanet, PLANET_NAMES } from '../utils/planets'
+import { getRulingPlanet, planetLabel, PLANET_NAMES } from '../utils/planets'
 import { useWindowDimensions } from 'react-native'
 
 const PLANET_ASSETS = {
@@ -38,14 +39,16 @@ function getPlanetAsset(planetName) {
 }
 
 export default function NameScreen({ birthDate, birthTime, name, gender = 'male', onNameChange, onGenderChange, onNext, onBack }) {
+  const { t, i18n } = useTranslation()
   const [planetData, setPlanetData] = useState(null)
   const [loading, setLoading] = useState(true)
 
   const fallbackPlanet = getRulingPlanet(birthDate)
-  const planetTitle = fallbackPlanet
+  const planetKey = fallbackPlanet
+  const planetTitle = planetLabel(fallbackPlanet, t)
   const planetInterpretation = planetData?.interpretations?.sign?.title ?? ''
   const planetContent = planetData?.interpretations?.sign?.content ?? ''
-  const planetAsset = useMemo(() => getPlanetAsset(planetTitle), [planetTitle])
+  const planetAsset = useMemo(() => getPlanetAsset(planetKey), [planetKey])
 
   const { width } = useWindowDimensions()
   const isSmallScreen = width <= 360
@@ -57,13 +60,13 @@ export default function NameScreen({ birthDate, birthTime, name, gender = 'male'
       setPlanetData(ok ? data : null)
       setLoading(false)
     })
-  }, [birthDate, gender])
+  }, [birthDate, gender, i18n.language])
 
   const PLANET_SIZES = {
     [PLANET_NAMES.saturn]: 600,
     [PLANET_NAMES.uranus]: 500,
   }
-  const sizePlanet = PLANET_SIZES[planetTitle] ?? isSmallScreen ? 400 : 550
+  const sizePlanet = PLANET_SIZES[planetKey] ?? isSmallScreen ? 400 : 550
 
   return (
     <YStack flex={1}>
@@ -131,7 +134,7 @@ export default function NameScreen({ birthDate, birthTime, name, gender = 'male'
               fontWeight="600"
               pressStyle={{ opacity: 0.7 }}
             >
-              {option === 'male' ? 'Male' : 'Female'}
+              {t(option === 'male' ? 'name.male' : 'name.female')}
             </Button>
           ))}
         </XStack>
@@ -139,11 +142,11 @@ export default function NameScreen({ birthDate, birthTime, name, gender = 'male'
         <Label style={{
             fontWeight: 700, 
             fontSize: isSmallScreen ? 16 : 18,
-          }}>What is your name</Label>
+          }}>{t('name.question')}</Label>
         <StyledInput
           value={name}
           onChangeText={onNameChange}
-          placeholder="Enter your name"
+          placeholder={t('name.placeholder')}
           style={{
             fontSize: isSmallScreen ? 14 : 16,
           }}
@@ -153,7 +156,7 @@ export default function NameScreen({ birthDate, birthTime, name, gender = 'male'
           fontSize = {isSmallScreen ? 14 : 18}
           height={isSmallScreen ? 40 : 45}
         >
-          NEXT
+          {t('common.next')}
         </PrimaryButton>
 
         <XStack width="100%" justifyContent="space-between" alignItems="center" gap={16}>
@@ -163,7 +166,7 @@ export default function NameScreen({ birthDate, birthTime, name, gender = 'male'
               marginTop = {isSmallScreen ? 5 : 15}
               fontSize = {isSmallScreen ? 10 : 12}
             >
-              ← Back
+              ← {t('common.back')}
             </BackButton>
           )}
 
@@ -172,7 +175,7 @@ export default function NameScreen({ birthDate, birthTime, name, gender = 'male'
             marginTop = {isSmallScreen ? 5 : 15}
             fontSize = {isSmallScreen ? 10 : 12}
             >
-            Skip →
+            {t('common.skip')} →
           </SecondaryButton>
         </XStack>
 

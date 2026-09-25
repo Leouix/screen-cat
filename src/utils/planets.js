@@ -11,6 +11,14 @@ export const PLANET_NAMES = {
   pluto: 'Pluto',
 }
 
+// Localized display name for a canonical planet name ('Mercury' -> 'Меркурий').
+export function planetLabel(name, t) {
+  if (!name) return ''
+  const key = String(name).toLowerCase()
+  if (!t || !Object.values(PLANET_NAMES).includes(name)) return name
+  return t(`planets.${key}`)
+}
+
 export function getRulingPlanet(birthDateString) {
   const date = new Date(birthDateString)
   const month = date.getMonth() + 1

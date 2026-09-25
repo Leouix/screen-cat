@@ -4,8 +4,8 @@ const DB_NAME = 'sprite-app.db'
 
 let dbPromise = null
 
-function buildDataKey({ birthDate, birthTime, latitude, longitude, timezone, gender }) {
-  return [birthDate ?? '', birthTime ?? '', latitude ?? '', longitude ?? '', timezone ?? '', gender ?? ''].join('|')
+function buildDataKey({ birthDate, birthTime, latitude, longitude, timezone, gender, lang }) {
+  return [birthDate ?? '', birthTime ?? '', latitude ?? '', longitude ?? '', timezone ?? '', gender ?? '', lang ?? ''].join('|')
 }
 
 function getDb() {
@@ -34,6 +34,10 @@ function getDb() {
           timezone TEXT,
           gender TEXT,
           synced INTEGER NOT NULL DEFAULT 0
+        );
+        CREATE TABLE IF NOT EXISTS settings (
+          key TEXT PRIMARY KEY,
+          value TEXT
         );
       `)
       try {
@@ -145,4 +149,19 @@ export async function loadPrediction(input) {
   const row = await db.getFirstAsync('SELECT data_json FROM prediction WHERE id = 1 AND data_key = ?', buildDataKey(input))
   if (!row) return null
   return JSON.parse(row.data_json)
+}
+
+export async function saveSetting(key, value) {
+  const db = await getDb()
+  await db.runAsync(
+    'INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT (key) DO UPDATE SET value = excluded.value',
+    key,
+    value == null ? null : String(value),
+  )
+}
+
+export async function loadSetting(key) {
+  const db = await getDb()
+  const row = await db.getFirstAsync('SELECT value FROM settings WHERE key = ?', key)
+  return row?.value ?? null
 }

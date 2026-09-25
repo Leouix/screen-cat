@@ -1,6 +1,11 @@
-import { API_BASE_URL, API_TIMEOUT_MS, LOCALIZE_PATH_API } from '../config'
+import { API_BASE_URL, API_TIMEOUT_MS, getApiLocale, localizePath } from '../config'
+import i18n from '../i18n'
 
-const API_V1 = `${API_BASE_URL}${LOCALIZE_PATH_API}/api/v1`
+// Resolved per request so switching the language in the UI also switches the
+// backend locale (English -> /api/v1, Russian -> /ru/api/v1).
+function apiV1() {
+  return `${API_BASE_URL}${localizePath(getApiLocale())}/api/v1`
+}
 
 async function fetchWithTimeout(url, options, timeoutMs = API_TIMEOUT_MS) {
   const controller = new AbortController()
@@ -20,15 +25,17 @@ async function request(url, options) {
       try {
         detail = await res.text()
       } catch {}
-      const message = detail ? `API error ${res.status}: ${detail}` : `API error: ${res.status}`
+      const message = detail
+        ? i18n.t('error.apiDetail', { status: res.status, detail })
+        : i18n.t('error.api', { status: res.status })
       return { ok: false, error: message }
     }
     return { ok: true, data: await res.json() }
   } catch (err) {
     if (err.name === 'AbortError') {
-      return { ok: false, error: 'Request timed out' }
+      return { ok: false, error: i18n.t('error.timeout') }
     }
-    return { ok: false, error: err.message || 'Network error' }
+    return { ok: false, error: i18n.t('error.network') }
   }
 }
 
@@ -42,7 +49,7 @@ export async function getPlanetByBirthDate(birthDate, gender) {
   const params = new URLSearchParams()
   params.append('birth_date', birthDate)
   if (gender) params.append('gender', gender)
-  return request(`${API_V1}/get-data-planet?${params.toString()}`)
+  return request(`${apiV1()}/get-data-planet?${params.toString()}`)
 }
 
 export async function getPrediction({ birthDate, birthTime, latitude, longitude, timezone, gender }) {
@@ -54,7 +61,7 @@ export async function getPrediction({ birthDate, birthTime, latitude, longitude,
   if (timezone) params.append('timezone', timezone)
   if (gender) params.append('gender', gender)
 
-  return request(`${API_V1}/prediction?${params.toString()}`)
+  return request(`${apiV1()}/prediction?${params.toString()}`)
 }
 
 export async function updateProfile({ token, name, birthDate, birthTime, latitude, longitude, timezone, gender }) {
@@ -66,7 +73,7 @@ export async function updateProfile({ token, name, birthDate, birthTime, latitud
   if (timezone) body.timezone = timezone
   if (gender) body.gender = gender
 
-  return request(`${API_V1}/profile`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(body) })
+  return request(`${apiV1()}/profile`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(body) })
 }
 
 export async function postGoogleAuth({ idToken, googleName, name, email, birthDate, birthTime, latitude, longitude, timezone, gender }) {
@@ -81,5 +88,5 @@ export async function postGoogleAuth({ idToken, googleName, name, email, birthDa
   if (timezone) body.timezone = timezone
   if (gender) body.gender = gender
 
-  return postJSON(`${API_V1}/auth/google`, body)
+  return postJSON(`${apiV1()}/auth/google`, body)
 }

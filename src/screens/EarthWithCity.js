@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { YStack, Text, XStack } from 'tamagui';
 import Earth3d from '../components/Earth3d';
 import CitySearch from '../components/CitySearch';
@@ -15,6 +16,7 @@ import {
 
 
 export default function EarthWithCity({ birthDate, birthTime, name, selectedCity, onCitySelect, onBack, onNext }) {
+  const { t } = useTranslation()
   const coord = selectedCity || { latitude: 42.8746, longitude: 74.5698 }
 
   const { width } = useWindowDimensions();
@@ -69,7 +71,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
           </YStack>
         )}
 
-        <Label style={{fontWeight: 700,  fontSize: isSmallScreen ? 16 : 18}}>In which city were you born?</Label>
+        <Label style={{fontWeight: 700,  fontSize: isSmallScreen ? 16 : 18}}>{t('city.question')}</Label>
 
         <CitySearch onSelect={onCitySelect} selectedCity={selectedCity} />
 
@@ -78,7 +80,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
           height={isSmallScreen ? 40 : 45}
           onPress={() => onNext(selectedCity)}
         >
-          PREDICTION MAP
+          {t('city.predictionMap')}
         </PrimaryButton>
 
         <XStack width="100%" justifyContent="space-between" >
@@ -88,7 +90,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
                 marginTop = {isSmallScreen ? 5 : 15}
                 fontSize = {isSmallScreen ? 10 : 12}
               >
-                ← Back
+                ← {t('common.back')}
               </BackButton>
           )}
           <SecondaryButton 
@@ -96,7 +98,7 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
             marginTop = {isSmallScreen ? 5 : 15}
             fontSize = {isSmallScreen ? 10 : 12}
             >
-            Skip →
+            {t('common.skip')} →
           </SecondaryButton>
         </XStack>
 
