@@ -134,6 +134,7 @@ export default function AspectCardStack({ items, startDelay = 300, revealDelay =
           index={index}
           count={count}
           peek={peek}
+          visible={index < revealed}
         />
       ))}
     </Animated.View>

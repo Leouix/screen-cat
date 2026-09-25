@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWindowDimensions } from 'react-native'
-import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated'
-import { YStack, Text } from 'tamagui'
+import Animated from 'react-native-reanimated'
+import { YStack } from 'tamagui'
 import StarryBackground from '../components/StarryBackground'
 import DailyPredictionMap from '../components/DailyPredictionMap'
 import AspectCardStack from '../components/AspectCardStack'
+import AnimatedText from '../components/AnimatedText'
 import { planetLabel } from '../utils/planets'
 
 const HARDCODED_PATHS = [
@@ -163,9 +164,8 @@ const HARDCODED_PATHS = [
 
 export default function SplashScreen({ fontsLoaded }) {
   const { t } = useTranslation()
-  const opacity = useSharedValue(0)
   const { width, height } = useWindowDimensions()
-  const size = Math.min(width * 0.5, height * 0.5)
+  const size = Math.min(width * 1, height * 0.5)
   const mapRef = useRef(null)
 
   const paths = useMemo(
@@ -179,10 +179,6 @@ export default function SplashScreen({ fontsLoaded }) {
     [t],
   )
 
-  useEffect(() => {
-    opacity.value = withTiming(1, { duration: 800, easing: Easing.out(Easing.ease) })
-  }, [opacity])
-  
   const isBigScreen = width >= 700
   const isSmallScreen = width <= 360
 
@@ -198,21 +194,21 @@ export default function SplashScreen({ fontsLoaded }) {
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',  
-          paddingHorizontal: 25,
+          paddingHorizontal: 0,
         }}
       >
         
          {fontsLoaded && (
-          <Text 
-            color="#ffffff" 
-            fontSize={24} 
-            fontFamily="Montserrat_600SemiBold" 
-            letterSpacing={2}
-            marginBottom={isBigScreen ? 50 : 10}
-            textAlign="center"
-          >
-            {t('splash.title')}
-          </Text>
+          <AnimatedText
+            text={t('splash.title')}
+            containerStyle={{ marginBottom: isBigScreen ? 50 : 10 }}
+            letterStyle={{
+              color: '#e1f54b',
+              fontSize: 24,
+              fontFamily: 'Montserrat_600SemiBold',
+              letterSpacing: 2,
+            }}
+          />
         )}
 
         <DailyPredictionMap

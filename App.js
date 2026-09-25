@@ -21,7 +21,7 @@ import { initI18n } from './src/i18n'
 
 const SCREEN_ORDER = ['splash', 'birthDate', 'name', 'city', 'prediction']
 
-const SPLASH_MIN_MS = 16000
+const SPLASH_MIN_MS = 1600000
 
 export default function App() {
   const [fontsLoaded] = useFonts({
