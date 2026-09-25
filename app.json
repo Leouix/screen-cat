@@ -22,7 +22,7 @@
         "backgroundColor": "#1a1a2e"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.leo546.spriteapp"
+      "package": "com.leo546.nmastrology"
     },
     "web": {
       "favicon": "./assets/icon.png"
