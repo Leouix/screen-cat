@@ -53,6 +53,7 @@
 
 - `EXPO_PUBLIC_LOCALE` (см. `.env.example`) — язык по умолчанию: `ru` (RU-стор) или `en` (Google Play). Одна переменная задаёт и стартовый язык UI, и префикс API: `en` → `/api/v1`, `ru` → `/ru/api/v1`. URL собирается в `src/services/api.js` (`apiV1()`), префикс — `localizePath()` в `src/config.js`; активная локаль синхронизируется через `setApiLocale()`.
 - i18n — `i18next` + `react-i18next`: словари `src/i18n/locales/en.js` и `ru.js`, инициализация в `src/i18n/index.js`. Язык сохраняется в таблице `settings` (expo-sqlite), переключатель RU/EN — в `BurgerMenu` (доступно на всех экранах после сплэша). Смена языка перезапрашивает прогноз/интерпретацию (кэш `prediction.data_key` включает `lang`).
+- Города: локальный справочник `src/data/cities.json` (~72k, GeoNames CC BY 4.0, включает полный список РФ) генерируется `scripts/build-cities.mjs` (кэш загрузок в `scripts/out/geonames/`), поиск в `src/services/geo.js` идёт по русским и английским названиям + региону, вывод локализован по `i18n.language`. Атрибуция — `src/data/NOTICE.md`.
 - `gender` (`male`/`female`) хранится в локальном профиле и в `users.gender` на бэкенде; передаётся в `get-data-planet`, `prediction`, `PUT profile`, `auth/google`.
 - Тумблер пола — на `NameScreen`; смена пола перезапрашивает интерпретацию.
 - `scripts/translate-interpretations.mjs` — оффлайн-генератор русских переводов бэкенда через Groq (`GROQ_API_KEY` из `.env`). Пишет `../nm-astrology/data/seed_interpretations_ru.sql`, прогресс кэширует в `scripts/out/ru-translations.jsonl` (resume).

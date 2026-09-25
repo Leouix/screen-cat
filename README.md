@@ -70,7 +70,7 @@ sprite-app/
 │   │                         # BurgerMenu, SunDecoration, shared/StyledComponents
 │   ├── services/             # api.js, auth.js, db.js (SQLite), geo.js (поиск городов)
 │   ├── utils/                # planets.js, prediction.js, trig.js
-│   └── data/                 # cities_en.json (справочник городов)
+│   └── data/                 # cities.json (справочник городов GeoNames)
 ├── assets/
 │   ├── icon.png
 │   ├── adaptive-icon.png
@@ -90,7 +90,7 @@ sprite-app/
 0. **Splash** — загрузка шрифтов и БД; при авторизованном пользователе с сохранённым профилем ведёт сразу на экран 4
 1. **BirthDate** — дата и время рождения (wheel-picker), кнопка NEXT / Skip
 2. **Name** — планета-управитель дня рождения, поле имени
-3. **City** — 3D-Земля + поиск города рождения (локальный `cities_en.json`)
+3. **City** — 3D-Земля + поиск города рождения (локальный `cities.json`, ru/en + регион)
 4. **Prediction** — карта предсказаний: транзитные аспекты, авторизация через Google, бургер-меню с выходом
 
 Навигация — ручная через `useState` + `BackHandler` в `App.js`, без `expo-router`/`@react-navigation`.

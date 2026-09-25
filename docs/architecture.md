@@ -21,7 +21,7 @@ Sprite App — Expo-приложение (SDK 57, New Architecture) на React N
 │          Services               │  api.js, auth.js, db.js, geo.js
 ├─────────────────────────────────┤
 │   Utils / Data / Config         │  planets.js, prediction.js, trig.js,
-│                                 │  cities_en.json, config.js
+│                                 │  cities.json, config.js
 └─────────────────────────────────┘
 ```
 
@@ -46,7 +46,7 @@ Sprite App — Expo-приложение (SDK 57, New Architecture) на React N
 | `SunDecoration` | Декоративное «солнце» (Skia) |
 | `PlanetImage` | Планета с внутренней тенью (Skia) |
 | `Earth3d` | 3D-Земля с маркером города (Skia) |
-| `CitySearch` | Поиск города по локальному `cities_en.json` |
+| `CitySearch` | Поиск города по локальному `cities.json` (ru/en + регион) |
 | `DailyPredictionMap` | Круговая карта аспектов дня (Skia) |
 | `AspectCardDeck` | Колода карточек аспектов |
 | `GoogleAuthOverlay` | Оверлей входа через Google |
@@ -64,7 +64,7 @@ Sprite App — Expo-приложение (SDK 57, New Architecture) на React N
 | `api.js` | fetch-клиент с таймаутом (AbortController): `getPlanetByBirthDate`, `getPrediction`, `updateProfile`, `postGoogleAuth` |
 | `auth.js` | Google Sign-In: `signInWithGoogle`, `googleSignOut`, `isGoogleSignedIn` |
 | `db.js` | SQLite (`expo-sqlite`): таблицы `auth`, `profile`, `prediction` (кэш по дате + input-ключ) |
-| `geo.js` | Поиск городов по подстроке в `data/cities_en.json` |
+| `geo.js` | Поиск городов по подстроке (ru/en + регион) в `data/cities.json`; генератор — `scripts/build-cities.mjs` |
 
 ## Хранение данных (expo-sqlite)
 

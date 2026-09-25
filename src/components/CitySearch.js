@@ -2,24 +2,34 @@ import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { YStack, XStack, Text, Input, ScrollView } from 'tamagui';
 import { Pressable } from 'react-native';
-import { searchCities } from '../services/geo';
+import { searchCities, cityPrimary, citySecondary } from '../services/geo';
 import { useWindowDimensions } from 'react-native';
 
 export default function CitySearch({ onSelect, selectedCity }) {
-  const { t } = useTranslation()
-  const [query, setQuery] = useState(selectedCity?.name ? `${selectedCity.name}, ${selectedCity.country}` : '')
+  const { t, i18n } = useTranslation()
+  const lang = (i18n.language || 'ru').startsWith('ru') ? 'ru' : 'en'
+
+  const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [showDropdown, setShowDropdown] = useState(false)
   const timerRef = useRef(null)
 
   const { width } = useWindowDimensions()
   const isSmallScreen = width <= 360
-  
+
+  const labelFor = (city) =>
+    city ? `${cityPrimary(city, lang)}, ${lang === 'ru' ? city.countryRu : city.country}` : ''
+
+  // Keep the input in sync with the selected city and the active language.
+  useEffect(() => {
+    setQuery(selectedCity ? labelFor(selectedCity) : '')
+  }, [selectedCity, lang])
+
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
 
     timerRef.current = setTimeout(() => {
-      const matches = searchCities(query)
+      const matches = searchCities(query, lang)
       setResults(matches)
       setShowDropdown(matches.length > 0)
     }, 300)
@@ -27,10 +37,10 @@ export default function CitySearch({ onSelect, selectedCity }) {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [query])
+  }, [query, lang])
 
   function handleSelect(city) {
-    setQuery(`${city.name}, ${city.country}`)
+    setQuery(labelFor(city))
     setShowDropdown(false)
     onSelect(city)
   }
@@ -50,6 +60,12 @@ export default function CitySearch({ onSelect, selectedCity }) {
           onChangeText={setQuery}
           placeholder={t('city.searchPlaceholder')}
           placeholderTextColor="#b2b2bc"
+          keyboardType="default"
+          inputMode="search"
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="off"
+          spellCheck={false}
           width="100%"
           backgroundColor="#ffffff08"
           borderWidth={1}
@@ -84,7 +100,7 @@ export default function CitySearch({ onSelect, selectedCity }) {
         >
           <ScrollView>
             {results.map((city, i) => (
-              <Pressable key={`${city.name}-${city.country}-${i}`} onPress={() => handleSelect(city)}>
+              <Pressable key={`${city.name}-${city.latitude}-${city.longitude}-${i}`} onPress={() => handleSelect(city)}>
                 <YStack
                   paddingVertical={12}
                   paddingHorizontal={16}
@@ -92,10 +108,10 @@ export default function CitySearch({ onSelect, selectedCity }) {
                   borderBottomColor="#ffffff10"
                 >
                   <Text color="#ffffff" fontSize={15} fontWeight="500">
-                    {city.name}
+                    {cityPrimary(city, lang)}
                   </Text>
                   <Text color="#b2b2bc" fontSize={12}>
-                    {city.country}
+                    {citySecondary(city, lang)}
                   </Text>
                 </YStack>
               </Pressable>

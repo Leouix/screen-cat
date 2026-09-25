@@ -74,8 +74,8 @@
 - Маркер на карте показывает выбранный город
 
 ### Контент
-- Поиск города (`CitySearch`) по локальному справочнику `src/data/cities_en.json` (`services/geo.js`)
-  - Выбор города подтягивает `latitude`, `longitude`, `timezone`, `country`
+- Поиск города (`CitySearch`) по локальному справочнику `src/data/cities.json` (`services/geo.js`) — GeoNames (~72k городов мира, включая полный список РФ), поиск по русским и английским названиям + региону, вывод локализован по текущему языку
+  - Выбор города подтягивает `latitude`, `longitude`, `timezone`, `country`, `region`
   - Внизу отображается название выбранного города и координаты
 - Кнопка `PREDICTION MAP` (NEXT)
 - Кнопки `Back` / `Skip`

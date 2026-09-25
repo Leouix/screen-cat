@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { YStack, Text, XStack } from 'tamagui';
 import Earth3d from '../components/Earth3d';
 import CitySearch from '../components/CitySearch';
+import { cityPrimary, citySecondary } from '../services/geo';
 import StarryBackground from '../components/StarryBackground';
 import SunDecoration from '../components/SunDecoration';
 import { useWindowDimensions } from 'react-native';
@@ -16,7 +17,8 @@ import {
 
 
 export default function EarthWithCity({ birthDate, birthTime, name, selectedCity, onCitySelect, onBack, onNext }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const lang = (i18n.language || 'ru').startsWith('ru') ? 'ru' : 'en'
   const coord = selectedCity || { latitude: 42.8746, longitude: 74.5698 }
 
   const { width } = useWindowDimensions();
@@ -63,7 +65,10 @@ export default function EarthWithCity({ birthDate, birthTime, name, selectedCity
          {selectedCity?.name && (
           <YStack alignItems="center">
             <Text color="#ffffff" fontSize={14} fontWeight="500">
-              {selectedCity.name}, {selectedCity.country}
+              {cityPrimary(selectedCity, lang)}
+            </Text>
+            <Text color="#b2b2bc" fontSize={12}>
+              {citySecondary(selectedCity, lang)}
             </Text>
             <Text color="#b2b2bc" fontSize={11} marginBottom="20">
               {selectedCity.latitude}°, {selectedCity.longitude}°

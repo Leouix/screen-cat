@@ -31,8 +31,15 @@ export default function BurgerMenu({ isLoggedIn, onLogout }) {
           borderRadius={12}
           backgroundColor="#ffffff08"
           pressStyle={{ opacity: 0.6 }}
+          
         >
-          <YStack width={18} height={2} borderRadius={1} backgroundColor="#f8df61" />
+          <YStack 
+            width={18} 
+            height={2} 
+            borderRadius={1} 
+            backgroundColor="#f8df61" 
+          />
+
           <YStack width={18} height={2} borderRadius={1} backgroundColor="#f8df61" />
           <YStack width={18} height={2} borderRadius={1} backgroundColor="#f8df61" />
         </XStack>
@@ -45,7 +52,7 @@ export default function BurgerMenu({ isLoggedIn, onLogout }) {
           left={0}
           right={0}
           bottom={0}
-          zIndex={20}
+          zIndex={50}
           onPress={() => setOpen(false)}
         />
       )}
@@ -61,10 +68,6 @@ export default function BurgerMenu({ isLoggedIn, onLogout }) {
           borderBottomColor="#f8df6140"
           zIndex={40}
         >
-          <Text color="#ffffff7a" fontSize={13} fontFamily="Montserrat_500Medium">
-            {t('common.menu')}
-          </Text>
-
           <XStack alignItems="center" gap={10} marginTop={10}>
             
             {LANGUAGES.map((code) => {
