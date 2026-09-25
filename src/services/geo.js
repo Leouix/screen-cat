@@ -96,7 +96,7 @@ export function searchCities(query, lang = 'ru') {
 
 export function cityPrimary(city, lang = 'ru') {
   if (!city) return ''
-  return lang === 'ru' ? city.nameRu || city.name : city.name
+  return (lang === 'ru' ? city.nameRu || city.name : city.name) || ''
 }
 
 export function citySecondary(city, lang = 'ru') {

@@ -17,8 +17,12 @@ export default function CitySearch({ onSelect, selectedCity }) {
   const { width } = useWindowDimensions()
   const isSmallScreen = width <= 360
 
-  const labelFor = (city) =>
-    city ? `${cityPrimary(city, lang)}, ${lang === 'ru' ? city.countryRu : city.country}` : ''
+  const labelFor = (city) => {
+    if (!city) return ''
+    const name = cityPrimary(city, lang)
+    const country = lang === 'ru' ? city.countryRu || city.country : city.country
+    return [name, country].filter(Boolean).join(', ')
+  }
 
   // Keep the input in sync with the selected city and the active language.
   useEffect(() => {
