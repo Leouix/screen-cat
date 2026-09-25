@@ -165,7 +165,7 @@ const HARDCODED_PATHS = [
 export default function SplashScreen({ fontsLoaded }) {
   const { t } = useTranslation()
   const { width, height } = useWindowDimensions()
-  const size = Math.min(width * 1, height * 0.5)
+  const size = Math.min(width * 0.5, height * 0.5)
   const mapRef = useRef(null)
 
   const paths = useMemo(
@@ -190,7 +190,7 @@ export default function SplashScreen({ fontsLoaded }) {
         style={{
           position: 'absolute', 
           top: 0,
-          bottom: isSmallScreen ? 70 : 100,
+          bottom: 70,
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',  
@@ -214,6 +214,7 @@ export default function SplashScreen({ fontsLoaded }) {
         <DailyPredictionMap
           paths={paths}
           size={size}
+          canvasWidth={width - 50}
           height={isSmallScreen ? 350 : 450}
           ref={mapRef}
         />

@@ -265,7 +265,7 @@ export default function PredictionScreen({ birthDate, birthTime, name, gender, s
           </YStack>
         ) : (
           <>
-            <DailyPredictionMap paths={paths} size={size} height={height} selectedId={selectedPath?.id} onSelect={setSelectedPath} ref={mapRef} />
+            <DailyPredictionMap paths={paths} size={size} canvasWidth={width} height={height} selectedId={selectedPath?.id} onSelect={setSelectedPath} ref={mapRef} />
 
             <AspectCardDeck 
               aspects={paths} 

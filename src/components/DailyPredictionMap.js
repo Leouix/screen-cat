@@ -158,12 +158,23 @@ function PlanetLabel({
   panY,
   cx,
   cy,
+  canvasWidth,
   color,
   font,
   subtitle,
   subtitleFont,
   dimmed,
 }) {
+  const padX = 4
+  const padY = 1
+  const subWidth = useMemo(
+    () => (subtitle && subtitleFont ? subtitleFont.measureText(subtitle).width : 0),
+    [subtitle, subtitleFont]
+  )
+  const contentW = Math.max(width, subWidth)
+  const bgW = contentW + padX * 2
+  const bgHalf = bgW / 2
+
   const pos = useDerivedValue(() =>
     planetPoint({
       deg,
@@ -182,24 +193,20 @@ function PlanetLabel({
     const dy = pos.value.y - cy
     const len = Math.hypot(dx, dy) || 1
     const off = (len + 14) / len
+    // Keep the label (and its badge) inside the canvas horizontally.
+    const rawCenterX = cx + dx * off
+    const centerX = Math.max(bgHalf, Math.min(canvasWidth - bgHalf, rawCenterX))
     return {
-      x: cx + dx * off - width / 2,
+      x: centerX - width / 2,
       y: cy + dy * off + fontSize * 0.4,
     }
   })
   const x = useDerivedValue(() => textPos.value.x)
   const y = useDerivedValue(() => textPos.value.y)
   const subtitleY = useDerivedValue(() => textPos.value.y + fontSize * 1.2)
-  const subWidth = useMemo(
-    () => (subtitle && subtitleFont ? subtitleFont.measureText(subtitle).width : 0),
-    [subtitle, subtitleFont]
-  )
-  const padX = 4
-  const padY = 1
   const subH = subtitle ? fontSize * 1.2 + fontSize * 0.4 : 0
-  const bgW = Math.max(width, subWidth) + padX * 2
   const bgH = fontSize + subH + padY * 2
-  const bgX = useDerivedValue(() => textPos.value.x - padX)
+  const bgX = useDerivedValue(() => textPos.value.x + width / 2 - bgW / 2)
   const bgY = useDerivedValue(() => textPos.value.y - fontSize - padY)
   const opacity = useSharedValue(dimmed ? 0 : 1)
   const subtitleOpacity = useSharedValue(dimmed ? 0 : 0.85)
@@ -218,12 +225,12 @@ function PlanetLabel({
   )
 }
 
-export default forwardRef(function DailyPredictionMap({ paths, size, height = size, selectedId = null, onSelect }, ref) {
+export default forwardRef(function DailyPredictionMap({ paths, size, height = size, canvasWidth = size, selectedId = null, onSelect }, ref) {
   const { t } = useTranslation()
   const { width } = useWindowDimensions();
   const isSmallScreen = width <= 360;
   
-  const cx = size / 2
+  const cx = canvasWidth / 2
   const cy = isSmallScreen 
               ? height * 0.45 - 75 
               : height * 0.45 - 60;
@@ -405,8 +412,8 @@ export default forwardRef(function DailyPredictionMap({ paths, size, height = si
   }
 
   return (
-    <View style={{ width: size, height }}>
-      <Canvas style={{ width: size, height }}>
+    <View style={{ width: canvasWidth, height }}>
+      <Canvas style={{ width: canvasWidth, height }}>
         <Group transform={backdropTransform}>
           {spherePaths.map((s) => (
             <Group key={s.key}>
@@ -526,6 +533,7 @@ export default forwardRef(function DailyPredictionMap({ paths, size, height = si
               panY={panY}
               cx={cx}
               cy={cy}
+              canvasWidth={canvasWidth}
               color={l.color}
               font={labelFont}
               subtitle={t('map.natal')}
@@ -549,6 +557,7 @@ export default forwardRef(function DailyPredictionMap({ paths, size, height = si
               panY={panY}
               cx={cx}
               cy={cy}
+              canvasWidth={canvasWidth}
               color={l.color}
               font={labelFont}
               dimmed={selectedPath !== null && l.name !== selectedPath.transit_planet}
